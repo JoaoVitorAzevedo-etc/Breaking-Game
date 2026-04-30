@@ -131,6 +131,26 @@
         .info-text { color: var(--cor-texto-secundario); font-size: 1.2rem; margin-bottom: 10px; }
         .highlight-text { color: var(--cor-principal); font-weight: bold; }
 
+        #login-screen { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        input[type="text"], input[type="password"] {
+            background: var(--bg-input);
+            border: 2px solid var(--borda-card);
+            color: var(--cor-texto);
+            padding: 12px 20px;
+            font-size: 1rem;
+            text-align: center;
+            width: 300px;
+            max-width: 90%;
+            border-radius: 5px;
+            display: block;
+            margin: 0 auto;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: var(--cor-principal);
+            box-shadow: 0 0 8px var(--cor-glow);
+        }
+
         /* ROADMAP */
         .roadmap-container { border-left: 4px solid var(--borda-card); margin-left: 20px; padding-left: 40px; position: relative; }
         .roadmap-node { position: relative; margin-bottom: 30px; }
@@ -152,10 +172,6 @@
         .roadmap-node.unlocked .level-title { color: var(--cor-principal); font-weight: bold; }
         
         .chapter-header h2 { color: var(--cor-principal); font-size: 1.6rem; text-transform: uppercase; background: var(--bg-gradient); display: inline-block; padding-right: 15px; }
-
-        /* INPUTS E HUD */
-        input[type="text"] { background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto); padding: 12px 20px; font-size: 1rem; text-align: center; width: 300px; border-radius: 5px; }
-        input[type="text"]:focus { outline: none; border-color: var(--cor-principal); box-shadow: 0 0 8px var(--cor-glow); }
 
         .hud { position: fixed; top: 70px; right: 20px; background: var(--bg-card); padding: 20px; border: 2px solid var(--cor-principal); color: var(--cor-principal); z-index: 100; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-weight: bold; border-radius: 8px; }
 
@@ -398,7 +414,7 @@
             .level-card { padding: 15px; }
             .level-title { font-size: 1.1rem; }
             .chapter-header h2 { font-size: 1.4rem; }
-            input[type="text"] { width: 100%; max-width: 300px; }
+            input[type="text"], input[type="password"] { width: 100%; max-width: 300px; }
             .hud { top: auto; bottom: 10px; right: 10px; left: auto; width: auto; padding: 15px; font-size: 0.85rem; }
             .question-box { padding: 30px; max-width: 90%; }
             .question-title { font-size: 1.3rem; }
@@ -454,7 +470,7 @@
             .level-card { padding: 12px; }
             .level-title { font-size: 1rem; }
             .chapter-header h2 { font-size: 1.2rem; }
-            input[type="text"] { width: 100%; max-width: 250px; padding: 10px 15px; }
+            input[type="text"], input[type="password"] { width: 100%; max-width: 250px; padding: 10px 15px; }
             .hud { bottom: 5px; right: 5px; padding: 10px; font-size: 0.8rem; }
             .question-box { padding: 20px; }
             .question-title { font-size: 1.2rem; }
@@ -559,6 +575,7 @@
         <h1 class="game-title">Breaking Game</h1>
         <p class="game-subtitle">Aprenda Química Jogando</p>
         <input type="text" id="username-input" placeholder="Seu nome aqui..." autofocus>
+        <input type="password" id="password-input" placeholder="Digite sua senha...">
         <div class="menu-options" style="margin-top: 30px;">
             <button class="btn-option" onclick="app.entrarComUsuario()">Entrar</button>
         </div>

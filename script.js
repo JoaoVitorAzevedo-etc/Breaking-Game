@@ -71,6 +71,7 @@
             obterPerfilPadrao() {
                 return {
                     nome: "user",
+                    senha: "user",
                     pontuacaoTotal: 0,
                     nivelMaximo: 1,
                     badges: [],
@@ -83,6 +84,7 @@
             obterPerfilUser0() {
                 return {
                     nome: "user0",
+                    senha: "user0",
                     pontuacaoTotal: 9999,
                     nivelMaximo: 14,
                     badges: [
@@ -341,32 +343,43 @@
 
             entrarComUsuario() {
                 const name = document.getElementById('username-input').value.trim();
+                const password = document.getElementById('password-input').value.trim();
                 if (!name) return alert("Digite um nome!");
+                if (!password) return alert("Digite uma senha!");
                 this.usuarioAtual = name;
 
-                if (name === 'user0') {
-                    const dadosSalvos = this.carregarDados(`usuario_${name}`);
-                    const perfilUser0 = this.obterPerfilUser0();
+                const dadosSalvos = this.carregarDados(`usuario_${name}`);
+                if (dadosSalvos) {
+                    let senhaMigrada = false;
+                    if (!dadosSalvos.senha) {
+                        dadosSalvos.senha = password;
+                        senhaMigrada = true;
+                    }
+                    if (dadosSalvos.senha !== password) {
+                        return alert("Senha incorreta. Tente novamente.");
+                    }
 
-                    if (dadosSalvos) {
+                    if (name === 'user0') {
+                        const perfilUser0 = this.obterPerfilUser0();
                         this.contaPadrao = Object.assign(perfilUser0, dadosSalvos);
                         this.contaPadrao.pontuacaoTotal = Math.max(this.contaPadrao.pontuacaoTotal || 0, perfilUser0.pontuacaoTotal);
                         this.contaPadrao.nivelMaximo = Math.max(this.contaPadrao.nivelMaximo || 1, perfilUser0.nivelMaximo);
                         this.contaPadrao.badges = perfilUser0.badges;
                     } else {
-                        this.contaPadrao = perfilUser0;
+                        this.contaPadrao = Object.assign(this.obterPerfilPadrao(), dadosSalvos);
+                    }
+                    if (senhaMigrada) {
+                        this.salvarDados(`usuario_${name}`, this.contaPadrao);
                     }
                 } else {
-                    const dadosSalvos = this.carregarDados(`usuario_${name}`);
-                    if (dadosSalvos) {
-                        this.contaPadrao = Object.assign(this.obterPerfilPadrao(), dadosSalvos);
-                    } else {
-                        this.contaPadrao = this.obterPerfilPadrao();
-                        this.contaPadrao.nome = name;
-                    }
+                    this.contaPadrao = this.obterPerfilPadrao();
+                    this.contaPadrao.nome = name;
+                    this.contaPadrao.senha = password;
+                    this.salvarDados(`usuario_${name}`, this.contaPadrao);
                 }
 
                 document.getElementById('username-input').value = '';
+                document.getElementById('password-input').value = '';
                 document.getElementById('login-screen').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('login-screen').style.display = 'none';
