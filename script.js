@@ -700,6 +700,18 @@
                 this.mostrarTabelaPeriodicaView('tabela', primeiroBtn);
             },
 
+            abrirLoja() {
+                document.getElementById('main-menu').style.display = 'none';
+                document.getElementById('modal-overlay').style.display = 'block';
+                document.getElementById('shop-screen').style.display = 'flex';
+            },
+
+            fecharLoja() {
+                document.getElementById('shop-screen').style.display = 'none';
+                document.getElementById('modal-overlay').style.display = 'none';
+                document.getElementById('main-menu').style.display = 'block';
+            },
+
             mostrarTabelaPeriodicaView(view, botao) {
                 // Atualizar botões de menu
                 document.querySelectorAll('.periodic-menu-btn').forEach(btn => btn.classList.remove('active'));
@@ -1513,6 +1525,7 @@
                 document.getElementById('modal-overlay').style.display = 'none';
                 document.getElementById('profile-screen').style.display = 'none';
                 document.getElementById('final-warning-screen').style.display = 'none';
+                document.getElementById('shop-screen').style.display = 'none';
                 this.carregarMenuPrincipal(); 
             },
 

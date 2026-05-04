@@ -543,6 +543,139 @@
     color: #a0b0c0;
     font-family: monospace; /* Fonte com espaçamento igual para fórmulas */
 }
+    .shop-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 260;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(20px);
+    }
+
+    [data-theme="dark"] .shop-screen {
+        background: rgba(10, 18, 35, 0.78);
+    }
+
+    .shop-panel {
+        width: min(900px, 95vw);
+        max-height: min(85vh, calc(100vh - 40px));
+        overflow-y: auto;
+        padding: 28px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 24px;
+        backdrop-filter: blur(14px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    [data-theme="dark"] .shop-panel {
+        background: rgba(15, 23, 45, 0.72);
+        border-color: rgba(255, 255, 255, 0.10);
+    }
+
+    .shop-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+
+    .shop-header {
+        font-size: 2.4rem;
+        color: var(--cor-principal);
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin: 0;
+    }
+
+    .shop-subtitle {
+        color: var(--cor-texto-secundario);
+        font-size: 1rem;
+        margin-bottom: 28px;
+        max-width: 760px;
+        line-height: 1.6;
+    }
+
+    .shop-section {
+        margin-bottom: 30px;
+        padding: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(14px);
+    }
+
+    [data-theme="dark"] .shop-section {
+        background: rgba(15, 23, 45, 0.72);
+        border-color: rgba(255, 255, 255, 0.10);
+    }
+
+    .shop-section h3 {
+        margin: 0 0 18px 0;
+        font-size: 1.45rem;
+        color: var(--cor-principal);
+        letter-spacing: 1px;
+    }
+
+    .shop-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+    }
+
+    .shop-card {
+        border-radius: 22px;
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(12px);
+        transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    [data-theme="dark"] .shop-card {
+        background: rgba(20, 30, 55, 0.72);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .shop-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--cor-principal);
+    }
+
+    .shop-card h4 {
+        margin: 0 0 10px 0;
+        font-size: 1.2rem;
+        color: var(--cor-principal);
+    }
+
+    .shop-card p {
+        color: var(--cor-texto-secundario);
+        margin-bottom: 18px;
+        line-height: 1.6;
+    }
+
+    .shop-card .shop-buy-btn {
+        background: var(--cor-principal);
+        border: none;
+        color: var(--bg-input);
+        padding: 12px 18px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+        font-weight: bold;
+        width: 100%;
+    }
+
+    .shop-card .shop-buy-btn:hover {
+        background: #00294a;
+        transform: translateY(-1px);
+    }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
@@ -572,6 +705,7 @@
         <div class="menu-options" style="margin-top: 50px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
             <button class="btn-option" onclick="app.abrirPanorama()"> Mapa de Fases</button>
             <button class="btn-option" onclick="app.abrirTabelaPeriodica()"> Tabela Periódica</button>
+            <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
             <button class="btn-option" onclick="app.abrirPerfil()"> Meu Perfil (Badges e Histórico)</button>
             <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
         </div>
@@ -741,6 +875,112 @@
 
         <div style="text-align: center; margin-top: 35px;">
             <button class="config-close" onclick="app.fecharPerfil()">Fechar Perfil</button>
+        </div>
+    </div>
+
+    <div class="shop-screen modal-animated" id="shop-screen">
+        <div class="shop-panel">
+            <div class="shop-top">
+                <div>
+                    <h2 class="shop-header">Loja Química</h2>
+                    <p class="shop-subtitle">Use seus pontos para desbloquear recursos e reforçar sua jornada.</p>
+                </div>
+                <button class="config-close" onclick="app.fecharLoja()">Fechar</button>
+            </div>
+
+            <div class="shop-section">
+                <h3>🌍 Misturas Homogêneas (Soluções)</h3>
+                <div class="shop-grid">
+                    <div class="shop-card">
+                        <h4>🌍 Ar Atmosférico</h4>
+                        <p>Estude N₂, O₂ e CO₂ - solução gasosa essencial para compreender misturas gasosas.</p>
+                        <button class="shop-buy-btn">Comprar por 80 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>💧 Soro Fisiológico</h4>
+                        <p>Aprenda sobre NaCl + H₂O - solução aquosa com aplicações médicas e industriais.</p>
+                        <button class="shop-buy-btn">Comprar por 85 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>🥃 Álcool Comercial</h4>
+                        <p>Estude C₂H₅OH + H₂O - solução líquida com propriedades desinfetantes.</p>
+                        <button class="shop-buy-btn">Comprar por 90 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>🔶 Bronze</h4>
+                        <p>Liga metálica Cu + Sn - compreenda ligas metálicas e sua importância industrial.</p>
+                        <button class="shop-buy-btn">Comprar por 95 pts</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-section">
+                <h3>🏜️ Misturas Heterogêneas e Coloides</h3>
+                <div class="shop-grid">
+                    <div class="shop-card">
+                        <h4>🏜️ Água e Areia</h4>
+                        <p>SiO₂ + H₂O - suspensão heterogênea separável por filtração.</p>
+                        <button class="shop-buy-btn">Comprar por 75 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>⛰️ Granito</h4>
+                        <p>Mistura heterogênea de quartzo, feldspato e mica - rocha ígnea essencial.</p>
+                        <button class="shop-buy-btn">Comprar por 85 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>🩸 Sangue</h4>
+                        <p>Coloide natural - plasma com células e moléculas diversas em suspensão.</p>
+                        <button class="shop-buy-btn">Comprar por 100 pts</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-section">
+                <h3>⚗️ Misturas Especiais e Industriais</h3>
+                <div class="shop-grid">
+                    <div class="shop-card">
+                        <h4>🥃 Álcool 96%</h4>
+                        <p>Mistura azeotrópica - aprenda sobre temperatura de ebulição constante.</p>
+                        <button class="shop-buy-btn">Comprar por 100 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>🔧 Solda</h4>
+                        <p>Mistura eutética Sn + Pb - ponto de fusão constante em aplicações industriais.</p>
+                        <button class="shop-buy-btn">Comprar por 100 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>⛽ Petróleo</h4>
+                        <p>Hidrocarbonetos complexos - combustível obtido por destilação.</p>
+                        <button class="shop-buy-btn">Comprar por 110 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>🧼 Água Sanitária</h4>
+                        <p>NaClO - desinfetante e blequeador com propriedades especiais.</p>
+                        <button class="shop-buy-btn">Comprar por 95 pts</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-section">
+                <h3>⚡ Ofertas Rápidas e Boosts</h3>
+                <div class="shop-grid">
+                    <div class="shop-card">
+                        <h4>🎯 Pacote de Dicas</h4>
+                        <p>Adquira 3 dicas adicionais para usar em fases futuras e ganhar vantagem nas perguntas mais difíceis.</p>
+                        <button class="shop-buy-btn">Comprar por 150 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>⭐ Bônus de Pontos</h4>
+                        <p>Receba 200 pontos extras para ajudar a alcançar novas conquistas e desbloquear conteúdos.</p>
+                        <button class="shop-buy-btn">Comprar por 180 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>🛡️ Protetor de Fase</h4>
+                        <p>Não perca pontos ao errar a próxima pergunta - um erro não será contado.</p>
+                        <button class="shop-buy-btn">Comprar por 200 pts</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
