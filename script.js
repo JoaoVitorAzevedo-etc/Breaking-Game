@@ -1382,7 +1382,7 @@
                 document.getElementById('pontuacao-atual').textContent = this.gameState.pontuacaoAtual;
                 document.getElementById('total-points-hud').textContent = perfil.pontuacaoTotal;
             },
-
+//uirhewguihg
             finalizar() {
                 const perfil = this.contaPadrao;
                 if (!perfil.badges) perfil.badges = [];
