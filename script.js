@@ -71,7 +71,6 @@
             obterPerfilPadrao() {
                 return {
                     nome: "user",
-                    senha: "user",
                     pontuacaoTotal: 0,
                     nivelMaximo: 1,
                     badges: [],
@@ -84,7 +83,6 @@
             obterPerfilUser0() {
                 return {
                     nome: "user0",
-                    senha: "user0",
                     pontuacaoTotal: 9999,
                     nivelMaximo: 14,
                     badges: [
@@ -343,43 +341,32 @@
 
             entrarComUsuario() {
                 const name = document.getElementById('username-input').value.trim();
-                const password = document.getElementById('password-input').value.trim();
                 if (!name) return alert("Digite um nome!");
-                if (!password) return alert("Digite uma senha!");
                 this.usuarioAtual = name;
 
-                const dadosSalvos = this.carregarDados(`usuario_${name}`);
-                if (dadosSalvos) {
-                    let senhaMigrada = false;
-                    if (!dadosSalvos.senha) {
-                        dadosSalvos.senha = password;
-                        senhaMigrada = true;
-                    }
-                    if (dadosSalvos.senha !== password) {
-                        return alert("Senha incorreta. Tente novamente.");
-                    }
+                if (name === 'user0') {
+                    const dadosSalvos = this.carregarDados(`usuario_${name}`);
+                    const perfilUser0 = this.obterPerfilUser0();
 
-                    if (name === 'user0') {
-                        const perfilUser0 = this.obterPerfilUser0();
+                    if (dadosSalvos) {
                         this.contaPadrao = Object.assign(perfilUser0, dadosSalvos);
                         this.contaPadrao.pontuacaoTotal = Math.max(this.contaPadrao.pontuacaoTotal || 0, perfilUser0.pontuacaoTotal);
                         this.contaPadrao.nivelMaximo = Math.max(this.contaPadrao.nivelMaximo || 1, perfilUser0.nivelMaximo);
                         this.contaPadrao.badges = perfilUser0.badges;
                     } else {
-                        this.contaPadrao = Object.assign(this.obterPerfilPadrao(), dadosSalvos);
-                    }
-                    if (senhaMigrada) {
-                        this.salvarDados(`usuario_${name}`, this.contaPadrao);
+                        this.contaPadrao = perfilUser0;
                     }
                 } else {
-                    this.contaPadrao = this.obterPerfilPadrao();
-                    this.contaPadrao.nome = name;
-                    this.contaPadrao.senha = password;
-                    this.salvarDados(`usuario_${name}`, this.contaPadrao);
+                    const dadosSalvos = this.carregarDados(`usuario_${name}`);
+                    if (dadosSalvos) {
+                        this.contaPadrao = Object.assign(this.obterPerfilPadrao(), dadosSalvos);
+                    } else {
+                        this.contaPadrao = this.obterPerfilPadrao();
+                        this.contaPadrao.nome = name;
+                    }
                 }
 
                 document.getElementById('username-input').value = '';
-                document.getElementById('password-input').value = '';
                 document.getElementById('login-screen').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('login-screen').style.display = 'none';
@@ -711,6 +698,18 @@
                 document.getElementById('periodic-table-screen').style.display = 'block';
                 const primeiroBtn = document.querySelector('.periodic-menu-btn');
                 this.mostrarTabelaPeriodicaView('tabela', primeiroBtn);
+            },
+
+            abrirLoja() {
+                document.getElementById('main-menu').style.display = 'none';
+                document.getElementById('modal-overlay').style.display = 'block';
+                document.getElementById('shop-screen').style.display = 'flex';
+            },
+
+            fecharLoja() {
+                document.getElementById('shop-screen').style.display = 'none';
+                document.getElementById('modal-overlay').style.display = 'none';
+                document.getElementById('main-menu').style.display = 'block';
             },
 
             mostrarTabelaPeriodicaView(view, botao) {
@@ -1526,6 +1525,7 @@
                 document.getElementById('modal-overlay').style.display = 'none';
                 document.getElementById('profile-screen').style.display = 'none';
                 document.getElementById('final-warning-screen').style.display = 'none';
+                document.getElementById('shop-screen').style.display = 'none';
                 this.carregarMenuPrincipal(); 
             },
 

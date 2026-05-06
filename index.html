@@ -89,8 +89,17 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
+        @keyframes smoothEnter {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
         .modal-animated {
             animation: modalEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .smooth-enter {
+            animation: smoothEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         .shake-animation { animation: shake 0.5s ease-in-out; }
         .pop-animation { animation: pop 0.4s ease-out forwards; }
@@ -131,26 +140,6 @@
         .info-text { color: var(--cor-texto-secundario); font-size: 1.2rem; margin-bottom: 10px; }
         .highlight-text { color: var(--cor-principal); font-weight: bold; }
 
-        #login-screen { display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        input[type="text"], input[type="password"] {
-            background: var(--bg-input);
-            border: 2px solid var(--borda-card);
-            color: var(--cor-texto);
-            padding: 12px 20px;
-            font-size: 1rem;
-            text-align: center;
-            width: 300px;
-            max-width: 90%;
-            border-radius: 5px;
-            display: block;
-            margin: 0 auto;
-        }
-        input[type="text"]:focus, input[type="password"]:focus {
-            outline: none;
-            border-color: var(--cor-principal);
-            box-shadow: 0 0 8px var(--cor-glow);
-        }
-
         /* ROADMAP */
         .roadmap-container { border-left: 4px solid var(--borda-card); margin-left: 20px; padding-left: 40px; position: relative; }
         .roadmap-node { position: relative; margin-bottom: 30px; }
@@ -173,6 +162,10 @@
         
         .chapter-header h2 { color: var(--cor-principal); font-size: 1.6rem; text-transform: uppercase; background: var(--bg-gradient); display: inline-block; padding-right: 15px; }
 
+        /* INPUTS E HUD */
+        input[type="text"] { background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto); padding: 12px 20px; font-size: 1rem; text-align: center; width: 300px; border-radius: 5px; }
+        input[type="text"]:focus { outline: none; border-color: var(--cor-principal); box-shadow: 0 0 8px var(--cor-glow); }
+
         .hud { position: fixed; top: 70px; right: 20px; background: var(--bg-card); padding: 20px; border: 2px solid var(--cor-principal); color: var(--cor-principal); z-index: 100; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-weight: bold; border-radius: 8px; }
 
         .question-box {
@@ -192,13 +185,21 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-overlay); z-index: 150; }
 
         /* Estilo unificado para Modais */
-        .stats-screen, .config-screen, .auxiliar-screen, .profile-screen {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px;
-            padding: 40px; z-index: 250; width: 90%; text-align: center; color: var(--cor-texto); box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        .stats-screen, .config-screen, .auxiliar-screen, .profile-screen, .conceito-box {
+            position: fixed; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            width: 100vw; height: 100vh; padding: 20px;
+            z-index: 250;
         }
-        .stats-screen { max-width: 500px; display: none; }
-        .config-screen { max-width: 500px; display: none; }
+        .stats-screen { display: none; }
+        .config-screen { display: none; }
+
+        .modal-card {
+            background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px;
+            padding: 40px; color: var(--cor-texto); text-align: center;
+            width: min(90vw, 700px); max-height: 85vh; overflow-y: auto;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
 
         .config-option { background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto); padding: 15px 20px; margin: 10px 0; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: left; font-size: 1rem; display: flex; justify-content: space-between; align-items: center; }
         .config-option:hover { border-color: var(--cor-principal); background: var(--bg-card); }
@@ -208,7 +209,7 @@
         .config-close:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
         /* AUXILIAR */
-        .auxiliar-screen { max-width: 680px; display: none; }
+        .auxiliar-screen { display: none; }
         .auxiliar-header { color: var(--cor-principal); font-size: 1.6rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }
         .auxiliar-subtitulo { color: var(--cor-texto-secundario); font-size: 0.95rem; margin-bottom: 30px; letter-spacing: 1px; }
         .auxiliar-grid { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
@@ -222,7 +223,7 @@
         .auxiliar-confirmar:hover { transform: scale(1.05); box-shadow: 0 4px 14px var(--cor-glow); }
 
         /* PERFIL E BADGES */
-        .profile-screen { max-width: 700px; display: none; max-height: 85vh; overflow-y: auto; padding: 30px;}
+        .profile-screen { display: none; }
         .profile-header { color: var(--cor-principal); font-size: 1.8rem; margin-bottom: 20px; text-transform: uppercase; }
         .profile-section-title { font-size: 1.3rem; margin: 20px 0 10px 0; color: var(--cor-texto); border-bottom: 2px solid var(--cor-principal); display: inline-block; padding-bottom: 5px;}
         .badges-container { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
@@ -269,7 +270,7 @@
         @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* SISTEMA DE CONCEITOS */
-        .conceito-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px; padding: 40px; z-index: 250; width: 90%; max-width: 700px; max-height: 80vh; overflow-y: auto; text-align: center; color: var(--cor-texto); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+        .conceito-box { position: fixed; inset: 0; background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px; padding: 40px; z-index: 250; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; max-width: 700px; max-height: 80vh; overflow-y: auto; text-align: center; color: var(--cor-texto); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
         .conceito-header { color: var(--cor-principal); font-size: 1.8rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
         .conceito-auxiliar { color: var(--cor-texto-secundario); font-size: 0.95rem; margin-bottom: 5px; font-style: italic; }
         .conceito-texto { background: var(--bg-input); border-left: 4px solid var(--cor-principal); padding: 20px; border-radius: 8px; margin: 20px 0; text-align: left; line-height: 1.6; font-size: 1.05rem; }
@@ -414,7 +415,7 @@
             .level-card { padding: 15px; }
             .level-title { font-size: 1.1rem; }
             .chapter-header h2 { font-size: 1.4rem; }
-            input[type="text"], input[type="password"] { width: 100%; max-width: 300px; }
+            input[type="text"] { width: 100%; max-width: 300px; }
             .hud { top: auto; bottom: 10px; right: 10px; left: auto; width: auto; padding: 15px; font-size: 0.85rem; }
             .question-box { padding: 30px; max-width: 90%; }
             .question-title { font-size: 1.3rem; }
@@ -470,7 +471,7 @@
             .level-card { padding: 12px; }
             .level-title { font-size: 1rem; }
             .chapter-header h2 { font-size: 1.2rem; }
-            input[type="text"], input[type="password"] { width: 100%; max-width: 250px; padding: 10px 15px; }
+            input[type="text"] { width: 100%; max-width: 250px; padding: 10px 15px; }
             .hud { bottom: 5px; right: 5px; padding: 10px; font-size: 0.8rem; }
             .question-box { padding: 20px; }
             .question-title { font-size: 1.2rem; }
@@ -559,6 +560,139 @@
     color: #a0b0c0;
     font-family: monospace; /* Fonte com espaçamento igual para fórmulas */
 }
+    .shop-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 260;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(20px);
+    }
+
+    [data-theme="dark"] .shop-screen {
+        background: rgba(10, 18, 35, 0.78);
+    }
+
+    .shop-panel {
+        width: min(900px, 95vw);
+        max-height: min(85vh, calc(100vh - 40px));
+        overflow-y: auto;
+        padding: 28px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 24px;
+        backdrop-filter: blur(14px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    [data-theme="dark"] .shop-panel {
+        background: rgba(15, 23, 45, 0.72);
+        border-color: rgba(255, 255, 255, 0.10);
+    }
+
+    .shop-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+
+    .shop-header {
+        font-size: 2.4rem;
+        color: var(--cor-principal);
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin: 0;
+    }
+
+    .shop-subtitle {
+        color: var(--cor-texto-secundario);
+        font-size: 1rem;
+        margin-bottom: 28px;
+        max-width: 760px;
+        line-height: 1.6;
+    }
+
+    .shop-section {
+        margin-bottom: 30px;
+        padding: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(14px);
+    }
+
+    [data-theme="dark"] .shop-section {
+        background: rgba(15, 23, 45, 0.72);
+        border-color: rgba(255, 255, 255, 0.10);
+    }
+
+    .shop-section h3 {
+        margin: 0 0 18px 0;
+        font-size: 1.45rem;
+        color: var(--cor-principal);
+        letter-spacing: 1px;
+    }
+
+    .shop-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+    }
+
+    .shop-card {
+        border-radius: 22px;
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(12px);
+        transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    [data-theme="dark"] .shop-card {
+        background: rgba(20, 30, 55, 0.72);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .shop-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--cor-principal);
+    }
+
+    .shop-card h4 {
+        margin: 0 0 10px 0;
+        font-size: 1.2rem;
+        color: var(--cor-principal);
+    }
+
+    .shop-card p {
+        color: var(--cor-texto-secundario);
+        margin-bottom: 18px;
+        line-height: 1.6;
+    }
+
+    .shop-card .shop-buy-btn {
+        background: var(--cor-principal);
+        border: none;
+        color: var(--bg-input);
+        padding: 12px 18px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+        font-weight: bold;
+        width: 100%;
+    }
+
+    .shop-card .shop-buy-btn:hover {
+        background: #00294a;
+        transform: translateY(-1px);
+    }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
@@ -575,7 +709,6 @@
         <h1 class="game-title">Breaking Game</h1>
         <p class="game-subtitle">Aprenda Química Jogando</p>
         <input type="text" id="username-input" placeholder="Seu nome aqui..." autofocus>
-        <input type="password" id="password-input" placeholder="Digite sua senha...">
         <div class="menu-options" style="margin-top: 30px;">
             <button class="btn-option" onclick="app.entrarComUsuario()">Entrar</button>
         </div>
@@ -589,6 +722,7 @@
         <div class="menu-options" style="margin-top: 50px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
             <button class="btn-option" onclick="app.abrirPanorama()"> Mapa de Fases</button>
             <button class="btn-option" onclick="app.abrirTabelaPeriodica()"> Tabela Periódica</button>
+            <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
             <button class="btn-option" onclick="app.abrirPerfil()"> Meu Perfil (Badges e Histórico)</button>
             <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
         </div>
@@ -615,7 +749,8 @@
 
     <div class="modal-overlay" id="modal-overlay"></div>
     
-    <div class="conceito-box modal-animated" id="conceito-box" style="display: none;">
+    <div class="conceito-box smooth-enter" id="conceito-box" style="display: none;">
+        <div class="modal-card">
         <h3 class="conceito-header">Conceito da Fase</h3>
         <p class="conceito-auxiliar" id="conceito-auxiliar-nome"></p>
         <div class="conceito-texto" id="conceito-conteudo"></div>
@@ -623,9 +758,10 @@
             <button class="conceito-botao" style="background: #888888;" onclick="app.fecharConceitoVoltarMapa()">← Voltar ao Mapa</button>
             <button class="conceito-botao" onclick="app.passarParaPerguntas()">Começar a Jogar →</button>
         </div>
+        </div>
     </div>
 
-    <div class="question-box modal-animated" id="question-box" style="display: none;">
+    <div class="question-box smooth-enter" id="question-box" style="display: none;">
         <h3 id="question-title" style="color: var(--cor-principal); margin-bottom:15px; font-size: 1.5rem;"></h3>
         <p id="question-text" style="margin-bottom:25px; font-size: 1.2rem; line-height: 1.4;"></p>
         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
@@ -640,7 +776,8 @@
         </div>
     </div>
 
-    <div class="stats-screen modal-animated" id="stats-screen">
+    <div class="stats-screen smooth-enter" id="stats-screen">
+        <div class="modal-card">
         <h2 id="result-title" style="color: var(--cor-principal); margin-bottom: 15px; font-size: 2rem;">🏆 Fase Concluída!</h2>
         <div style="margin: 20px 0; text-align: left; border: 1px solid var(--borda-card); padding: 20px; background: var(--bg-input); border-radius: 8px;">
             <p style="font-size: 1.3rem; margin-bottom: 10px;">Pontos Ganhos: <span id="final-score" class="highlight-text">0</span></p>
@@ -651,9 +788,11 @@
             <button class="btn-option" style="font-size: 1rem; background: #888888; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;" onclick="app.voltarAoMenu()">🏠 Menu Principal</button>
             <button class="btn-option" style="font-size: 1.2rem;" onclick="app.abrirPanorama()">Continuar Jornada →</button>
         </div>
+        </div>
     </div>
 
-    <div class="config-screen modal-animated" id="config-screen">
+    <div class="config-screen smooth-enter" id="config-screen">
+        <div class="modal-card">
         <h2 class="config-header">Configurações</h2>
         <div class="config-option">
             <span>Alto Contraste</span>
@@ -672,9 +811,11 @@
             </div>
         </div>
         <button class="config-close" onclick="app.fecharConfig()">Fechar</button>
+        </div>
     </div>
 
-    <div class="auxiliar-screen modal-animated" id="final-warning-screen" style="display: none;">
+    <div class="auxiliar-screen smooth-enter" id="final-warning-screen" style="display: none;">
+        <div class="modal-card">
         <h2 style="color: var(--cor-principal); font-size: 2.2rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;">🏆 DESAFIO FINAL 🏆</h2>
         <div style="background: rgba(255, 193, 7, 0.15); border: 3px solid #ffc107; border-radius: 12px; padding: 30px; margin: 20px 0; text-align: center;">
             <p style="font-size: 1.8rem; color: var(--cor-texto); margin: 10px 0; font-weight: bold;">Esta é a ÚLTIMA FASE!</p>
@@ -698,9 +839,11 @@
         <button class="auxiliar-confirmar" onclick="document.getElementById('final-warning-screen').style.display='none'; document.getElementById('modal-overlay').style.display='none';" style="display: inline-block; background: #888888; color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;">
             ← Voltar ao Panorama
         </button>
+        </div>
     </div>
 
-    <div class="auxiliar-screen modal-animated" id="auxiliar-screen">
+    <div class="auxiliar-screen smooth-enter" id="auxiliar-screen">
+        <div class="modal-card">
         <h2 class="auxiliar-header">Escolha seu Auxiliar</h2>
         <p class="auxiliar-subtitulo">Ele te ajudará com dicas ao longo da fase</p>
         <div class="auxiliar-grid">
@@ -726,9 +869,11 @@
         <button class="auxiliar-confirmar" style="display: inline-block; background: #888888;" onclick="app.fecharAuxiliarVoltarMapa()">
             ← Voltar ao Mapa
         </button>
+        </div>
     </div>
 
-    <div class="profile-screen modal-animated" id="profile-screen">
+    <div class="profile-screen smooth-enter" id="profile-screen">
+        <div class="modal-card">
         <h2 class="profile-header">Meu Perfil</h2>
         
         <div class="profile-section-title"> Minhas Conquistas (Passe o mouse!)</div>
@@ -759,9 +904,59 @@
         <div style="text-align: center; margin-top: 35px;">
             <button class="config-close" onclick="app.fecharPerfil()">Fechar Perfil</button>
         </div>
+        </div>
     </div>
 
-    <div class="periodic-table-screen modal-animated" id="periodic-table-screen">
+    <div class="shop-screen" id="shop-screen">
+        <div class="shop-panel">
+            <div class="shop-top">
+                <div>
+                    <h2 class="shop-header">Loja Química</h2>
+                    <p class="shop-subtitle">Use seus pontos para desbloquear recursos e reforçar sua jornada.</p>
+                </div>
+                <button class="config-close" onclick="app.fecharLoja()">Fechar</button>
+            </div>
+
+            <div class="shop-section">
+                <h3>Recursos de Estudo</h3>
+                <div class="shop-grid">
+                    <div class="shop-card">
+                        <h4>Pacote de Dicas</h4>
+                        <p>Adquira 3 dicas adicionais para usar em fases futuras e ganhar vantagem nas perguntas mais difíceis.</p>
+                        <button class="shop-buy-btn">Comprar por 150 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>Bônus de Pontos</h4>
+                        <p>Receba 200 pontos extras para ajudar a alcançar novas conquistas e desbloquear conteúdos.</p>
+                        <button class="shop-buy-btn">Comprar por 180 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>Tema Brilhante</h4>
+                        <p>Desbloqueie um tema visual exclusivo que deixa a sua tela ainda mais estilosa.</p>
+                        <button class="shop-buy-btn">Comprar por 220 pts</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-section">
+                <h3>Ofertas Rápidas</h3>
+                <div class="shop-grid">
+                    <div class="shop-card">
+                        <h4>Revisão Rápida</h4>
+                        <p>Ganhe um resumo instantâneo de conteúdo para lembrar os conceitos antes da próxima fase.</p>
+                        <button class="shop-buy-btn">Comprar por 120 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>Desbloqueio de Conteúdo</h4>
+                        <p>Tenha acesso extra a cards explicativos e informações detalhadas na tabela periódica.</p>
+                        <button class="shop-buy-btn">Comprar por 260 pts</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="periodic-table-screen smooth-enter" id="periodic-table-screen">
         <div class="periodic-container">
             <div class="periodic-menu">
                 <button class="periodic-menu-btn active" onclick="app.mostrarTabelaPeriodicaView('tabela', this)">🧪 Tabela Periódica</button>
@@ -997,7 +1192,7 @@
     </div>
 
     <!-- SELETOR DE CONCEITOS (acessível pela Tabela Periódica) -->
-    <div class="seletor-conceitos-screen modal-animated" id="seletor-conceitos-screen">
+    <div class="seletor-conceitos-screen smooth-enter" id="seletor-conceitos-screen">
         <h2 class="seletor-conceitos-header">📖 Revisão de Conceitos</h2>
         <p class="seletor-conceitos-sub">Escolha uma fase e um auxiliar para revisar o conteúdo sem precisar jogar.</p>
 
@@ -1031,11 +1226,13 @@
     </div>
 
     <!-- MODAL DE CONCEITO LIVRE (sem botão "Começar a Jogar") -->
-    <div class="conceito-box modal-animated" id="conceito-livre-box" style="display: none;">
+    <div class="conceito-box smooth-enter" id="conceito-livre-box" style="display: none;">
+        <div class="modal-card">
         <h3 class="conceito-header" id="conceito-livre-titulo">Conceito da Fase</h3>
         <p class="conceito-auxiliar" id="conceito-livre-auxiliar-nome"></p>
         <div class="conceito-texto" id="conceito-livre-conteudo"></div>
         <button class="conceito-livre-botao" onclick="app.fecharConceitoLivre()">← Voltar ao Seletor</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
