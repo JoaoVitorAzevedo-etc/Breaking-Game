@@ -17,6 +17,7 @@
             sons: {},
             
             
+            
             inicializarSons() {
                 const basePath = 'sounds/';
                 this.sons = {
@@ -85,6 +86,7 @@
                     tamanhoFonte: "medio"
                 };
             },
+            
 
             obterPerfilUser0() {
                 return {
@@ -716,18 +718,6 @@
                 document.getElementById('periodic-table-screen').style.display = 'block';
                 const primeiroBtn = document.querySelector('.periodic-menu-btn');
                 this.mostrarTabelaPeriodicaView('tabela', primeiroBtn);
-            },
-
-            abrirLoja() {
-                document.getElementById('main-menu').style.display = 'none';
-                document.getElementById('modal-overlay').style.display = 'block';
-                document.getElementById('shop-screen').style.display = 'flex';
-            },
-
-            fecharLoja() {
-                document.getElementById('shop-screen').style.display = 'none';
-                document.getElementById('modal-overlay').style.display = 'none';
-                document.getElementById('main-menu').style.display = 'block';
             },
 
             mostrarTabelaPeriodicaView(view, botao) {

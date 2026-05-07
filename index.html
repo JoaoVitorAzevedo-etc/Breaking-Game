@@ -122,12 +122,216 @@
             background: var(--bg-gradient);
             min-height: 100vh;
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
             color: var(--cor-texto); 
             overflow-x: hidden;
             font-size: calc(1rem * var(--tamanho-fonte));
         }
+        /* =========================================
+   CORREÇÃO GERAL DE LAYOUT E MODAIS
+   ========================================= */
+
+/* CENTRALIZAÇÃO GERAL */
+body {
+    justify-content: center !important;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* REMOVE O DESLOCAMENTO ERRADO DO MENU */
+#main-menu {
+    text-align: left;
+    padding-left: 40px;
+    margin-top: 0 !important;
+    padding-top: 40px;
+}
+
+/* CONTAINER MAIS ESTÁVEL */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* =========================================
+   SISTEMA PADRÃO DE MODAIS
+   ========================================= */
+
+.stats-screen,
+.config-screen,
+.auxiliar-screen,
+.profile-screen,
+.conceito-box,
+.periodic-table-screen,
+.seletor-conceitos-screen {
+
+    position: fixed;
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    overflow-y: auto;
+
+    z-index: 300;
+}
+
+/* OVERLAY MAIS ESTÁVEL */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-overlay);
+    z-index: 150;
+}
+
+/* CARD DOS MODAIS */
+.modal-card {
+    width: min(90vw, 700px);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    margin: auto;
+
+    border-radius: 16px;
+
+    padding: 30px;
+
+    position: relative;
+}
+
+/* =========================================
+   CORREÇÃO ESPECÍFICA DA CONCEITO-BOX
+   ========================================= */
+
+.conceito-box {
+    background: rgba(0,0,0,0.5);
+}
+
+.conceito-box .modal-card {
+    width: min(90vw, 750px);
+    max-height: 90vh;
+}
+
+/* REMOVE CONFLITOS ANTIGOS */
+.conceito-box {
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+}
+
+/* =========================================
+   TABELA PERIÓDICA RESPONSIVA
+   ========================================= */
+
+.periodic-table-screen {
+    background: rgba(0,0,0,0.7);
+}
+
+.periodic-table-screen .periodic-container {
+    width: min(95vw, 1500px);
+    max-height: 90vh;
+
+    overflow: auto;
+
+    background: var(--bg-card);
+
+    padding: 20px;
+
+    border-radius: 16px;
+}
+
+/* =========================================
+   HUD MAIS ACESSÍVEL
+   ========================================= */
+
+.hud {
+    top: 15px !important;
+    right: 15px !important;
+
+    max-width: 300px;
+
+    border-radius: 12px;
+}
+
+/* =========================================
+   RIGHT PANEL SEM BUG DE STICKY
+   ========================================= */
+
+.right-panel {
+    position: relative !important;
+    top: auto !important;
+}
+
+/* =========================================
+   RESPONSIVIDADE EXTRA
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    #main-menu {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .modal-card {
+        width: 95vw;
+        padding: 20px;
+    }
+
+    .hud {
+        top: auto !important;
+        bottom: 10px !important;
+        right: 10px !important;
+
+        max-width: calc(100vw - 20px);
+    }
+
+    .periodic-table-screen .periodic-container {
+        padding: 12px;
+    }
+
+    .periodic-grid {
+        grid-template-columns: repeat(10, 1fr);
+    }
+}
+
+/* =========================================
+   TELAS MUITO PEQUENAS
+   ========================================= */
+
+@media (max-width: 480px) {
+
+    .modal-card {
+        width: 100%;
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .periodic-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .top-controls {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+}
 
         html {
             font-size: calc(16px * var(--tamanho-fonte));
@@ -191,10 +395,7 @@
 
         .container { text-align: center; z-index: 10; max-width: 1200px; width: 100%; padding: 40px 20px; }
         #login-screen { margin: 0 auto; }
-        #main-menu {
-    text-align: left;
-    padding-left: 80px;
-    margin-top: 0;}
+        
 
         .split-layout { display: flex; gap: 50px; text-align: left; align-items: flex-start; }
         .left-panel { flex: 1.5; padding-bottom: 50px; }
@@ -347,7 +548,6 @@
         @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* SISTEMA DE CONCEITOS */
-        .conceito-box { position: fixed; inset: 0; background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px; padding: 40px; z-index: 250; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; max-width: 700px; max-height: 80vh; overflow-y: auto; text-align: center; color: var(--cor-texto); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
         .conceito-header { color: var(--cor-principal); font-size: 1.8rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
         .conceito-auxiliar { color: var(--cor-texto-secundario); font-size: 0.95rem; margin-bottom: 5px; font-style: italic; }
         .conceito-texto { background: var(--bg-input); border-left: 4px solid var(--cor-principal); padding: 20px; border-radius: 8px; margin: 20px 0; text-align: left; line-height: 1.6; font-size: 1.05rem; }
@@ -637,139 +837,54 @@
     color: #a0b0c0;
     font-family: monospace; /* Fonte com espaçamento igual para fórmulas */
 }
-    .shop-screen {
-        position: fixed;
-        inset: 0;
-        z-index: 260;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.14);
-        backdrop-filter: blur(20px);
-    }
+/* =========================================
+   CORREÇÃO DE DESAPARECIMENTO DO MENU
+   ========================================= */
 
-    [data-theme="dark"] .shop-screen {
-        background: rgba(10, 18, 35, 0.78);
-    }
+.modal-overlay {
+    display: none;
 
-    .shop-panel {
-        width: min(900px, 95vw);
-        max-height: min(85vh, calc(100vh - 40px));
-        overflow-y: auto;
-        padding: 28px;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 24px;
-        backdrop-filter: blur(14px);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-    }
+    position: fixed;
+    inset: 0;
 
-    [data-theme="dark"] .shop-panel {
-        background: rgba(15, 23, 45, 0.72);
-        border-color: rgba(255, 255, 255, 0.10);
-    }
+    width: 100%;
+    height: 100%;
 
-    .shop-top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        flex-wrap: wrap;
-        margin-bottom: 18px;
-    }
+    background: var(--bg-overlay);
 
-    .shop-header {
-        font-size: 2.4rem;
-        color: var(--cor-principal);
-        text-transform: uppercase;
-        letter-spacing: 4px;
-        margin: 0;
-    }
+    z-index: 150;
+}
 
-    .shop-subtitle {
-        color: var(--cor-texto-secundario);
-        font-size: 1rem;
-        margin-bottom: 28px;
-        max-width: 760px;
-        line-height: 1.6;
-    }
+.stats-screen,
+.config-screen,
+.auxiliar-screen,
+.profile-screen,
+.conceito-box,
+.periodic-table-screen,
+.seletor-conceitos-screen {
 
-    .shop-section {
-        margin-bottom: 30px;
-        padding: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 22px;
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(14px);
-    }
+    position: fixed;
+    inset: 0;
 
-    [data-theme="dark"] .shop-section {
-        background: rgba(15, 23, 45, 0.72);
-        border-color: rgba(255, 255, 255, 0.10);
-    }
+    display: none;
 
-    .shop-section h3 {
-        margin: 0 0 18px 0;
-        font-size: 1.45rem;
-        color: var(--cor-principal);
-        letter-spacing: 1px;
-    }
+    align-items: center;
+    justify-content: center;
 
-    .shop-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 18px;
-    }
+    padding: 20px;
 
-    .shop-card {
-        border-radius: 22px;
-        padding: 24px;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
-        backdrop-filter: blur(12px);
-        transition: transform 0.25s ease, border-color 0.25s ease;
-    }
+    overflow-y: auto;
 
-    [data-theme="dark"] .shop-card {
-        background: rgba(20, 30, 55, 0.72);
-        border-color: rgba(255, 255, 255, 0.08);
-    }
+    z-index: 300;
+}
 
-    .shop-card:hover {
-        transform: translateY(-5px);
-        border-color: var(--cor-principal);
-    }
-
-    .shop-card h4 {
-        margin: 0 0 10px 0;
-        font-size: 1.2rem;
-        color: var(--cor-principal);
-    }
-
-    .shop-card p {
-        color: var(--cor-texto-secundario);
-        margin-bottom: 18px;
-        line-height: 1.6;
-    }
-
-    .shop-card .shop-buy-btn {
-        background: var(--cor-principal);
-        border: none;
-        color: var(--bg-input);
-        padding: 12px 18px;
-        border-radius: 999px;
-        cursor: pointer;
-        transition: background 0.2s ease, transform 0.2s ease;
-        font-weight: bold;
-        width: 100%;
-    }
-
-    .shop-card .shop-buy-btn:hover {
-        background: #00294a;
-        transform: translateY(-1px);
-    }
+.container,
+#main-menu,
+.left-panel,
+.right-panel {
+    position: relative;
+    z-index: 2;
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
@@ -799,7 +914,6 @@
         <div class="menu-options" style="margin-top: 50px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
             <button class="btn-option" onclick="app.abrirPanorama()"> Mapa de Fases</button>
             <button class="btn-option" onclick="app.abrirTabelaPeriodica()">Material de Estudo</button>
-            <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
             <button class="btn-option" onclick="app.abrirPerfil()"> Meu Perfil (Badges e Histórico)</button>
             <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
         </div>
@@ -984,54 +1098,7 @@
         </div>
     </div>
 
-    <div class="shop-screen" id="shop-screen">
-        <div class="shop-panel">
-            <div class="shop-top">
-                <div>
-                    <h2 class="shop-header">Loja Química</h2>
-                    <p class="shop-subtitle">Use seus pontos para desbloquear recursos e reforçar sua jornada.</p>
-                </div>
-                <button class="config-close" onclick="app.fecharLoja()">Fechar</button>
-            </div>
-
-            <div class="shop-section">
-                <h3>Recursos de Estudo</h3>
-                <div class="shop-grid">
-                    <div class="shop-card">
-                        <h4>Pacote de Dicas</h4>
-                        <p>Adquira 3 dicas adicionais para usar em fases futuras e ganhar vantagem nas perguntas mais difíceis.</p>
-                        <button class="shop-buy-btn">Comprar por 150 pts</button>
-                    </div>
-                    <div class="shop-card">
-                        <h4>Bônus de Pontos</h4>
-                        <p>Receba 200 pontos extras para ajudar a alcançar novas conquistas e desbloquear conteúdos.</p>
-                        <button class="shop-buy-btn">Comprar por 180 pts</button>
-                    </div>
-                    <div class="shop-card">
-                        <h4>Tema Brilhante</h4>
-                        <p>Desbloqueie um tema visual exclusivo que deixa a sua tela ainda mais estilosa.</p>
-                        <button class="shop-buy-btn">Comprar por 220 pts</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="shop-section">
-                <h3>Ofertas Rápidas</h3>
-                <div class="shop-grid">
-                    <div class="shop-card">
-                        <h4>Revisão Rápida</h4>
-                        <p>Ganhe um resumo instantâneo de conteúdo para lembrar os conceitos antes da próxima fase.</p>
-                        <button class="shop-buy-btn">Comprar por 120 pts</button>
-                    </div>
-                    <div class="shop-card">
-                        <h4>Desbloqueio de Conteúdo</h4>
-                        <p>Tenha acesso extra a cards explicativos e informações detalhadas na tabela periódica.</p>
-                        <button class="shop-buy-btn">Comprar por 260 pts</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+            
 
     <div class="periodic-table-screen smooth-enter" id="periodic-table-screen">
         <div class="periodic-container">
