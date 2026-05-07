@@ -1,4 +1,5 @@
         const app = {
+            temasDisponiveis: ['light-1', 'light-2', 'light-3', 'dark-1', 'dark-2', 'dark-3'],
             usuarioAtual: null,
             perguntaAtualIdx: 0,
             gameState: { 
@@ -14,6 +15,7 @@
             nivelPendente: null,
             tagPendente: null,
             sons: {},
+            
             
             inicializarSons() {
                 const basePath = 'sounds/';
@@ -70,12 +72,16 @@
 
             obterPerfilPadrao() {
                 return {
-                    nome: "user",
-                    pontuacaoTotal: 0,
-                    nivelMaximo: 1,
-                    badges: [],
-                    historico: [],
-                    temaCurrent: "light",
+                    // ... 
+                    temaCurrent: "light-1",
+                    tamanhoFonte: "medio"
+                };
+            },
+
+            obterPerfilUser0() {
+                return {
+                    // ... 
+                    temaCurrent: "light-1",
                     tamanhoFonte: "medio"
                 };
             },
@@ -480,10 +486,22 @@
 
             toggleTema() {
                 const body = document.body;
-                const novo = body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-                body.setAttribute('data-theme', novo);
-                if (this.usuarioAtual) {
-                    this.contaPadrao.temaCurrent = novo;
+                let temaAtual = body.getAttribute('data-theme') || 'light-1';
+                
+                // Conversão caso o usuário ainda esteja usando um save antigo
+                if (temaAtual === 'light') temaAtual = 'light-1';
+                if (temaAtual === 'dark') temaAtual = 'dark-1';
+
+                // Descobre qual é o próximo tema do Array
+                let index = this.temasDisponiveis.indexOf(temaAtual);
+                let novoIndex = (index + 1) % this.temasDisponiveis.length;
+                let novoTema = this.temasDisponiveis[novoIndex];
+                
+                body.setAttribute('data-theme', novoTema);
+                
+                // Salva no perfil do jogador
+                if (this.usuarioAtual && this.contaPadrao) {
+                    this.contaPadrao.temaCurrent = novoTema;
                     this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
                 }
             },
@@ -523,8 +541,8 @@
 
             carregarTemaSalvo() {
                 if (!this.contaPadrao) this.inicializarConta();
-                document.body.setAttribute('data-theme', 'light');
-                this.contaPadrao.temaCurrent = 'light';
+                document.body.setAttribute('data-theme', 'light-1');
+                this.contaPadrao.temaCurrent = 'light-1';
                 this.contaPadrao.tamanhoFonte = 'medio';
                 this.aplicarTamanhoFonte('medio');
             },

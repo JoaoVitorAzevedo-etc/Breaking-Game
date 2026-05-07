@@ -6,33 +6,107 @@
     <title>Breaking Game - Aprenda Química Jogando</title>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
     <style>
+        /* Importação da Google Font Lobster */
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+/* Estilos de Fonte */
+.fonte-padrao { font-family: 'Special Elite', cursive, sans-serif !important; }
+.fonte-times { font-family: 'Times New Roman', Times, serif !important; }
+.fonte-lobster { font-family: 'Lobster', cursive !important; }
+
+/* Para as fontes Unicode (Double Struck e Serif Bold Italic), 
+   usaremos uma técnica de "text-transform" via JS ou apenas a classe para controle */
+.fonte-double-struck { font-family: serif !important; font-weight: bold; }
+.fonte-serif-bold-italic { font-family: serif !important; font-style: italic; font-weight: bold; }
         /* =========================================
            VARIÁVEIS DE TEMA
            ========================================= */
+        /* =========================================
+           VARIÁVEIS DE TEMA (6 TEMAS)
+           ========================================= */
         :root {
-            --bg-gradient: radial-gradient(circle, #ffffff 0%, #e6eff8 100%);
+            --tamanho-fonte: 1;
+            --opacidade-textura: 0.03;
+        }
+
+        /* TEMA CLARO 1 */
+        [data-theme="light-1"], [data-theme="light"] {
+            --bg-gradient: radial-gradient(circle, #FAF3DD 0%, #e8e1cc 100%);
             --cor-principal: #003366;
             --cor-texto: #333333;
             --cor-texto-secundario: #555555;
-            --bg-card: rgba(255, 255, 255, 0.95);
-            --borda-card: #cccccc;
-            --bg-input: #ffffff;
+            --bg-card: rgba(200, 213, 185, 0.95); /* #C8D5B9 */
+            --borda-card: #C8D5B9;
+            --bg-input: #FAF3DD;
             --cor-glow: rgba(0, 51, 102, 0.3);
             --bg-overlay: rgba(0, 0, 0, 0.6);
-            --opacidade-textura: 0.03;
-            --tamanho-fonte: 1;
         }
 
-        [data-theme="dark"] {
-            --bg-gradient: radial-gradient(circle, #1a1a1a 0%, #050505 100%);
-            --cor-principal: #ffff2c; 
+        /* TEMA CLARO 2 */
+        [data-theme="light-2"] {
+            --bg-gradient: radial-gradient(circle, #DEE5E5 0%, #cdd4d4 100%);
+            --cor-principal: #463F3A;
+            --cor-texto: #222222;
+            --cor-texto-secundario: #463F3A;
+            --bg-card: rgba(157, 197, 187, 0.95); /* #9DC5BB */
+            --borda-card: #9DC5BB;
+            --bg-input: #DEE5E5;
+            --cor-glow: rgba(70, 63, 58, 0.3);
+            --bg-overlay: rgba(0, 0, 0, 0.6);
+        }
+
+        /* TEMA CLARO 3 */
+        [data-theme="light-3"] {
+            --bg-gradient: radial-gradient(circle, #C5EFCB 0%, #b3d8b8 100%);
+            --cor-principal: #231C07;
+            --cor-texto: #111111;
+            --cor-texto-secundario: #231C07;
+            --bg-card: rgba(172, 136, 135, 0.95); /* #AC8887 */
+            --borda-card: #AC8887;
+            --bg-input: #C5EFCB;
+            --cor-glow: rgba(35, 28, 7, 0.3);
+            --bg-overlay: rgba(0, 0, 0, 0.6);
+        }
+
+        /* TEMA ESCURO 1 */
+        [data-theme="dark-1"], [data-theme="dark"] {
+            --bg-gradient: radial-gradient(circle, #222222 0%, #111111 100%);
+            --cor-principal: #ffff2c;
             --cor-texto: #eeeeee;
-            --cor-texto-secundario: #cccccc;
-            --bg-card: rgba(30, 30, 30, 0.95);
-            --borda-card: #444444;
+            --cor-texto-secundario: hsl(0, 0%, 80%);
+            --bg-card: rgba(204, 204, 204, 0.15); /* #cccccc adaptado para escuro */
+            --borda-card: #cccccc;
             --bg-input: #222222;
             --cor-glow: rgba(255, 255, 44, 0.4);
-            --bg-overlay: rgba(0, 0, 0, 0.85);
+            --bg-overlay: rgba(0, 0, 0, 0.8);
+            --opacidade-textura: 0.1;
+        }
+
+        /* TEMA ESCURO 2 */
+        [data-theme="dark-2"] {
+            --bg-gradient: radial-gradient(circle, #37392E 0%, #25261f 100%);
+            --cor-principal: #EFF1F3;
+            --cor-texto: #ffffff;
+            --cor-texto-secundario: #dddddd;
+            --bg-card: rgba(241, 81, 82, 0.25); /* #F15152 adaptado para escuro */
+            --borda-card: #F15152;
+            --bg-input: #37392E;
+            --cor-glow: rgba(239, 241, 243, 0.4);
+            --bg-overlay: rgba(0, 0, 0, 0.8);
+            --opacidade-textura: 0.1;
+        }
+
+        /* TEMA ESCURO 3 */
+        [data-theme="dark-3"] {
+            --bg-gradient: radial-gradient(circle, #6A041D 0%, #4a0214 100%);
+            --cor-principal: #B2FFA9;
+            --cor-texto: #ffffff;
+            --cor-texto-secundario: #dddddd;
+            --bg-card: rgba(255, 74, 28, 0.25); /* #FF4A1C adaptado para escuro */
+            --borda-card: #FF4A1C;
+            --bg-input: #6A041D;
+            --cor-glow: rgba(178, 255, 169, 0.4);
+            --bg-overlay: rgba(0, 0, 0, 0.8);
             --opacidade-textura: 0.1;
         }
 
@@ -117,7 +191,10 @@
 
         .container { text-align: center; z-index: 10; max-width: 1200px; width: 100%; padding: 40px 20px; }
         #login-screen { margin: 0 auto; }
-        #main-menu { text-align: left; padding-left: 80px; margin-top: -200px; }
+        #main-menu {
+    text-align: left;
+    padding-left: 80px;
+    margin-top: 0;}
 
         .split-layout { display: flex; gap: 50px; text-align: left; align-items: flex-start; }
         .left-panel { flex: 1.5; padding-bottom: 50px; }
@@ -721,7 +798,7 @@
         
         <div class="menu-options" style="margin-top: 50px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
             <button class="btn-option" onclick="app.abrirPanorama()"> Mapa de Fases</button>
-            <button class="btn-option" onclick="app.abrirTabelaPeriodica()"> Tabela Periódica</button>
+            <button class="btn-option" onclick="app.abrirTabelaPeriodica()">Material de Estudo</button>
             <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
             <button class="btn-option" onclick="app.abrirPerfil()"> Meu Perfil (Badges e Histórico)</button>
             <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
@@ -795,8 +872,8 @@
         <div class="modal-card">
         <h2 class="config-header">Configurações</h2>
         <div class="config-option">
-            <span>Alto Contraste</span>
-            <input type="checkbox" id="toggle-tema" onchange="app.toggleTema()" style="transform: scale(1.5);">
+            <span>Aparência Visual</span>
+            <button class="hint-btn" onclick="app.toggleTema()" style="margin: 0;">Trocar Tema 🎨</button>
         </div>
         <div class="config-option">
             <span>Música (Em breve)</span>
