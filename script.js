@@ -1,5 +1,4 @@
-        const app = {
-            temasDisponiveis: ['light-1', 'light-2', 'light-3', 'dark-1', 'dark-2', 'dark-3'],
+ const app = {
             usuarioAtual: null,
             perguntaAtualIdx: 0,
             gameState: { 
@@ -15,8 +14,6 @@
             nivelPendente: null,
             tagPendente: null,
             sons: {},
-            
-            
             
             inicializarSons() {
                 const basePath = 'sounds/';
@@ -73,20 +70,15 @@
 
             obterPerfilPadrao() {
                 return {
-                    // ... 
-                    temaCurrent: "light-1",
+                    nome: "user",
+                    pontuacaoTotal: 0,
+                    nivelMaximo: 1,
+                    badges: [],
+                    historico: [],
+                    temaCurrent: "light",
                     tamanhoFonte: "medio"
                 };
             },
-
-            obterPerfilUser0() {
-                return {
-                    // ... 
-                    temaCurrent: "light-1",
-                    tamanhoFonte: "medio"
-                };
-            },
-            
 
             obterPerfilUser0() {
                 return {
@@ -486,24 +478,29 @@
                 });
             },
 
+            temasDisponiveis: ['light-1','light-2','light-3','dark-1','dark-2','dark-3'],
+
             toggleTema() {
                 const body = document.body;
-                let temaAtual = body.getAttribute('data-theme') || 'light-1';
-                
-                // Conversão caso o usuário ainda esteja usando um save antigo
-                if (temaAtual === 'light') temaAtual = 'light-1';
-                if (temaAtual === 'dark') temaAtual = 'dark-1';
+                const atual = body.getAttribute('data-theme') || 'light-1';
+                const lista = this.temasDisponiveis;
+                let idx = lista.indexOf(atual);
+                if (idx === -1) {
+                    // mapear temas legados
+                    idx = (atual === 'dark') ? lista.indexOf('dark-1') : lista.indexOf('light-1');
+                }
+                const novo = lista[(idx + 1) % lista.length];
+                this.setTema(novo);
+            },
 
-                // Descobre qual é o próximo tema do Array
-                let index = this.temasDisponiveis.indexOf(temaAtual);
-                let novoIndex = (index + 1) % this.temasDisponiveis.length;
-                let novoTema = this.temasDisponiveis[novoIndex];
-                
-                body.setAttribute('data-theme', novoTema);
-                
-                // Salva no perfil do jogador
+            setTema(tema) {
+                const body = document.body;
+                body.setAttribute('data-theme', tema);
+                document.querySelectorAll('.theme-swatch').forEach(el => {
+                    el.classList.toggle('active', el.getAttribute('data-theme-value') === tema);
+                });
                 if (this.usuarioAtual && this.contaPadrao) {
-                    this.contaPadrao.temaCurrent = novoTema;
+                    this.contaPadrao.temaCurrent = tema;
                     this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
                 }
             },
@@ -511,6 +508,10 @@
             abrirConfig() {
                 document.getElementById('config-screen').style.display = 'block';
                 document.getElementById('modal-overlay').style.display = 'block';
+                const atual = document.body.getAttribute('data-theme') || 'light-1';
+                document.querySelectorAll('.theme-swatch').forEach(el => {
+                    el.classList.toggle('active', el.getAttribute('data-theme-value') === atual);
+                });
             },
 
             fecharConfig() {
@@ -543,8 +544,8 @@
 
             carregarTemaSalvo() {
                 if (!this.contaPadrao) this.inicializarConta();
-                document.body.setAttribute('data-theme', 'light-1');
-                this.contaPadrao.temaCurrent = 'light-1';
+                document.body.setAttribute('data-theme', 'light');
+                this.contaPadrao.temaCurrent = 'light';
                 this.contaPadrao.tamanhoFonte = 'medio';
                 this.aplicarTamanhoFonte('medio');
             },
@@ -718,6 +719,18 @@
                 document.getElementById('periodic-table-screen').style.display = 'block';
                 const primeiroBtn = document.querySelector('.periodic-menu-btn');
                 this.mostrarTabelaPeriodicaView('tabela', primeiroBtn);
+            },
+
+            abrirLoja() {
+                document.getElementById('main-menu').style.display = 'none';
+                document.getElementById('modal-overlay').style.display = 'block';
+                document.getElementById('shop-screen').style.display = 'flex';
+            },
+
+            fecharLoja() {
+                document.querySelector(".shop-screen").style.display = "flex";
+                document.getElementById('modal-overlay').style.display = 'none';
+                document.getElementById('main-menu').style.display = 'block';
             },
 
             mostrarTabelaPeriodicaView(view, botao) {
@@ -1529,13 +1542,18 @@
             },
 
             voltarAoMenu() { 
-                document.getElementById('levels-screen').style.display = 'none';
-                document.getElementById('modal-overlay').style.display = 'none';
-                document.getElementById('profile-screen').style.display = 'none';
-                document.getElementById('final-warning-screen').style.display = 'none';
-                document.getElementById('shop-screen').style.display = 'none';
-                this.carregarMenuPrincipal(); 
-            },
+    // Esconde as diversas telas de sobreposição e janelas específicas
+    document.getElementById('levels-screen').style.display = 'none';
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('profile-screen').style.display = 'none';
+    document.getElementById('final-warning-screen').style.display = 'none';
+    
+    // Garante que a tela da loja (shop-screen) seja ocultada/ajustada
+    document.querySelector(".shop-screen").style.display = "none"; // Ajustado para fechar
+    
+    // Chama a função que recarrega/exibe o menu principal
+    this.carregarMenuPrincipal(); 
+},
 
             trocarUsuario() { 
                 if (this.usuarioAtual) {

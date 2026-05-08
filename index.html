@@ -4,893 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Breaking Game - Aprenda Química Jogando</title>
-    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
-    <style>
-        /* Importação da Google Font Lobster */
-@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
-
-/* Estilos de Fonte */
-.fonte-padrao { font-family: 'Special Elite', cursive, sans-serif !important; }
-.fonte-times { font-family: 'Times New Roman', Times, serif !important; }
-.fonte-lobster { font-family: 'Lobster', cursive !important; }
-
-/* Para as fontes Unicode (Double Struck e Serif Bold Italic), 
-   usaremos uma técnica de "text-transform" via JS ou apenas a classe para controle */
-.fonte-double-struck { font-family: serif !important; font-weight: bold; }
-.fonte-serif-bold-italic { font-family: serif !important; font-style: italic; font-weight: bold; }
-        /* =========================================
-           VARIÁVEIS DE TEMA
-           ========================================= */
-        /* =========================================
-           VARIÁVEIS DE TEMA (6 TEMAS)
-           ========================================= */
-        :root {
-            --tamanho-fonte: 1;
-            --opacidade-textura: 0.03;
-        }
-
-        /* TEMA CLARO 1 */
-        [data-theme="light-1"], [data-theme="light"] {
-            --bg-gradient: radial-gradient(circle, #FAF3DD 0%, #e8e1cc 100%);
-            --cor-principal: #003366;
-            --cor-texto: #333333;
-            --cor-texto-secundario: #555555;
-            --bg-card: rgba(200, 213, 185, 0.95); /* #C8D5B9 */
-            --borda-card: #C8D5B9;
-            --bg-input: #FAF3DD;
-            --cor-glow: rgba(0, 51, 102, 0.3);
-            --bg-overlay: rgba(0, 0, 0, 0.6);
-        }
-
-        /* TEMA CLARO 2 */
-        [data-theme="light-2"] {
-            --bg-gradient: radial-gradient(circle, #DEE5E5 0%, #cdd4d4 100%);
-            --cor-principal: #463F3A;
-            --cor-texto: #222222;
-            --cor-texto-secundario: #463F3A;
-            --bg-card: rgba(157, 197, 187, 0.95); /* #9DC5BB */
-            --borda-card: #9DC5BB;
-            --bg-input: #DEE5E5;
-            --cor-glow: rgba(70, 63, 58, 0.3);
-            --bg-overlay: rgba(0, 0, 0, 0.6);
-        }
-
-        /* TEMA CLARO 3 */
-        [data-theme="light-3"] {
-            --bg-gradient: radial-gradient(circle, #C5EFCB 0%, #b3d8b8 100%);
-            --cor-principal: #231C07;
-            --cor-texto: #111111;
-            --cor-texto-secundario: #231C07;
-            --bg-card: rgba(172, 136, 135, 0.95); /* #AC8887 */
-            --borda-card: #AC8887;
-            --bg-input: #C5EFCB;
-            --cor-glow: rgba(35, 28, 7, 0.3);
-            --bg-overlay: rgba(0, 0, 0, 0.6);
-        }
-
-        /* TEMA ESCURO 1 */
-        [data-theme="dark-1"], [data-theme="dark"] {
-            --bg-gradient: radial-gradient(circle, #222222 0%, #111111 100%);
-            --cor-principal: #ffff2c;
-            --cor-texto: #eeeeee;
-            --cor-texto-secundario: hsl(0, 0%, 80%);
-            --bg-card: rgba(204, 204, 204, 0.15); /* #cccccc adaptado para escuro */
-            --borda-card: #cccccc;
-            --bg-input: #222222;
-            --cor-glow: rgba(255, 255, 44, 0.4);
-            --bg-overlay: rgba(0, 0, 0, 0.8);
-            --opacidade-textura: 0.1;
-        }
-
-        /* TEMA ESCURO 2 */
-        [data-theme="dark-2"] {
-            --bg-gradient: radial-gradient(circle, #37392E 0%, #25261f 100%);
-            --cor-principal: #EFF1F3;
-            --cor-texto: #ffffff;
-            --cor-texto-secundario: #dddddd;
-            --bg-card: rgba(241, 81, 82, 0.25); /* #F15152 adaptado para escuro */
-            --borda-card: #F15152;
-            --bg-input: #37392E;
-            --cor-glow: rgba(239, 241, 243, 0.4);
-            --bg-overlay: rgba(0, 0, 0, 0.8);
-            --opacidade-textura: 0.1;
-        }
-
-        /* TEMA ESCURO 3 */
-        [data-theme="dark-3"] {
-            --bg-gradient: radial-gradient(circle, #6A041D 0%, #4a0214 100%);
-            --cor-principal: #B2FFA9;
-            --cor-texto: #ffffff;
-            --cor-texto-secundario: #dddddd;
-            --bg-card: rgba(255, 74, 28, 0.25); /* #FF4A1C adaptado para escuro */
-            --borda-card: #FF4A1C;
-            --bg-input: #6A041D;
-            --cor-glow: rgba(178, 255, 169, 0.4);
-            --bg-overlay: rgba(0, 0, 0, 0.8);
-            --opacidade-textura: 0.1;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Special Elite', system-ui, serif;
-            transition: background 0.3s, color 0.3s, border-color 0.3s;
-        }
-
-        body {
-            background: var(--bg-gradient);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--cor-texto); 
-            overflow-x: hidden;
-            font-size: calc(1rem * var(--tamanho-fonte));
-        }
-        /* =========================================
-   CORREÇÃO GERAL DE LAYOUT E MODAIS
-   ========================================= */
-
-/* CENTRALIZAÇÃO GERAL */
-body {
-    justify-content: center !important;
-    align-items: center;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-/* REMOVE O DESLOCAMENTO ERRADO DO MENU */
-#main-menu {
-    text-align: left;
-    padding-left: 40px;
-    margin-top: 0 !important;
-    padding-top: 40px;
-}
-
-/* CONTAINER MAIS ESTÁVEL */
-.container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* =========================================
-   SISTEMA PADRÃO DE MODAIS
-   ========================================= */
-
-.stats-screen,
-.config-screen,
-.auxiliar-screen,
-.profile-screen,
-.conceito-box,
-.periodic-table-screen,
-.seletor-conceitos-screen {
-
-    position: fixed;
-    inset: 0;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    overflow-y: auto;
-
-    z-index: 300;
-}
-
-/* OVERLAY MAIS ESTÁVEL */
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--bg-overlay);
-    z-index: 150;
-}
-
-/* CARD DOS MODAIS */
-.modal-card {
-    width: min(90vw, 700px);
-
-    max-height: 90vh;
-
-    overflow-y: auto;
-
-    margin: auto;
-
-    border-radius: 16px;
-
-    padding: 30px;
-
-    position: relative;
-}
-
-/* =========================================
-   CORREÇÃO ESPECÍFICA DA CONCEITO-BOX
-   ========================================= */
-
-.conceito-box {
-    background: rgba(0,0,0,0.5);
-}
-
-.conceito-box .modal-card {
-    width: min(90vw, 750px);
-    max-height: 90vh;
-}
-
-/* REMOVE CONFLITOS ANTIGOS */
-.conceito-box {
-    transform: none !important;
-    top: auto !important;
-    left: auto !important;
-    width: auto !important;
-    height: auto !important;
-    max-width: none !important;
-    max-height: none !important;
-}
-
-/* =========================================
-   TABELA PERIÓDICA RESPONSIVA
-   ========================================= */
-
-.periodic-table-screen {
-    background: rgba(0,0,0,0.7);
-}
-
-.periodic-table-screen .periodic-container {
-    width: min(95vw, 1500px);
-    max-height: 90vh;
-
-    overflow: auto;
-
-    background: var(--bg-card);
-
-    padding: 20px;
-
-    border-radius: 16px;
-}
-
-/* =========================================
-   HUD MAIS ACESSÍVEL
-   ========================================= */
-
-.hud {
-    top: 15px !important;
-    right: 15px !important;
-
-    max-width: 300px;
-
-    border-radius: 12px;
-}
-
-/* =========================================
-   RIGHT PANEL SEM BUG DE STICKY
-   ========================================= */
-
-.right-panel {
-    position: relative !important;
-    top: auto !important;
-}
-
-/* =========================================
-   RESPONSIVIDADE EXTRA
-   ========================================= */
-
-@media (max-width: 768px) {
-
-    #main-menu {
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-
-    .modal-card {
-        width: 95vw;
-        padding: 20px;
-    }
-
-    .hud {
-        top: auto !important;
-        bottom: 10px !important;
-        right: 10px !important;
-
-        max-width: calc(100vw - 20px);
-    }
-
-    .periodic-table-screen .periodic-container {
-        padding: 12px;
-    }
-
-    .periodic-grid {
-        grid-template-columns: repeat(10, 1fr);
-    }
-}
-
-/* =========================================
-   TELAS MUITO PEQUENAS
-   ========================================= */
-
-@media (max-width: 480px) {
-
-    .modal-card {
-        width: 100%;
-        padding: 16px;
-        border-radius: 12px;
-    }
-
-    .periodic-grid {
-        grid-template-columns: repeat(5, 1fr);
-    }
-
-    .top-controls {
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
-}
-
-        html {
-            font-size: calc(16px * var(--tamanho-fonte));
-        }
-
-        body::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-            opacity: var(--opacidade-textura); 
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* =========================================
-           ANIMAÇÕES (KEYFRAMES)
-           ========================================= */
-        @keyframes modalEnter {
-            from { opacity: 0; transform: translate(-50%, -45%) scale(0.95); }
-            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translate(-50%, -50%) translateX(0); }
-            20%, 60% { transform: translate(-50%, -50%) translateX(-12px); }
-            40%, 80% { transform: translate(-50%, -50%) translateX(12px); }
-        }
-
-        @keyframes pop {
-            0% { transform: scale(0.8); opacity: 0; }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes smoothEnter {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .modal-animated {
-            animation: modalEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        .smooth-enter {
-            animation: smoothEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        .shake-animation { animation: shake 0.5s ease-in-out; }
-        .pop-animation { animation: pop 0.4s ease-out forwards; }
-
-
-        .top-controls { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; gap: 10px; }
-
-        .control-btn {
-            background: var(--cor-principal); color: var(--bg-input); border: none;
-            padding: 10px 15px; border-radius: 50px; cursor: pointer; font-size: 0.8rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-transform: uppercase; display: flex; align-items: center; gap: 5px;
-            transition: transform 0.2s;
-        }
-        .control-btn:active { transform: scale(0.9); } /* Feedback de clique */
-
-        .container { text-align: center; z-index: 10; max-width: 1200px; width: 100%; padding: 40px 20px; }
-        #login-screen { margin: 0 auto; }
-        
-
-        .split-layout { display: flex; gap: 50px; text-align: left; align-items: flex-start; }
-        .left-panel { flex: 1.5; padding-bottom: 50px; }
-        .right-panel { flex: 1; position: sticky; top: 40px; display: flex; justify-content: center; align-items: center; }
-
-        .theme-image { width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 15px 35px var(--cor-glow); border: 4px solid var(--cor-principal); object-fit: cover; }
-
-        .game-title { font-size: 3.5rem; color: var(--cor-principal); text-transform: uppercase; letter-spacing: 10px; margin-bottom: 20px; text-shadow: 0 0 10px var(--cor-glow); }
-        .game-subtitle { font-size: 1.1rem; color: var(--cor-texto-secundario); margin-bottom: 40px; letter-spacing: 3px; }
-
-        .btn-option {
-            background: none; border: none; color: var(--cor-texto-secundario); font-size: 1.2rem; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 3px; transition: all 0.4s ease; position: relative; padding: 10px;
-        }
-        .btn-option:hover { color: var(--cor-principal); text-shadow: 0 0 5px var(--cor-glow); transform: scale(1.05); }
-        .btn-option:active { transform: scale(0.95); }
-        .btn-option::after { content: ""; position: absolute; bottom: -5px; left: 50%; width: 0; height: 2px; background: var(--cor-principal); transition: all 0.4s ease; transform: translateX(-50%); }
-        .btn-option:hover::after { width: 80%; }
-
-        .info-text { color: var(--cor-texto-secundario); font-size: 1.2rem; margin-bottom: 10px; }
-        .highlight-text { color: var(--cor-principal); font-weight: bold; }
-
-        /* ROADMAP */
-        .roadmap-container { border-left: 4px solid var(--borda-card); margin-left: 20px; padding-left: 40px; position: relative; }
-        .roadmap-node { position: relative; margin-bottom: 30px; }
-        .roadmap-node::before {
-            content: ''; position: absolute; left: -52px; top: 50%; transform: translateY(-50%);
-            width: 20px; height: 20px; border-radius: 50%; background: var(--bg-input); border: 4px solid var(--borda-card); z-index: 2;
-            transition: all 0.3s;
-        }
-        .roadmap-node.completed::before { background: #00c850; border-color: #008833; box-shadow: 0 0 10px rgba(0, 200, 80, 0.4);}
-        .roadmap-node.current::before { background: var(--cor-principal); border-color: var(--cor-principal); box-shadow: 0 0 15px var(--cor-glow); }
-
-        .level-card {
-            background: var(--bg-card); border: 2px solid var(--borda-card); border-radius: 10px; padding: 20px; width: 100%; max-width: 450px; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
-        }
-        .roadmap-node.unlocked .level-card { border-color: var(--cor-principal); } 
-        .roadmap-node.unlocked .level-card:hover { transform: translateX(10px); box-shadow: 0 8px 20px var(--cor-glow); }
-
-        .level-title { font-size: 1.2rem; color: var(--cor-texto); transition: color 0.3s; }
-        .roadmap-node.unlocked .level-title { color: var(--cor-principal); font-weight: bold; }
-        
-        .chapter-header h2 { color: var(--cor-principal); font-size: 1.6rem; text-transform: uppercase; background: var(--bg-gradient); display: inline-block; padding-right: 15px; }
-
-        /* INPUTS E HUD */
-        input[type="text"] { background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto); padding: 12px 20px; font-size: 1rem; text-align: center; width: 300px; border-radius: 5px; }
-        input[type="text"]:focus { outline: none; border-color: var(--cor-principal); box-shadow: 0 0 8px var(--cor-glow); }
-
-        .hud { position: fixed; top: 70px; right: 20px; background: var(--bg-card); padding: 20px; border: 2px solid var(--cor-principal); color: var(--cor-principal); z-index: 100; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-weight: bold; border-radius: 8px; }
-
-        .question-box {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px;
-            padding: 40px; z-index: 200; max-width: 600px; width: 90%; display: none;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5); color: var(--cor-texto); 
-        }
-
-        .option-btn {
-            background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto); 
-            padding: 15px; margin: 8px 0; cursor: pointer; width: 100%; text-align: left; transition: all 0.2s; border-radius: 8px; font-weight: bold;
-        }
-        .option-btn:hover { border-color: var(--cor-principal); color: var(--cor-principal); transform: translateX(8px); box-shadow: -4px 4px 10px rgba(0,0,0,0.1);}
-        .option-btn:active { transform: scale(0.98); }
-
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-overlay); z-index: 150; }
-
-        /* Estilo unificado para Modais */
-        .stats-screen, .config-screen, .auxiliar-screen, .profile-screen, .conceito-box {
-            position: fixed; inset: 0;
-            display: flex; align-items: center; justify-content: center;
-            width: 100vw; height: 100vh; padding: 20px;
-            z-index: 250;
-        }
-        .stats-screen { display: none; }
-        .config-screen { display: none; }
-
-        .modal-card {
-            background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px;
-            padding: 40px; color: var(--cor-texto); text-align: center;
-            width: min(90vw, 700px); max-height: 85vh; overflow-y: auto;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-        }
-
-        .config-option { background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto); padding: 15px 20px; margin: 10px 0; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: left; font-size: 1rem; display: flex; justify-content: space-between; align-items: center; }
-        .config-option:hover { border-color: var(--cor-principal); background: var(--bg-card); }
-        .config-header { color: var(--cor-principal); font-size: 1.8rem; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
-
-        .config-close { background: var(--cor-principal); color: var(--bg-input); border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; margin-top: 20px; font-size: 0.9rem; text-transform: uppercase; transition: all 0.3s; }
-        .config-close:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-
-        /* AUXILIAR */
-        .auxiliar-screen { display: none; }
-        .auxiliar-header { color: var(--cor-principal); font-size: 1.6rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }
-        .auxiliar-subtitulo { color: var(--cor-texto-secundario); font-size: 0.95rem; margin-bottom: 30px; letter-spacing: 1px; }
-        .auxiliar-grid { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-        .auxiliar-card { background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 12px; padding: 24px 18px; width: 170px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .auxiliar-card:hover { border-color: var(--cor-principal); transform: translateY(-5px); box-shadow: 0 8px 20px var(--cor-glow); }
-        .auxiliar-card.selecionado { border-color: var(--cor-principal); background: var(--bg-card); box-shadow: 0 0 15px var(--cor-glow); transform: scale(1.05); }
-        .auxiliar-sprite { width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--borda-card); background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; }
-        .auxiliar-nome { color: var(--cor-principal); font-size: 1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-        .auxiliar-descricao { color: var(--cor-texto-secundario); font-size: 0.82rem; line-height: 1.4; }
-        .auxiliar-confirmar { background: var(--cor-principal); color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; margin-top: 28px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; display: none; }
-        .auxiliar-confirmar:hover { transform: scale(1.05); box-shadow: 0 4px 14px var(--cor-glow); }
-
-        /* PERFIL E BADGES */
-        .profile-screen { display: none; }
-        .profile-header { color: var(--cor-principal); font-size: 1.8rem; margin-bottom: 20px; text-transform: uppercase; }
-        .profile-section-title { font-size: 1.3rem; margin: 20px 0 10px 0; color: var(--cor-texto); border-bottom: 2px solid var(--cor-principal); display: inline-block; padding-bottom: 5px;}
-        .badges-container { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
-        
-        .badge-item {
-            background: var(--bg-input); border: 2px solid var(--cor-principal); border-radius: 50px;
-            padding: 10px 20px; font-size: 1rem; font-weight: bold; color: var(--cor-principal);
-            display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px var(--cor-glow);
-            transition: transform 0.2s, background 0.3s;
-            cursor: help; /* Muda o cursor para indicar que tem dica */
-            position: relative; /* Necessário para o tooltip flutuante */
-        }
-        .badge-item:hover { transform: scale(1.1) translateY(-5px); background: var(--bg-card); }
-        
-        /* O Tooltip Elegante usando ::after e ::before */
-        .badge-item::after {
-            content: attr(data-tooltip); /* Pega o texto do HTML */
-            position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%) translateY(10px);
-            background: var(--cor-texto); color: var(--bg-input);
-            padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: normal;
-            white-space: nowrap; opacity: 0; pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4); z-index: 1000;
-        }
-        .badge-item::before { /* O triângulo apontando pra baixo */
-            content: ''; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%) translateY(10px);
-            border-width: 6px; border-style: solid; border-color: var(--cor-texto) transparent transparent transparent;
-            opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 1000;
-        }
-        .badge-item:hover::after, .badge-item:hover::before { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-        .history-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: var(--bg-input); border-radius: 8px; overflow: hidden;}
-        .history-table th, .history-table td { border-bottom: 1px solid var(--borda-card); padding: 12px; text-align: center; transition: background 0.2s;}
-        .history-table th { background: var(--cor-principal); color: var(--bg-input); text-transform: uppercase; font-size: 0.9rem;}
-        .history-table tr:hover td { background: var(--cor-glow); }
-        .history-table tr:last-child td { border-bottom: none; }
-
-        /* SISTEMA DE DICAS */
-        .hint-btn { background: #ffc107; color: #333; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: bold; transition: all 0.3s; margin-right: 10px; }
-        .hint-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4); }
-        .hint-btn:disabled { opacity: 0.5; cursor: not-allowed; background: #cccccc; }
-        .hint-display { background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 235, 59, 0.1) 100%); border-left: 4px solid #ffc107; padding: 15px 18px; border-radius: 8px; margin-top: 15px; margin-bottom: 10px; font-style: italic; color: var(--cor-texto); display: none; box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2); }
-        .hint-display.show { display: block; animation: slideIn 0.4s ease; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* SISTEMA DE CONCEITOS */
-        .conceito-header { color: var(--cor-principal); font-size: 1.8rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
-        .conceito-auxiliar { color: var(--cor-texto-secundario); font-size: 0.95rem; margin-bottom: 5px; font-style: italic; }
-        .conceito-texto { background: var(--bg-input); border-left: 4px solid var(--cor-principal); padding: 20px; border-radius: 8px; margin: 20px 0; text-align: left; line-height: 1.6; font-size: 1.05rem; }
-        .conceito-botao { background: var(--cor-principal); color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; margin-top: 25px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
-
-        /* TABELA PERIÓDICA */
-        .periodic-table-screen { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px; padding: 20px; z-index: 250; width: 98%; max-width: 1600px; max-height: 90vh; overflow: auto; display: none; }
-        .periodic-container { display: flex; gap: 15px; }
-        .periodic-menu { display: flex; flex-direction: column; gap: 10px; min-width: 150px; }
-        .periodic-menu-btn { background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto); padding: 12px 15px; border-radius: 6px; cursor: pointer; transition: all 0.3s; text-transform: uppercase; font-size: 0.85rem; font-weight: bold; text-align: center; }
-        .periodic-menu-btn:hover { border-color: var(--cor-principal); color: var(--cor-principal); transform: translateX(5px); }
-        .periodic-menu-btn.active { background: var(--cor-principal); color: var(--bg-input); border-color: var(--cor-principal); }
-        .periodic-content { flex: 1; }
-        .periodic-header { color: var(--cor-principal); font-size: 1.8rem; margin-bottom: 15px; text-transform: uppercase; text-align: center; }
-        .periodic-grid { display: grid; grid-template-columns: repeat(18, 1fr); gap: 4px; margin-bottom: 20px; }
-        .element-btn { background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 4px; padding: 6px 4px; cursor: pointer; transition: all 0.3s; text-align: center; font-size: 0.65rem; font-weight: bold; min-height: 60px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .element-btn:hover { border-color: var(--cor-principal); transform: scale(1.1); box-shadow: 0 0 10px var(--cor-glow); }
-        .element-btn.metais { background: linear-gradient(135deg, #D4541F 0%, #E86D2E 100%); }
-        .element-btn.nao-metais { background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); }
-        .element-btn.gases-nobres { background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%); }
-        .element-btn.semi-metais { background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%); }
-        .element-btn.halogenios { background: linear-gradient(135deg, #EAB308 0%, #CA8A04 100%); }
-        .element-btn.alcalinos { background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%); }
-        .element-btn.alcalino-terrosos { background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); }
-        .element-btn.lantanideos { background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); }
-        .element-btn.actinideos { background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%); }
-        .element-btn.metais-transicao { background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%); }
-        .element-num { font-size: 0.5rem; color: #fff; font-weight: bold; }
-        .element-symbol { font-size: 0.9rem; font-weight: bold; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
-        .element-name { font-size: 0.5rem; color: #fff; font-weight: 500; }
-        .element-mass { font-size: 0.5rem; color: rgba(255, 255, 255, 0.9); }
-        .element-info { background: var(--bg-input); border: 2px solid var(--cor-principal); border-radius: 8px; padding: 20px; text-align: center; display: none; margin-top: 15px; }
-        .element-info.show { display: block; }
-        .element-info-header { font-size: 1.2rem; color: var(--cor-principal); font-weight: bold; margin-bottom: 10px; }
-        .element-details { text-align: left; background: var(--bg-gradient); padding: 15px; border-radius: 5px; }
-        .element-detail-item { margin: 8px 0; font-size: 0.9rem; }
-        .element-detail-label { color: var(--cor-principal); font-weight: bold; }
-        .periodic-controls { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
-        .periodic-close-btn { background: var(--cor-principal); color: var(--bg-input); border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-size: 1rem; text-transform: uppercase; flex: 1; }
-        .periodic-close-btn:hover { transform: scale(1.05); box-shadow: 0 4px 10px var(--cor-glow); }
-        .lantanideos-actinideos { display: grid; grid-template-columns: repeat(18, 1fr); gap: 4px; margin-top: 20px; }
-        .legend { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px; font-size: 0.8rem; }
-        .legend-item { display: flex; align-items: center; gap: 5px; }
-        .legend-color { width: 20px; height: 20px; border: 1px solid var(--borda-card); border-radius: 3px; transition: transform 0.3s; }
-        .legend-item:hover .legend-color { transform: scale(1.2); }
-        .legend-item.active { font-weight: bold; opacity: 1; }
-        .element-btn.desabilitado { background: #888 !important; opacity: 0.4; cursor: not-allowed; }
-        .element-btn.destacado { filter: brightness(1.2); }
-        .conceito-botao:hover { transform: scale(1.05); box-shadow: 0 4px 14px var(--cor-glow); }
-
-        /* BOTÃO CONCEITOS - destaque visual no menu lateral */
-        .periodic-menu-btn.conceitos-btn {
-            margin-top: 20px;
-            border-top: 2px solid var(--borda-card);
-            padding-top: 18px;
-            background: linear-gradient(135deg, var(--cor-principal) 0%, #002244 100%);
-            color: var(--bg-input);
-            border-color: var(--cor-principal);
-        }
-        [data-theme="dark"] .periodic-menu-btn.conceitos-btn {
-            background: linear-gradient(135deg, var(--cor-principal) 0%, #b8b800 100%);
-            color: #1a1a1a;
-        }
-        .periodic-menu-btn.conceitos-btn:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px var(--cor-glow);
-            filter: brightness(1.1);
-        }
-
-        /* SELETOR DE CONCEITOS */
-        .seletor-conceitos-screen {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px;
-            padding: 35px 40px; z-index: 300; width: 90%; max-width: 650px;
-            max-height: 85vh; overflow-y: auto;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5); color: var(--cor-texto);
-            display: none;
-        }
-        .seletor-conceitos-header { color: var(--cor-principal); font-size: 1.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; text-align: center; }
-        .seletor-conceitos-sub { color: var(--cor-texto-secundario); font-size: 0.9rem; text-align: center; margin-bottom: 25px; }
-
-        .seletor-modulo-titulo { color: var(--cor-principal); font-size: 1.1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 18px 0 10px 0; border-bottom: 2px solid var(--borda-card); padding-bottom: 6px; }
-        .seletor-fases-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-        .seletor-fase-btn {
-            background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto);
-            padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 0.88rem;
-            transition: all 0.25s; font-weight: bold;
-        }
-        .seletor-fase-btn:hover { border-color: var(--cor-principal); color: var(--cor-principal); transform: translateY(-2px); box-shadow: 0 4px 10px var(--cor-glow); }
-        .seletor-fase-btn.selecionada { background: var(--cor-principal); color: var(--bg-input); border-color: var(--cor-principal); }
-
-        .seletor-auxiliar-section { margin-top: 22px; }
-        .seletor-auxiliar-titulo { color: var(--cor-texto); font-size: 1rem; font-weight: bold; margin-bottom: 12px; }
-        .seletor-auxiliar-grid { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-        .seletor-aux-btn {
-            background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 10px;
-            padding: 14px 18px; cursor: pointer; transition: all 0.25s; display: flex; flex-direction: column;
-            align-items: center; gap: 6px; min-width: 130px; font-size: 0.85rem; color: var(--cor-texto);
-        }
-        .seletor-aux-btn:hover { border-color: var(--cor-principal); transform: translateY(-3px); box-shadow: 0 6px 14px var(--cor-glow); }
-        .seletor-aux-btn.selecionado { background: var(--cor-principal); color: var(--bg-input); border-color: var(--cor-principal); }
-        .seletor-aux-emoji { font-size: 1.8rem; }
-        .seletor-aux-nome { font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; }
-
-        .seletor-ver-btn {
-            background: var(--cor-principal); color: var(--bg-input); border: none;
-            padding: 13px 36px; border-radius: 50px; cursor: pointer; font-size: 1rem;
-            text-transform: uppercase; letter-spacing: 2px; margin-top: 25px; transition: all 0.3s;
-            display: none; width: 100%;
-        }
-        .seletor-ver-btn:hover { transform: scale(1.03); box-shadow: 0 4px 14px var(--cor-glow); }
-
-        .seletor-fechar-btn {
-            background: transparent; border: 2px solid var(--borda-card); color: var(--cor-texto-secundario);
-            padding: 10px 24px; border-radius: 50px; cursor: pointer; font-size: 0.9rem;
-            text-transform: uppercase; letter-spacing: 1px; margin-top: 12px; transition: all 0.3s; width: 100%;
-        }
-        .seletor-fechar-btn:hover { border-color: var(--cor-principal); color: var(--cor-principal); }
-
-        /* CONCEITO LIVRE (sem botão de jogar) */
-        .conceito-livre-botao {
-            background: var(--cor-principal); color: var(--bg-input); border: none;
-            padding: 12px 32px; border-radius: 50px; cursor: pointer; margin-top: 25px;
-            font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;
-        }
-        .conceito-livre-botao:hover { transform: scale(1.05); box-shadow: 0 4px 14px var(--cor-glow); }
-
-        /* =========================================
-           RESPONSIVIDADE
-           ========================================= */
-        @media (max-width: 768px) {
-            .container { padding: 20px 15px; }
-            .game-title { font-size: 2.5rem; }
-            .game-subtitle { font-size: 1rem; margin-bottom: 30px; }
-            .split-layout { flex-direction: column; gap: 30px; }
-            .left-panel { padding-bottom: 30px; }
-            .right-panel { position: static; display: flex; justify-content: center; align-items: center; }
-            .theme-image { width: 80%; max-width: 300px; }
-            .btn-option { font-size: 1rem; }
-            .info-text { font-size: 1.1rem; }
-            .roadmap-container { margin-left: 10px; padding-left: 30px; }
-            .level-card { padding: 15px; }
-            .level-title { font-size: 1.1rem; }
-            .chapter-header h2 { font-size: 1.4rem; }
-            input[type="text"] { width: 100%; max-width: 300px; }
-            .hud { top: auto; bottom: 10px; right: 10px; left: auto; width: auto; padding: 15px; font-size: 0.85rem; }
-            .question-box { padding: 30px; max-width: 90%; }
-            .question-title { font-size: 1.3rem; }
-            .question-text { font-size: 1.1rem; }
-            .option-btn { padding: 12px; font-size: 0.95rem; }
-            .modal-overlay { display: block; }
-            .stats-screen, .config-screen, .auxiliar-screen, .profile-screen, .conceito-box { width: 95%; max-width: none; padding: 30px; }
-            .config-header { font-size: 1.6rem; }
-            .auxiliar-header { font-size: 1.4rem; }
-            .auxiliar-grid { gap: 12px; }
-            .auxiliar-card { width: 140px; padding: 20px 15px; }
-            .auxiliar-sprite { width: 60px; height: 60px; font-size: 2rem; }
-            .auxiliar-nome { font-size: 0.9rem; }
-            .auxiliar-descricao { font-size: 0.75rem; }
-            .profile-header { font-size: 1.6rem; }
-            .profile-section-title { font-size: 1.2rem; }
-            .badges-container { gap: 10px; }
-            .badge-item { padding: 8px 15px; font-size: 0.9rem; }
-            .history-table th, .history-table td { padding: 10px; font-size: 0.85rem; }
-            .top-controls { top: 10px; right: 10px; }
-            .control-btn { padding: 8px 12px; font-size: 0.75rem; }
-            .periodic-table-screen { width: 98%; max-width: 100%; padding: 15px; }
-            .periodic-container { flex-direction: column; }
-            .periodic-menu { flex-direction: row; min-width: auto; margin-bottom: 15px; }
-            .periodic-menu-btn { flex: 1; font-size: 0.7rem; padding: 10px 8px; }
-            .periodic-menu-btn.conceitos-btn { margin-top: 0; border-top: none; padding-top: 10px; }
-            .periodic-grid { grid-template-columns: repeat(10, 1fr); gap: 3px; }
-            .element-btn { padding: 4px 2px; font-size: 0.55rem; min-height: 45px; }
-            .element-num { font-size: 0.4rem; }
-            .element-symbol { font-size: 0.75rem; }
-            .element-mass { font-size: 0.4rem; }
-            .periodic-header { font-size: 1.4rem; }
-            .element-info-header { font-size: 1rem; }
-            .element-details { font-size: 0.8rem; }
-            .legend { gap: 8px; font-size: 0.7rem; }
-            .legend-color { width: 15px; height: 15px; }
-            .lantanideos-actinideos { grid-template-columns: repeat(10, 1fr); }
-            .periodic-controls { flex-direction: column; }
-            .periodic-close-btn { width: 100%; }
-        }
-
-        @media (max-width: 480px) {
-            .container { padding: 15px 10px; }
-            .game-title { font-size: 2rem; letter-spacing: 5px; }
-            .game-subtitle { font-size: 0.9rem; margin-bottom: 25px; }
-            .split-layout { gap: 20px; }
-            .left-panel { padding-bottom: 20px; }
-            .theme-image { width: 90%; max-width: 250px; }
-            .btn-option { font-size: 0.95rem; padding: 8px; }
-            .info-text { font-size: 1rem; }
-            .roadmap-container { margin-left: 5px; padding-left: 20px; }
-            .roadmap-node::before { left: -45px; }
-            .level-card { padding: 12px; }
-            .level-title { font-size: 1rem; }
-            .chapter-header h2 { font-size: 1.2rem; }
-            input[type="text"] { width: 100%; max-width: 250px; padding: 10px 15px; }
-            .hud { bottom: 5px; right: 5px; padding: 10px; font-size: 0.8rem; }
-            .question-box { padding: 20px; }
-            .question-title { font-size: 1.2rem; }
-            .question-text { font-size: 1rem; }
-            .option-btn { padding: 10px; font-size: 0.9rem; }
-            .stats-screen, .config-screen, .auxiliar-screen, .profile-screen, .conceito-box { padding: 20px; }
-            .config-header { font-size: 1.4rem; }
-            .auxiliar-header { font-size: 1.2rem; }
-            .auxiliar-grid { gap: 10px; }
-            .auxiliar-card { width: 120px; padding: 15px 10px; }
-            .auxiliar-sprite { width: 50px; height: 50px; font-size: 1.8rem; }
-            .auxiliar-nome { font-size: 0.8rem; }
-            .auxiliar-descricao { font-size: 0.7rem; }
-            .profile-header { font-size: 1.4rem; }
-            .profile-section-title { font-size: 1.1rem; }
-            .badges-container { gap: 8px; flex-wrap: wrap; }
-            .badge-item { padding: 6px 12px; font-size: 0.8rem; }
-            .history-table th, .history-table td { padding: 8px; font-size: 0.8rem; }
-            .top-controls { top: 5px; right: 5px; gap: 5px; }
-            .control-btn { padding: 6px 10px; font-size: 0.7rem; }
-            .conceito-header { font-size: 1.5rem; }
-            .conceito-texto { padding: 15px; font-size: 0.95rem; }
-            .conceito-botao { padding: 10px 25px; font-size: 0.9rem; }
-        }
-        /* =========================================
-   LAYOUT QUÍMICA ORGÂNICA (CARDS)
-   ========================================= */
-.grid-moleculas {
-    display: grid;
-    /* Isso faz a grade ser responsiva: cria colunas de no mínimo 200px */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 10px;
-}
-
-.card-molecula {
-    /* Fundo escuro com leve gradiente inspirado na sua imagem */
-    background: linear-gradient(135deg, #1a2a40 0%, #0d1624 100%);
-    border: 2px solid #2a4060;
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-}
-
-/* Efeito ao passar o mouse por cima do card */
-.card-molecula:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-    border-color: #4a90e2; /* Borda azul brilhante ao focar */
-}
-
-.card-molecula .tipo-badge {
-    background-color: #4a90e2;
-    color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    display: inline-block;
-    margin-bottom: 15px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Estilo para a imagem 3D da molécula que você vai adicionar depois */
-.card-molecula img.img-molecula {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-    margin-bottom: 15px;
-}
-
-.card-molecula h4 {
-    margin: 0 0 5px 0;
-    font-size: 1.3rem;
-    color: #ffffff;
-    font-family: 'Special Elite', cursive; /* Mantendo a fonte do seu jogo */
-}
-
-.card-molecula p.formula {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #a0b0c0;
-    font-family: monospace; /* Fonte com espaçamento igual para fórmulas */
-}
-/* =========================================
-   CORREÇÃO DE DESAPARECIMENTO DO MENU
-   ========================================= */
-
-.modal-overlay {
-    display: none;
-
-    position: fixed;
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: var(--bg-overlay);
-
-    z-index: 150;
-}
-
-.stats-screen,
-.config-screen,
-.auxiliar-screen,
-.profile-screen,
-.conceito-box,
-.periodic-table-screen,
-.seletor-conceitos-screen {
-
-    position: fixed;
-    inset: 0;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    overflow-y: auto;
-
-    z-index: 300;
-}
-
-.container,
-#main-menu,
-.left-panel,
-.right-panel {
-    position: relative;
-    z-index: 2;
-}
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     
 </head>
-<body data-theme="light">
+<body data-theme="light-1">
 
     <div class="top-controls">
         <button class="control-btn" onclick="app.abrirConfig()"> Config</button>
@@ -913,7 +33,8 @@ body {
         
         <div class="menu-options" style="margin-top: 50px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
             <button class="btn-option" onclick="app.abrirPanorama()"> Mapa de Fases</button>
-            <button class="btn-option" onclick="app.abrirTabelaPeriodica()">Material de Estudo</button>
+            <button class="btn-option" onclick="app.abrirTabelaPeriodica()">Materiais de Estudo</button>
+            <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
             <button class="btn-option" onclick="app.abrirPerfil()"> Meu Perfil (Badges e Histórico)</button>
             <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
         </div>
@@ -940,8 +61,7 @@ body {
 
     <div class="modal-overlay" id="modal-overlay"></div>
     
-    <div class="conceito-box smooth-enter" id="conceito-box" style="display: none;">
-        <div class="modal-card">
+    <div class="conceito-box modal-animated" id="conceito-box" style="display: none;">
         <h3 class="conceito-header">Conceito da Fase</h3>
         <p class="conceito-auxiliar" id="conceito-auxiliar-nome"></p>
         <div class="conceito-texto" id="conceito-conteudo"></div>
@@ -949,10 +69,9 @@ body {
             <button class="conceito-botao" style="background: #888888;" onclick="app.fecharConceitoVoltarMapa()">← Voltar ao Mapa</button>
             <button class="conceito-botao" onclick="app.passarParaPerguntas()">Começar a Jogar →</button>
         </div>
-        </div>
     </div>
 
-    <div class="question-box smooth-enter" id="question-box" style="display: none;">
+    <div class="question-box modal-animated" id="question-box" style="display: none;">
         <h3 id="question-title" style="color: var(--cor-principal); margin-bottom:15px; font-size: 1.5rem;"></h3>
         <p id="question-text" style="margin-bottom:25px; font-size: 1.2rem; line-height: 1.4;"></p>
         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
@@ -967,8 +86,7 @@ body {
         </div>
     </div>
 
-    <div class="stats-screen smooth-enter" id="stats-screen">
-        <div class="modal-card">
+    <div class="stats-screen modal-animated" id="stats-screen">
         <h2 id="result-title" style="color: var(--cor-principal); margin-bottom: 15px; font-size: 2rem;">🏆 Fase Concluída!</h2>
         <div style="margin: 20px 0; text-align: left; border: 1px solid var(--borda-card); padding: 20px; background: var(--bg-input); border-radius: 8px;">
             <p style="font-size: 1.3rem; margin-bottom: 10px;">Pontos Ganhos: <span id="final-score" class="highlight-text">0</span></p>
@@ -979,15 +97,38 @@ body {
             <button class="btn-option" style="font-size: 1rem; background: #888888; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;" onclick="app.voltarAoMenu()">🏠 Menu Principal</button>
             <button class="btn-option" style="font-size: 1.2rem;" onclick="app.abrirPanorama()">Continuar Jornada →</button>
         </div>
-        </div>
     </div>
 
-    <div class="config-screen smooth-enter" id="config-screen">
-        <div class="modal-card">
+    <div class="config-screen modal-animated" id="config-screen">
         <h2 class="config-header">Configurações</h2>
-        <div class="config-option">
-            <span>Aparência Visual</span>
-            <button class="hint-btn" onclick="app.toggleTema()" style="margin: 0;">Trocar Tema 🎨</button>
+        <div class="config-option" style="flex-direction: column; align-items: flex-start;">
+            <span style="margin-bottom: 10px;">Tema visual</span>
+            <div class="theme-picker" id="theme-picker">
+                <div class="theme-swatch" data-theme-value="light-1" onclick="app.setTema('light-1')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#FAF3DD,#C8D5B9);"></div>
+                    <span class="theme-swatch-label">Areia</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="light-2" onclick="app.setTema('light-2')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#DEE5E5,#9DC5BB);"></div>
+                    <span class="theme-swatch-label">Névoa</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="light-3" onclick="app.setTema('light-3')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#C5EFCB,#AC8887);"></div>
+                    <span class="theme-swatch-label">Menta</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="dark-1" onclick="app.setTema('dark-1')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#222,#ffff2c);"></div>
+                    <span class="theme-swatch-label">Neon</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="dark-2" onclick="app.setTema('dark-2')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#37392E,#F15152);"></div>
+                    <span class="theme-swatch-label">Pedra</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="dark-3" onclick="app.setTema('dark-3')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#6A041D,#B2FFA9);"></div>
+                    <span class="theme-swatch-label">Vinho</span>
+                </div>
+            </div>
         </div>
         <div class="config-option">
             <span>Música (Em breve)</span>
@@ -1002,11 +143,9 @@ body {
             </div>
         </div>
         <button class="config-close" onclick="app.fecharConfig()">Fechar</button>
-        </div>
     </div>
 
-    <div class="auxiliar-screen smooth-enter" id="final-warning-screen" style="display: none;">
-        <div class="modal-card">
+    <div class="auxiliar-screen modal-animated" id="final-warning-screen" style="display: none;">
         <h2 style="color: var(--cor-principal); font-size: 2.2rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;">🏆 DESAFIO FINAL 🏆</h2>
         <div style="background: rgba(255, 193, 7, 0.15); border: 3px solid #ffc107; border-radius: 12px; padding: 30px; margin: 20px 0; text-align: center;">
             <p style="font-size: 1.8rem; color: var(--cor-texto); margin: 10px 0; font-weight: bold;">Esta é a ÚLTIMA FASE!</p>
@@ -1030,11 +169,9 @@ body {
         <button class="auxiliar-confirmar" onclick="document.getElementById('final-warning-screen').style.display='none'; document.getElementById('modal-overlay').style.display='none';" style="display: inline-block; background: #888888; color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;">
             ← Voltar ao Panorama
         </button>
-        </div>
     </div>
 
-    <div class="auxiliar-screen smooth-enter" id="auxiliar-screen">
-        <div class="modal-card">
+    <div class="auxiliar-screen modal-animated" id="auxiliar-screen">
         <h2 class="auxiliar-header">Escolha seu Auxiliar</h2>
         <p class="auxiliar-subtitulo">Ele te ajudará com dicas ao longo da fase</p>
         <div class="auxiliar-grid">
@@ -1060,11 +197,9 @@ body {
         <button class="auxiliar-confirmar" style="display: inline-block; background: #888888;" onclick="app.fecharAuxiliarVoltarMapa()">
             ← Voltar ao Mapa
         </button>
-        </div>
     </div>
 
-    <div class="profile-screen smooth-enter" id="profile-screen">
-        <div class="modal-card">
+    <div class="profile-screen modal-animated" id="profile-screen">
         <h2 class="profile-header">Meu Perfil</h2>
         
         <div class="profile-section-title"> Minhas Conquistas (Passe o mouse!)</div>
@@ -1095,12 +230,60 @@ body {
         <div style="text-align: center; margin-top: 35px;">
             <button class="config-close" onclick="app.fecharPerfil()">Fechar Perfil</button>
         </div>
+    </div>
+
+    <div class="shop-screen modal-animated" id="shop-screen">
+        <div class="shop-panel">
+            <div class="shop-top">
+                <div>
+                    <h2 class="shop-header">Loja Química</h2>
+                    <p class="shop-subtitle">Use seus pontos para desbloquear recursos e reforçar sua jornada.</p>
+                </div>
+                <button class="btn-option" style="font-size: 1rem; margin-bottom: 20px;" onclick="app.voltarAoMenu()">
+    ← Voltar
+</button>
+            </div>
+
+            <div class="shop-section">
+                <h3>Recursos de Estudo</h3>
+                <div class="shop-grid">
+                    <div class="shop-card">
+                        <h4>Pacote de Dicas</h4>
+                        <p>Adquira 3 dicas adicionais para usar em fases futuras e ganhar vantagem nas perguntas mais difíceis.</p>
+                        <button class="shop-buy-btn">Comprar por 150 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>Bônus de Pontos</h4>
+                        <p>Receba 200 pontos extras para ajudar a alcançar novas conquistas e desbloquear conteúdos.</p>
+                        <button class="shop-buy-btn">Comprar por 180 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>Tema Brilhante</h4>
+                        <p>Desbloqueie um tema visual exclusivo que deixa a sua tela ainda mais estilosa.</p>
+                        <button class="shop-buy-btn">Comprar por 220 pts</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-section">
+                <h3>Ofertas Rápidas</h3>
+                <div class="shop-grid">
+                    <div class="shop-card">
+                        <h4>Revisão Rápida</h4>
+                        <p>Ganhe um resumo instantâneo de conteúdo para lembrar os conceitos antes da próxima fase.</p>
+                        <button class="shop-buy-btn">Comprar por 120 pts</button>
+                    </div>
+                    <div class="shop-card">
+                        <h4>Desbloqueio de Conteúdo</h4>
+                        <p>Tenha acesso extra a cards explicativos e informações detalhadas na tabela periódica.</p>
+                        <button class="shop-buy-btn">Comprar por 260 pts</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-            
-
-    <div class="periodic-table-screen smooth-enter" id="periodic-table-screen">
+    <div class="periodic-table-screen modal-animated" id="periodic-table-screen">
         <div class="periodic-container">
             <div class="periodic-menu">
                 <button class="periodic-menu-btn active" onclick="app.mostrarTabelaPeriodicaView('tabela', this)">🧪 Tabela Periódica</button>
@@ -1336,7 +519,7 @@ body {
     </div>
 
     <!-- SELETOR DE CONCEITOS (acessível pela Tabela Periódica) -->
-    <div class="seletor-conceitos-screen smooth-enter" id="seletor-conceitos-screen">
+    <div class="seletor-conceitos-screen modal-animated" id="seletor-conceitos-screen">
         <h2 class="seletor-conceitos-header">📖 Revisão de Conceitos</h2>
         <p class="seletor-conceitos-sub">Escolha uma fase e um auxiliar para revisar o conteúdo sem precisar jogar.</p>
 
@@ -1370,13 +553,11 @@ body {
     </div>
 
     <!-- MODAL DE CONCEITO LIVRE (sem botão "Começar a Jogar") -->
-    <div class="conceito-box smooth-enter" id="conceito-livre-box" style="display: none;">
-        <div class="modal-card">
+    <div class="conceito-box modal-animated" id="conceito-livre-box" style="display: none;">
         <h3 class="conceito-header" id="conceito-livre-titulo">Conceito da Fase</h3>
         <p class="conceito-auxiliar" id="conceito-livre-auxiliar-nome"></p>
         <div class="conceito-texto" id="conceito-livre-conteudo"></div>
         <button class="conceito-livre-botao" onclick="app.fecharConceitoLivre()">← Voltar ao Seletor</button>
-        </div>
     </div>
 
     <script src="script.js"></script>
