@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Breaking Game - Aprenda Química Jogando</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Special+Elite&family=Lobster&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Special+Elite&family=Lobster&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     
@@ -99,10 +99,13 @@
         </div>
     </div>
 
-    <div class="config-screen modal-animated" id="config-screen">
-        <h2 class="config-header">Configurações</h2>
+ <div class="config-screen modal-animated" id="config-screen">
+    <h2 class="config-header">Configurações</h2>
+    
+    <div class="config-scroll-container" style="max-height: 60vh; overflow-y: auto; padding-right: 8px; margin-bottom: 20px;">
+        
         <div class="config-option" style="flex-direction: column; align-items: flex-start;">
-            <span style="margin-bottom: 10px;">Tema visual</span>
+            <span class="config-label" style="margin-bottom: 12px; font-weight: 600;">Tema Visual</span>
             <div class="theme-picker" id="theme-picker">
                 <div class="theme-swatch" data-theme-value="light-1" onclick="app.setTema('light-1')">
                     <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#FAF3DD,#C8D5B9);"></div>
@@ -130,20 +133,36 @@
                 </div>
             </div>
         </div>
-        <div class="config-option">
-            <span>Música (Em breve)</span>
-            <input type="checkbox" checked style="transform: scale(1.5);">
-        </div>
-        <div class="config-option" style="flex-direction: column; align-items: flex-start;">
-            <span style="margin-bottom: 10px;">Tamanho da Fonte</span>
-            <div style="display: flex; gap: 10px; width: 100%;">
-                <button class="size-btn" onclick="app.alterarTamanhoFonte('pequeno')" style="flex: 1; padding: 10px; background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 5px; cursor: pointer; transition: all 0.2s;">Pequeno</button>
-                <button class="size-btn" onclick="app.alterarTamanhoFonte('medio')" style="flex: 1; padding: 10px; background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 5px; cursor: pointer; transition: all 0.2s;">Médio</button>
-                <button class="size-btn" onclick="app.alterarTamanhoFonte('grande')" style="flex: 1; padding: 10px; background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 5px; cursor: pointer; transition: all 0.2s;">Grande</button>
+
+        <div class="config-section" style="margin-top: 20px;">
+            <span class="config-label" style="display: block; margin-bottom: 12px; font-weight: 600;">Estilo da Interface (Fonte)</span>
+            <div class="font-grid">
+                <button class="font-btn" onclick="app.alterarFonte('inter')">Inter</button>
+                <button class="font-btn" style="font-family: 'Special Elite', cursive !important;" onclick="app.alterarFonte('special')">Special Elite</button>
+                <button class="font-btn" style="font-family: 'Lobster', cursive !important;" onclick="app.alterarFonte('lobster')">Lobster</button>
+                <button class="font-btn" style="font-family: 'Times New Roman', serif !important;" onclick="app.alterarFonte('times')">Times New Roman</button>
+                <button class="font-btn" style="font-family: 'JetBrains Mono', monospace !important;" onclick="app.alterarFonte('double')">Mono Spaced</button>
+                <button class="font-btn" style="font-family: 'Playfair Display', serif !important; font-style: italic;" onclick="app.alterarFonte('serif-bold')">Serif Bold</button>
             </div>
         </div>
-        <button class="config-close" onclick="app.fecharConfig()">Fechar</button>
+
+        <div class="config-option" style="flex-direction: column; align-items: flex-start; margin-top: 20px;">
+            <span class="config-label" style="margin-bottom: 12px; font-weight: 600;">Tamanho da Fonte</span>
+            <div style="display: flex; gap: 10px; width: 100%;">
+                <button class="size-btn font-btn" onclick="app.alterarTamanhoFonte('pequeno')" style="flex: 1;">Pequeno</button>
+                <button class="size-btn font-btn" onclick="app.alterarTamanhoFonte('medio')" style="flex: 1;">Médio</button>
+                <button class="size-btn font-btn" onclick="app.alterarTamanhoFonte('grande')" style="flex: 1;">Grande</button>
+            </div>
+        </div>
+
+        <div class="config-option" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <span class="config-label" style="font-weight: 600;">Música (Em breve)</span>
+            <input type="checkbox" checked style="transform: scale(1.5); accent-color: var(--cor-principal);">
+        </div>
     </div>
+
+    <button class="config-close" onclick="app.fecharConfig()" style="width: 100%; padding: 12px; border-radius: 12px; background: var(--cor-principal); color: white; border: none; font-weight: bold; cursor: pointer;">Fechar</button>
+</div>
 
     <div class="auxiliar-screen modal-animated" id="final-warning-screen" style="display: none;">
         <h2 style="color: var(--cor-principal); font-size: 2.2rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;">🏆 DESAFIO FINAL 🏆</h2>
@@ -560,6 +579,6 @@
         <button class="conceito-livre-botao" onclick="app.fecharConceitoLivre()">← Voltar ao Seletor</button>
     </div>
 
-    <script src="script.js"></script>
+    <script src="teste.js"></script>
 </body>
 </html>

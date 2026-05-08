@@ -1,4 +1,4 @@
- const app = {
+const app = {
             usuarioAtual: null,
             perguntaAtualIdx: 0,
             gameState: { 
@@ -512,6 +512,12 @@
                 document.querySelectorAll('.theme-swatch').forEach(el => {
                     el.classList.toggle('active', el.getAttribute('data-theme-value') === atual);
                 });
+                const modal = document.getElementById('config-modal'); // ajuste para o ID correto do seu modal
+    modal.style.display = 'block';
+    
+    // Reseta o scroll para o topo toda vez que abrir
+    const configBox = document.querySelector('.config-box');
+    if (configBox) configBox.scrollTop = 0;
             },
 
             fecharConfig() {
@@ -1560,8 +1566,70 @@
                     this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
                 }
                 location.reload(); 
-            }
+            },
+            // Adicione estas funções dentro do seu objeto const app = { ... }
+
+alterarFonte(idFonte) {
+    // 1. Aplica a fonte ao corpo do site
+    document.body.setAttribute('data-font', idFonte);
+    
+    // 2. Salva a preferência
+    localStorage.setItem('fonte-preferida', idFonte);
+    
+    // 3. Atualiza o visual dos botões (opcional, remove 'active' de todos e add no clicado)
+    document.querySelectorAll('.font-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.innerText.toLowerCase().includes(idFonte)) btn.classList.add('active');
+    });
+    
+    console.log(`Fonte ajustada para: ${idFonte}`);
+},
+
+carregarFonteSalva() {
+    const fonteSalva = localStorage.getItem('fonte-preferida') || 'inter';
+    this.alterarFonte(fonteSalva);
+}
+
+// Lembre-se de chamar o app.carregarFonteSalva() no final do arquivo, 
+// junto com o carregarTemaSalvo() que você já tem.
         };
 
         app.inicializarSons();
         app.carregarTemaSalvo();
+// --- ADIÇÃO PARA ACESSIBILIDADE VIA TECLADO ---
+document.addEventListener('keydown', (event) => {
+    const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const elements = Array.from(document.querySelectorAll(focusableElements)).filter(el => {
+        // Filtra apenas elementos que estão visíveis na tela
+        return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+    });
+
+    const currentIdx = elements.indexOf(document.activeElement);
+    let nextIdx = -1;
+
+    // Se não houver nada focado, foca no primeiro elemento ao premir qualquer seta
+    if (currentIdx === -1 && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+        elements[0]?.focus();
+        return;
+    }
+
+    switch (event.key) {
+        case 'ArrowDown':
+        case 'ArrowRight':
+            event.preventDefault(); // Impede o scroll da página
+            nextIdx = (currentIdx + 1) % elements.length;
+            break;
+        case 'ArrowUp':
+        case 'ArrowLeft':
+            event.preventDefault(); // Impede o scroll da página
+            nextIdx = (currentIdx - 1 + elements.length) % elements.length;
+            break;
+        case 'Enter':
+            // O Enter já ativa o botão focado por padrão no navegador
+            break;
+    }
+
+    if (nextIdx !== -1) {
+        elements[nextIdx].focus();
+    }
+});

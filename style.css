@@ -38,7 +38,24 @@
 
             --grad-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
             --grad-accent: linear-gradient(135deg, #06b6d4 0%, #4f46e5 100%);
-        }
+            --fonte-principal: 'Inter', sans-serif; /* Fonte padrão */
+}
+
+/* Aplique a variável ao seletor universal que você já tem */
+* {
+    font-family: var(--fonte-principal) !important;
+}
+
+/* Definições das novas fontes baseadas no atributo do body */
+body[data-font="inter"] { --fonte-principal: 'Inter', sans-serif; }
+body[data-font="special"] { --fonte-principal: 'Special Elite', cursive; }
+body[data-font="lobster"] { --fonte-principal: 'Lobster', cursive; }
+body[data-font="times"] { --fonte-principal: 'Times New Roman', Times, serif; }
+
+/* Simulando os estilos especiais com variações de serifas */
+body[data-font="double"] { --fonte-principal: 'Courier New', monospace; font-variant: small-caps; }
+body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font-weight: bold; font-style: italic; }
+        
 
         [data-theme="dark"] {
             --bg-base: #0b1020;
@@ -1141,3 +1158,88 @@
             .auxiliar-sprite { width: 50px; height: 50px; font-size: 1.7rem; }
             .badge-item { padding: 7px 12px; font-size: 0.8rem; }
         }
+        /* Adicione ao seu style.css */
+button:focus, input:focus {
+    outline: 3px solid var(--cor-principal);
+    outline-offset: 2px;
+    box-shadow: 0 0 10px var(--cor-glow);
+}
+/* Efeito de destaque para navegação via teclado */
+button:focus {
+    outline: none; /* Remove o contorno padrão feio */
+    border: 2px solid var(--cor-principal-2);
+    box-shadow: 0 0 15px var(--cor-principal-2);
+    transform: scale(1.05); /* Aumenta ligeiramente o botão focado */
+    transition: all 0.2s ease;
+}
+/* Container para organizar os botões de fonte no Modal */
+.font-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dois botões por linha */
+    gap: 10px;
+    margin-top: 15px;
+    padding: 5px;
+}
+
+/* Estilização específica para os botões de fonte para seguirem o padrão do site */
+.font-btn {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--cor-texto);
+    padding: 12px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.font-btn:hover {
+    background: var(--cor-principal);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+/* Destaque para o botão da fonte que está ativa no momento */
+.font-btn.active {
+    border: 2px solid var(--cor-principal);
+    background: var(--glass-bg-strong);
+}
+/* Localize ou adicione este seletor */
+.config-box {
+    max-height: 85vh; /* Define uma altura máxima (85% da tela) */
+    overflow-y: auto; /* Ativa o scroll vertical quando o conteúdo exceder a altura */
+    padding-right: 10px; /* Espaço para a barra de rolagem não cobrir o conteúdo */
+    
+    /* Estilização da barra de rolagem para combinar com o tema Glassmorphism */
+    scrollbar-width: thin;
+    scrollbar-color: var(--cor-principal) transparent;
+}
+
+/* Customização da barra de rolagem para navegadores Chrome/Edge/Safari */
+.config-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.config-box::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.config-box::-webkit-scrollbar-thumb {
+    background-color: var(--cor-principal);
+    border-radius: 20px;
+    border: 2px solid transparent;
+}
+
+/* Garante que as seções dentro do scroll tenham um espaçamento fluido */
+.config-section {
+    margin-bottom: 25px;
+    animation: fadeIn 0.5s ease backwards;
+}
