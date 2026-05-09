@@ -1,5 +1,11 @@
 const app = {
             usuarioAtual: null,
+            // --- NOVAS PROPRIEDADES ADICIONADAS ---
+            usuario: null,
+            temaSelecionado: 'light-1',
+            fonteSelecionada: 'inter',
+            tamanhoFonte: 'medio',
+            // --------------------------------------
             perguntaAtualIdx: 0,
             gameState: { 
                 nivelAtual: 1, 
@@ -244,7 +250,7 @@ const app = {
                 nivel2: [
                     { pergunta: "Entre forças de London, dipolo-dipolo e ligação de hidrogênio, qual é a mais fraca?", opcoes: ["Ligação de Hidrogênio", "Dipolo-dipolo", "Forças de London", "Todas iguais"], resposta: 2, explicacao: "Forças de London são as mais fracas, ocorrem entre moléculas apolares.", dica: "Londres é uma força muito fraca (London)!" },
                     { pergunta: "Por que a água ferve a 100°C enquanto gasolina ferve a ~70°C?", opcoes: ["Água tem mais átomos", "Água tem ligações de hidrogênio mais fortes", "Gasolina é mais pesada", "Não há razão"], resposta: 1, explicacao: "Água tem ligações de hidrogênio muito fortes, exigindo mais calor para evaporar.", dica: "Quanto mais forte a intermolecular, maior o ponto de ebulição." },
-                    { pergunta: "Moléculas apolares interagem principalmente por qual força?", opcoes: ["Ligação de Hidrogênio", "Dipolo-dipolo", "Forças de London", "Ligação Iônica"], resposta: 2, explicacao: "Moléculas apolares (sem carga distribuída) só podem interagir por forças de London, as mais fracas.", dica: "Apolares = sem dipolos permanentes = só London!" },
+                    { pergunta: "Moléculas apolares interagem mainly por qual força?", opcoes: ["Ligação de Hidrogênio", "Dipolo-dipolo", "Forças de London", "Ligação Iônica"], resposta: 2, explicacao: "Moléculas apolares (sem carga distribuída) só podem interagir por forças de London, as mais fracas.", dica: "Apolares = sem dipolos permanentes = só London!" },
                     { pergunta: "O hidrogênio em uma ligação de hidrogênio está ligado a qual(is) elemento(s)?", opcoes: ["Carbono", "Oxigênio, Nitrogênio ou Flúor", "Qualquer elemento", "Apenas Oxigênio"], resposta: 1, explicacao: "Ligações de hidrogênio ocorrem quando H está ligado a O, N ou F (elementos muito eletronegativos).", dica: "O, N, F = elementos muito eletronegativos!" },
                     { pergunta: "Aumentar a força intermolecular afeta qual propriedade?", opcoes: ["Densidade somente", "Ponto de ebulição e ponto de fusão", "Cor da substância", "Nenhuma propriedade"], resposta: 1, explicacao: "Quanto mais forte a intermolecular, mais calor é necessário para mudar de estado.", dica: "Força intermolecular controla transições de fase!" }
                 ],
@@ -343,6 +349,7 @@ const app = {
                 const name = document.getElementById('username-input').value.trim();
                 if (!name) return alert("Digite um nome!");
                 this.usuarioAtual = name;
+                this.usuario = name;
 
                 if (name === 'user0') {
                     const dadosSalvos = this.carregarDados(`usuario_${name}`);
@@ -368,11 +375,78 @@ const app = {
 
                 document.getElementById('username-input').value = '';
                 document.getElementById('login-screen').style.opacity = '0';
+                
                 setTimeout(() => {
                     document.getElementById('login-screen').style.display = 'none';
                     document.getElementById('login-screen').style.opacity = '1';
-                    this.carregarMenuPrincipal();
+                    
+                    // Mostrar tela de tutorial intro na primeira vez
+                    if (!localStorage.getItem('tutorialVisualizado')) {
+                        this.mostrarTutorialIntro();
+                    } else {
+                        this.carregarMenuPrincipal();
+                        this.atualizarInfosMenu();
+                    }
                 }, 300);
+            },
+
+            // =========================================
+            // FUNÇÕES DE TUTORIAL E UI ADICIONADAS
+            // =========================================
+            mostrarTutorialIntro: function() {
+                document.getElementById('main-menu').style.display = 'none';
+                document.getElementById('tutorial-intro-screen').style.display = 'flex';
+            },
+
+            pularTutorialIntro: function() {
+                localStorage.setItem('tutorialVisualizado', 'true');
+                document.getElementById('tutorial-intro-screen').style.display = 'none';
+                document.getElementById('main-menu').style.display = 'block';
+                this.carregarMenuPrincipal();
+                this.atualizarInfosMenu();
+            },
+
+            abrirTutorialCompleto: function() {
+                alert('Tutorial completo em breve! Por enquanto, explore o jogo e descubra seus recursos.\n\n💡 Dica: Use o botão "Materiais de Estudo" para acessar a tabela periódica e outros conteúdos!');
+            },
+
+            finalizarTutorialIntro: function() {
+                localStorage.setItem('tutorialVisualizado', 'true');
+                document.getElementById('tutorial-intro-screen').style.display = 'none';
+                document.getElementById('main-menu').style.display = 'block';
+                this.carregarMenuPrincipal();
+                this.atualizarInfosMenu();
+            },
+
+            atualizarInfosMenu: function() {
+                if (this.usuarioAtual && this.contaPadrao) {
+                    const perfil = this.contaPadrao;
+                    document.getElementById('username-display').textContent = this.usuarioAtual;
+                    document.getElementById('total-points').textContent = perfil.pontuacaoTotal || 0;
+                    document.getElementById('max-level').textContent = perfil.nivelMaximo || 1;
+                }
+            },
+
+            carregarConfiguracoesSalvas: function() {
+                const temaSalvo = localStorage.getItem('tema') || 'light-1';
+                const fonteSalva = localStorage.getItem('fonte') || 'inter';
+                const tamanhoSalvo = localStorage.getItem('tamanhoFonte') || 'medio';
+                
+                if (this.setTema) this.setTema(temaSalvo);
+                if (this.alterarFonte) this.alterarFonte(fonteSalva);
+                if (this.alterarTamanhoFonte) this.alterarTamanhoFonte(tamanhoSalvo);
+            },
+
+            fecharTudoComOverlay: function() {
+                const overlay = document.getElementById('modal-overlay');
+                if (overlay && overlay.style.display === 'block') {
+                    overlay.style.display = 'none';
+                    document.querySelectorAll('.modal-animated').forEach(el => {
+                        el.style.display = 'none';
+                    });
+                    const mainMenu = document.getElementById('main-menu');
+                    if (mainMenu) mainMenu.style.display = 'block';
+                }
             },
 
             carregarMenuPrincipal() {
@@ -503,6 +577,10 @@ const app = {
                     this.contaPadrao.temaCurrent = tema;
                     this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
                 }
+                
+                // MUDANÇA ADICIONADA: Salva tema globalmente
+                this.temaSelecionado = tema;
+                localStorage.setItem('tema', tema);
             },
 
             abrirConfig() {
@@ -512,12 +590,12 @@ const app = {
                 document.querySelectorAll('.theme-swatch').forEach(el => {
                     el.classList.toggle('active', el.getAttribute('data-theme-value') === atual);
                 });
-                const modal = document.getElementById('config-modal'); // ajuste para o ID correto do seu modal
-    modal.style.display = 'block';
-    
-    // Reseta o scroll para o topo toda vez que abrir
-    const configBox = document.querySelector('.config-box');
-    if (configBox) configBox.scrollTop = 0;
+                const modal = document.getElementById('config-modal'); 
+                modal.style.display = 'block';
+                
+                // Reseta o scroll para o topo toda vez que abrir
+                const configBox = document.querySelector('.config-box');
+                if (configBox) configBox.scrollTop = 0;
             },
 
             fecharConfig() {
@@ -556,12 +634,21 @@ const app = {
                 this.aplicarTamanhoFonte('medio');
             },
 
-            alterarTamanhoFonte(tamanho) {
+            alterarTamanhoFonte: function(tamanho) {
+                // Combinação da lógica original com a nova
                 this.aplicarTamanhoFonte(tamanho);
                 if (this.usuarioAtual) {
                     this.contaPadrao.tamanhoFonte = tamanho;
                     this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
                 }
+                
+                // MUDANÇA ADICIONADA: Salva no localStorage global e muda fontSize base
+                const tamanhos = { 'pequeno': 0.9, 'medio': 1, 'grande': 1.2 };
+                if (tamanhos[tamanho]) {
+                    document.documentElement.style.fontSize = (16 * tamanhos[tamanho]) + 'px';
+                }
+                this.tamanhoFonte = tamanho;
+                localStorage.setItem('tamanhoFonte', tamanho);
             },
 
             aplicarTamanhoFonte(tamanho) {
@@ -1548,18 +1635,18 @@ const app = {
             },
 
             voltarAoMenu() { 
-    // Esconde as diversas telas de sobreposição e janelas específicas
-    document.getElementById('levels-screen').style.display = 'none';
-    document.getElementById('modal-overlay').style.display = 'none';
-    document.getElementById('profile-screen').style.display = 'none';
-    document.getElementById('final-warning-screen').style.display = 'none';
-    
-    // Garante que a tela da loja (shop-screen) seja ocultada/ajustada
-    document.querySelector(".shop-screen").style.display = "none"; // Ajustado para fechar
-    
-    // Chama a função que recarrega/exibe o menu principal
-    this.carregarMenuPrincipal(); 
-},
+                // Esconde as diversas telas de sobreposição e janelas específicas
+                document.getElementById('levels-screen').style.display = 'none';
+                document.getElementById('modal-overlay').style.display = 'none';
+                document.getElementById('profile-screen').style.display = 'none';
+                document.getElementById('final-warning-screen').style.display = 'none';
+                
+                // Garante que a tela da loja (shop-screen) seja ocultada/ajustada
+                document.querySelector(".shop-screen").style.display = "none"; // Ajustado para fechar
+                
+                // Chama a função que recarrega/exibe o menu principal
+                this.carregarMenuPrincipal(); 
+            },
 
             trocarUsuario() { 
                 if (this.usuarioAtual) {
@@ -1567,36 +1654,49 @@ const app = {
                 }
                 location.reload(); 
             },
-            // Adicione estas funções dentro do seu objeto const app = { ... }
 
-alterarFonte(idFonte) {
-    // 1. Aplica a fonte ao corpo do site
-    document.body.setAttribute('data-font', idFonte);
-    
-    // 2. Salva a preferência
-    localStorage.setItem('fonte-preferida', idFonte);
-    
-    // 3. Atualiza o visual dos botões (opcional, remove 'active' de todos e add no clicado)
-    document.querySelectorAll('.font-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if(btn.innerText.toLowerCase().includes(idFonte)) btn.classList.add('active');
-    });
-    
-    console.log(`Fonte ajustada para: ${idFonte}`);
-},
+            alterarFonte(idFonte) {
+                // 1. Aplica a fonte ao corpo do site
+                document.body.setAttribute('data-font', idFonte);
+                
+                // 2. Salva a preferência
+                this.fonteSelecionada = idFonte;
+                localStorage.setItem('fonte', idFonte);
+                
+                // 3. Atualiza o visual dos botões (opcional, remove 'active' de todos e add no clicado)
+                document.querySelectorAll('.font-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if(btn.innerText.toLowerCase().includes(idFonte)) btn.classList.add('active');
+                });
+                
+                console.log(`Fonte ajustada para: ${idFonte}`);
+            },
 
-carregarFonteSalva() {
-    const fonteSalva = localStorage.getItem('fonte-preferida') || 'inter';
-    this.alterarFonte(fonteSalva);
-}
-
-// Lembre-se de chamar o app.carregarFonteSalva() no final do arquivo, 
-// junto com o carregarTemaSalvo() que você já tem.
+            carregarFonteSalva() {
+                const fonteSalva = localStorage.getItem('fonte') || 'inter';
+                this.alterarFonte(fonteSalva);
+            }
         };
 
         app.inicializarSons();
         app.carregarTemaSalvo();
-// --- ADIÇÃO PARA ACESSIBILIDADE VIA TECLADO ---
+
+// --- ADIÇÃO PARA CARREGAMENTO E ACESSIBILIDADE VIA TECLADO ---
+window.addEventListener('DOMContentLoaded', () => {
+    // Carregar configurações salvas (tema, fonte, tamanho)
+    if (app.carregarConfiguracoesSalvas) {
+        app.carregarConfiguracoesSalvas();
+    }
+    
+    // Modal overlay deve fechar ao clicar fora
+    const overlay = document.getElementById('modal-overlay');
+    if (overlay) {
+        overlay.addEventListener('click', () => {
+            app.fecharTudoComOverlay();
+        });
+    }
+});
+
 document.addEventListener('keydown', (event) => {
     const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
     const elements = Array.from(document.querySelectorAll(focusableElements)).filter(el => {

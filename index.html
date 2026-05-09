@@ -25,6 +25,110 @@
             <button class="btn-option" onclick="app.entrarComUsuario()">Entrar</button>
         </div>
     </div>
+    <!-- =========================================
+     TELA DE TUTORIAL INICIAL
+     Coloque ANTES da div #main-menu
+========================================= -->
+<div id="tutorial-intro-screen" class="container fade-in" style="display: none; max-width: 1100px;">
+    <!-- CARD PRINCIPAL -->
+    <div class="tutorial-intro-wrapper">
+        <!-- TOPO -->
+        <div class="tutorial-top">
+            <h1 class="tutorial-title">
+                Bem-vindo ao <span>Breaking Game</span>
+            </h1>
+            <p class="tutorial-subtitle">
+                Antes de iniciar sua jornada, aprenda rapidamente como o jogo funciona.
+            </p>
+        </div>
+        <!-- GRID -->
+        <div class="tutorial-grid">
+            <!-- CARD -->
+            <div class="tutorial-card">
+                <div class="tutorial-icon">🧪</div>
+                <h3>Aprenda Química</h3>
+                <p>
+                    Cada fase possui conteúdos diferentes de química
+                    com perguntas, explicações e desafios.
+                </p>
+            </div>
+            <!-- CARD -->
+            <div class="tutorial-card">
+                <div class="tutorial-icon">🗺️</div>
+                <h3>Mapa de Fases</h3>
+                <p>
+                    Avance pelos módulos e desbloqueie novos conteúdos
+                    conforme seu progresso.
+                </p>
+            </div>
+            <!-- CARD -->
+            <div class="tutorial-card">
+                <div class="tutorial-icon">🏆</div>
+                <h3>Sistema de Pontos</h3>
+                <p>
+                    Ganhe pontos, badges e acompanhe
+                    seu desempenho durante o jogo.
+                </p>
+            </div>
+            <!-- CARD -->
+            <div class="tutorial-card">
+                <div class="tutorial-icon">💡</div>
+                <h3>Dicas e Auxiliares</h3>
+                <p>
+                    Utilize professores, assistentes e dicas
+                    para ajudar durante as fases.
+                </p>
+            </div>
+
+        </div>
+        <!-- ETAPAS -->
+        <div class="tutorial-steps">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Escolha uma fase</h4>
+                    <p>Entre no mapa e selecione o conteúdo desejado.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Leia o conceito</h4>
+                    <p>Aprenda a teoria antes de responder.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Responda as perguntas</h4>
+                    <p>Teste seus conhecimentos e ganhe pontos.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Avance no jogo</h4>
+                    <p>Desbloqueie fases e complete sua jornada.</p>
+                </div>
+            </div>
+        </div>
+        <!-- BOTÕES -->
+        <div class="tutorial-actions">
+            <button class="tutorial-btn secondary"
+                onclick="app.pularTutorialIntro()">
+                Pular Tutorial
+            </button>
+            <button class="tutorial-btn primary"
+                onclick="app.abrirTutorialCompleto()">
+                Ver Tutorial Completo
+            </button>
+            <button class="tutorial-btn start"
+                onclick="app.finalizarTutorialIntro()">
+                Começar Jornada →
+            </button>
+        </div>
+    </div>
+</div>
 
     <div id="main-menu" class="container fade-in" style="display: none;">
         <h1 class="game-title">Breaking Game</h1>
@@ -32,10 +136,10 @@
         <p class="info-text"> Pontos: <span id="total-points" class="highlight-text">0</span> |  Progresso: Fase <span id="max-level" class="highlight-text">1</span></p>
         
         <div class="menu-options" style="margin-top: 50px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
-            <button class="btn-option" onclick="app.abrirPanorama()"> Mapa de Fases</button>
+            <button class="btn-option" onclick="app.abrirPanorama()"> Jogar</button>
             <button class="btn-option" onclick="app.abrirTabelaPeriodica()">Materiais de Estudo</button>
             <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
-            <button class="btn-option" onclick="app.abrirPerfil()"> Meu Perfil (Badges e Histórico)</button>
+            <button class="btn-option" onclick="app.abrirPerfil()">Desempenho</button>
             <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
         </div>
     </div>
