@@ -4,684 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Breaking Game - Aprenda Química Jogando</title>
-    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
-    <style>
-        /* =========================================
-           VARIÁVEIS DE TEMA
-           ========================================= */
-        :root {
-            --bg-gradient: radial-gradient(circle, #ffffff 0%, #e6eff8 100%);
-            --cor-principal: #003366;
-            --cor-texto: #333333;
-            --cor-texto-secundario: #555555;
-            --bg-card: rgba(255, 255, 255, 0.95);
-            --borda-card: #cccccc;
-            --bg-input: #ffffff;
-            --cor-glow: rgba(0, 51, 102, 0.3);
-            --bg-overlay: rgba(0, 0, 0, 0.6);
-            --opacidade-textura: 0.03;
-            --tamanho-fonte: 1;
-        }
-
-        [data-theme="dark"] {
-            --bg-gradient: radial-gradient(circle, #1a1a1a 0%, #050505 100%);
-            --cor-principal: #ffff2c; 
-            --cor-texto: #eeeeee;
-            --cor-texto-secundario: #cccccc;
-            --bg-card: rgba(30, 30, 30, 0.95);
-            --borda-card: #444444;
-            --bg-input: #222222;
-            --cor-glow: rgba(255, 255, 44, 0.4);
-            --bg-overlay: rgba(0, 0, 0, 0.85);
-            --opacidade-textura: 0.1;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Special Elite', system-ui, serif;
-            transition: background 0.3s, color 0.3s, border-color 0.3s;
-        }
-
-        body {
-            background: var(--bg-gradient);
-            min-height: 100vh;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            color: var(--cor-texto); 
-            overflow-x: hidden;
-            font-size: calc(1rem * var(--tamanho-fonte));
-        }
-
-        html {
-            font-size: calc(16px * var(--tamanho-fonte));
-        }
-
-        body::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-            opacity: var(--opacidade-textura); 
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* =========================================
-           ANIMAÇÕES (KEYFRAMES)
-           ========================================= */
-        @keyframes modalEnter {
-            from { opacity: 0; transform: translate(-50%, -45%) scale(0.95); }
-            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translate(-50%, -50%) translateX(0); }
-            20%, 60% { transform: translate(-50%, -50%) translateX(-12px); }
-            40%, 80% { transform: translate(-50%, -50%) translateX(12px); }
-        }
-
-        @keyframes pop {
-            0% { transform: scale(0.8); opacity: 0; }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .modal-animated {
-            animation: modalEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        .shake-animation { animation: shake 0.5s ease-in-out; }
-        .pop-animation { animation: pop 0.4s ease-out forwards; }
-
-
-        .top-controls { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; gap: 10px; }
-
-        .control-btn {
-            background: var(--cor-principal); color: var(--bg-input); border: none;
-            padding: 10px 15px; border-radius: 50px; cursor: pointer; font-size: 0.8rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-transform: uppercase; display: flex; align-items: center; gap: 5px;
-            transition: transform 0.2s;
-        }
-        .control-btn:active { transform: scale(0.9); } /* Feedback de clique */
-
-        .container { text-align: center; z-index: 10; max-width: 1200px; width: 100%; padding: 40px 20px; }
-        #login-screen { margin: 0 auto; }
-        #main-menu { text-align: left; padding-left: 80px; margin-top: -200px; }
-
-        .split-layout { display: flex; gap: 50px; text-align: left; align-items: flex-start; }
-        .left-panel { flex: 1.5; padding-bottom: 50px; }
-        .right-panel { flex: 1; position: sticky; top: 40px; display: flex; justify-content: center; align-items: center; }
-
-        .theme-image { width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 15px 35px var(--cor-glow); border: 4px solid var(--cor-principal); object-fit: cover; }
-
-        .game-title { font-size: 3.5rem; color: var(--cor-principal); text-transform: uppercase; letter-spacing: 10px; margin-bottom: 20px; text-shadow: 0 0 10px var(--cor-glow); }
-        .game-subtitle { font-size: 1.1rem; color: var(--cor-texto-secundario); margin-bottom: 40px; letter-spacing: 3px; }
-
-        .btn-option {
-            background: none; border: none; color: var(--cor-texto-secundario); font-size: 1.2rem; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 3px; transition: all 0.4s ease; position: relative; padding: 10px;
-        }
-        .btn-option:hover { color: var(--cor-principal); text-shadow: 0 0 5px var(--cor-glow); transform: scale(1.05); }
-        .btn-option:active { transform: scale(0.95); }
-        .btn-option::after { content: ""; position: absolute; bottom: -5px; left: 50%; width: 0; height: 2px; background: var(--cor-principal); transition: all 0.4s ease; transform: translateX(-50%); }
-        .btn-option:hover::after { width: 80%; }
-
-        .info-text { color: var(--cor-texto-secundario); font-size: 1.2rem; margin-bottom: 10px; }
-        .highlight-text { color: var(--cor-principal); font-weight: bold; }
-
-        /* ROADMAP */
-        .roadmap-container { border-left: 4px solid var(--borda-card); margin-left: 20px; padding-left: 40px; position: relative; }
-        .roadmap-node { position: relative; margin-bottom: 30px; }
-        .roadmap-node::before {
-            content: ''; position: absolute; left: -52px; top: 50%; transform: translateY(-50%);
-            width: 20px; height: 20px; border-radius: 50%; background: var(--bg-input); border: 4px solid var(--borda-card); z-index: 2;
-            transition: all 0.3s;
-        }
-        .roadmap-node.completed::before { background: #00c850; border-color: #008833; box-shadow: 0 0 10px rgba(0, 200, 80, 0.4);}
-        .roadmap-node.current::before { background: var(--cor-principal); border-color: var(--cor-principal); box-shadow: 0 0 15px var(--cor-glow); }
-
-        .level-card {
-            background: var(--bg-card); border: 2px solid var(--borda-card); border-radius: 10px; padding: 20px; width: 100%; max-width: 450px; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
-        }
-        .roadmap-node.unlocked .level-card { border-color: var(--cor-principal); } 
-        .roadmap-node.unlocked .level-card:hover { transform: translateX(10px); box-shadow: 0 8px 20px var(--cor-glow); }
-
-        .level-title { font-size: 1.2rem; color: var(--cor-texto); transition: color 0.3s; }
-        .roadmap-node.unlocked .level-title { color: var(--cor-principal); font-weight: bold; }
-        
-        .chapter-header h2 { color: var(--cor-principal); font-size: 1.6rem; text-transform: uppercase; background: var(--bg-gradient); display: inline-block; padding-right: 15px; }
-
-        /* INPUTS E HUD */
-        input[type="text"] { background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto); padding: 12px 20px; font-size: 1rem; text-align: center; width: 300px; border-radius: 5px; }
-        input[type="text"]:focus { outline: none; border-color: var(--cor-principal); box-shadow: 0 0 8px var(--cor-glow); }
-
-        .hud { position: fixed; top: 70px; right: 20px; background: var(--bg-card); padding: 20px; border: 2px solid var(--cor-principal); color: var(--cor-principal); z-index: 100; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-weight: bold; border-radius: 8px; }
-
-        .question-box {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px;
-            padding: 40px; z-index: 200; max-width: 600px; width: 90%; display: none;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5); color: var(--cor-texto); 
-        }
-
-        .option-btn {
-            background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto); 
-            padding: 15px; margin: 8px 0; cursor: pointer; width: 100%; text-align: left; transition: all 0.2s; border-radius: 8px; font-weight: bold;
-        }
-        .option-btn:hover { border-color: var(--cor-principal); color: var(--cor-principal); transform: translateX(8px); box-shadow: -4px 4px 10px rgba(0,0,0,0.1);}
-        .option-btn:active { transform: scale(0.98); }
-
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-overlay); z-index: 150; }
-
-        /* Estilo unificado para Modais */
-        .stats-screen, .config-screen, .auxiliar-screen, .profile-screen {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px;
-            padding: 40px; z-index: 250; width: 90%; text-align: center; color: var(--cor-texto); box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-        }
-        .stats-screen { max-width: 500px; display: none; }
-        .config-screen { max-width: 500px; display: none; }
-
-        .config-option { background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto); padding: 15px 20px; margin: 10px 0; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: left; font-size: 1rem; display: flex; justify-content: space-between; align-items: center; }
-        .config-option:hover { border-color: var(--cor-principal); background: var(--bg-card); }
-        .config-header { color: var(--cor-principal); font-size: 1.8rem; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
-
-        .config-close { background: var(--cor-principal); color: var(--bg-input); border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; margin-top: 20px; font-size: 0.9rem; text-transform: uppercase; transition: all 0.3s; }
-        .config-close:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-
-        /* AUXILIAR */
-        .auxiliar-screen { max-width: 680px; display: none; }
-        .auxiliar-header { color: var(--cor-principal); font-size: 1.6rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }
-        .auxiliar-subtitulo { color: var(--cor-texto-secundario); font-size: 0.95rem; margin-bottom: 30px; letter-spacing: 1px; }
-        .auxiliar-grid { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-        .auxiliar-card { background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 12px; padding: 24px 18px; width: 170px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .auxiliar-card:hover { border-color: var(--cor-principal); transform: translateY(-5px); box-shadow: 0 8px 20px var(--cor-glow); }
-        .auxiliar-card.selecionado { border-color: var(--cor-principal); background: var(--bg-card); box-shadow: 0 0 15px var(--cor-glow); transform: scale(1.05); }
-        .auxiliar-sprite { width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--borda-card); background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; }
-        .auxiliar-nome { color: var(--cor-principal); font-size: 1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-        .auxiliar-descricao { color: var(--cor-texto-secundario); font-size: 0.82rem; line-height: 1.4; }
-        .auxiliar-confirmar { background: var(--cor-principal); color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; margin-top: 28px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; display: none; }
-        .auxiliar-confirmar:hover { transform: scale(1.05); box-shadow: 0 4px 14px var(--cor-glow); }
-
-        /* PERFIL E BADGES */
-        .profile-screen { max-width: 700px; display: none; max-height: 85vh; overflow-y: auto; padding: 30px;}
-        .profile-header { color: var(--cor-principal); font-size: 1.8rem; margin-bottom: 20px; text-transform: uppercase; }
-        .profile-section-title { font-size: 1.3rem; margin: 20px 0 10px 0; color: var(--cor-texto); border-bottom: 2px solid var(--cor-principal); display: inline-block; padding-bottom: 5px;}
-        .badges-container { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
-        
-        .badge-item {
-            background: var(--bg-input); border: 2px solid var(--cor-principal); border-radius: 50px;
-            padding: 10px 20px; font-size: 1rem; font-weight: bold; color: var(--cor-principal);
-            display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px var(--cor-glow);
-            transition: transform 0.2s, background 0.3s;
-            cursor: help; /* Muda o cursor para indicar que tem dica */
-            position: relative; /* Necessário para o tooltip flutuante */
-        }
-        .badge-item:hover { transform: scale(1.1) translateY(-5px); background: var(--bg-card); }
-        
-        /* O Tooltip Elegante usando ::after e ::before */
-        .badge-item::after {
-            content: attr(data-tooltip); /* Pega o texto do HTML */
-            position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%) translateY(10px);
-            background: var(--cor-texto); color: var(--bg-input);
-            padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: normal;
-            white-space: nowrap; opacity: 0; pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4); z-index: 1000;
-        }
-        .badge-item::before { /* O triângulo apontando pra baixo */
-            content: ''; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%) translateY(10px);
-            border-width: 6px; border-style: solid; border-color: var(--cor-texto) transparent transparent transparent;
-            opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 1000;
-        }
-        .badge-item:hover::after, .badge-item:hover::before { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-        .history-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: var(--bg-input); border-radius: 8px; overflow: hidden;}
-        .history-table th, .history-table td { border-bottom: 1px solid var(--borda-card); padding: 12px; text-align: center; transition: background 0.2s;}
-        .history-table th { background: var(--cor-principal); color: var(--bg-input); text-transform: uppercase; font-size: 0.9rem;}
-        .history-table tr:hover td { background: var(--cor-glow); }
-        .history-table tr:last-child td { border-bottom: none; }
-
-        /* SISTEMA DE DICAS */
-        .hint-btn { background: #ffc107; color: #333; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: bold; transition: all 0.3s; margin-right: 10px; }
-        .hint-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4); }
-        .hint-btn:disabled { opacity: 0.5; cursor: not-allowed; background: #cccccc; }
-        .hint-display { background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 235, 59, 0.1) 100%); border-left: 4px solid #ffc107; padding: 15px 18px; border-radius: 8px; margin-top: 15px; margin-bottom: 10px; font-style: italic; color: var(--cor-texto); display: none; box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2); }
-        .hint-display.show { display: block; animation: slideIn 0.4s ease; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* SISTEMA DE CONCEITOS */
-        .conceito-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px; padding: 40px; z-index: 250; width: 90%; max-width: 700px; max-height: 80vh; overflow-y: auto; text-align: center; color: var(--cor-texto); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
-        .conceito-header { color: var(--cor-principal); font-size: 1.8rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
-        .conceito-auxiliar { color: var(--cor-texto-secundario); font-size: 0.95rem; margin-bottom: 5px; font-style: italic; }
-        .conceito-texto { background: var(--bg-input); border-left: 4px solid var(--cor-principal); padding: 20px; border-radius: 8px; margin: 20px 0; text-align: left; line-height: 1.6; font-size: 1.05rem; }
-        .conceito-botao { background: var(--cor-principal); color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; margin-top: 25px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
-
-        /* TABELA PERIÓDICA */
-        .periodic-table-screen { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px; padding: 20px; z-index: 250; width: 98%; max-width: 1600px; max-height: 90vh; overflow: auto; display: none; }
-        .periodic-container { display: flex; gap: 15px; }
-        .periodic-menu { display: flex; flex-direction: column; gap: 10px; min-width: 150px; }
-        .periodic-menu-btn { background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto); padding: 12px 15px; border-radius: 6px; cursor: pointer; transition: all 0.3s; text-transform: uppercase; font-size: 0.85rem; font-weight: bold; text-align: center; }
-        .periodic-menu-btn:hover { border-color: var(--cor-principal); color: var(--cor-principal); transform: translateX(5px); }
-        .periodic-menu-btn.active { background: var(--cor-principal); color: var(--bg-input); border-color: var(--cor-principal); }
-        .periodic-content { flex: 1; }
-        .periodic-header { color: var(--cor-principal); font-size: 1.8rem; margin-bottom: 15px; text-transform: uppercase; text-align: center; }
-        .periodic-grid { display: grid; grid-template-columns: repeat(18, 1fr); gap: 4px; margin-bottom: 20px; }
-        .element-btn { background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 4px; padding: 6px 4px; cursor: pointer; transition: all 0.3s; text-align: center; font-size: 0.65rem; font-weight: bold; min-height: 60px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .element-btn:hover { border-color: var(--cor-principal); transform: scale(1.1); box-shadow: 0 0 10px var(--cor-glow); }
-        .element-btn.metais { background: linear-gradient(135deg, #D4541F 0%, #E86D2E 100%); }
-        .element-btn.nao-metais { background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); }
-        .element-btn.gases-nobres { background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%); }
-        .element-btn.semi-metais { background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%); }
-        .element-btn.halogenios { background: linear-gradient(135deg, #EAB308 0%, #CA8A04 100%); }
-        .element-btn.alcalinos { background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%); }
-        .element-btn.alcalino-terrosos { background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); }
-        .element-btn.lantanideos { background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); }
-        .element-btn.actinideos { background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%); }
-        .element-btn.metais-transicao { background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%); }
-        .element-num { font-size: 0.5rem; color: #fff; font-weight: bold; }
-        .element-symbol { font-size: 0.9rem; font-weight: bold; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
-        .element-name { font-size: 0.5rem; color: #fff; font-weight: 500; }
-        .element-mass { font-size: 0.5rem; color: rgba(255, 255, 255, 0.9); }
-        .element-info { background: var(--bg-input); border: 2px solid var(--cor-principal); border-radius: 8px; padding: 20px; text-align: center; display: none; margin-top: 15px; }
-        .element-info.show { display: block; }
-        .element-info-header { font-size: 1.2rem; color: var(--cor-principal); font-weight: bold; margin-bottom: 10px; }
-        .element-details { text-align: left; background: var(--bg-gradient); padding: 15px; border-radius: 5px; }
-        .element-detail-item { margin: 8px 0; font-size: 0.9rem; }
-        .element-detail-label { color: var(--cor-principal); font-weight: bold; }
-        .periodic-controls { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
-        .periodic-close-btn { background: var(--cor-principal); color: var(--bg-input); border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-size: 1rem; text-transform: uppercase; flex: 1; }
-        .periodic-close-btn:hover { transform: scale(1.05); box-shadow: 0 4px 10px var(--cor-glow); }
-        .lantanideos-actinideos { display: grid; grid-template-columns: repeat(18, 1fr); gap: 4px; margin-top: 20px; }
-        .legend { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px; font-size: 0.8rem; }
-        .legend-item { display: flex; align-items: center; gap: 5px; }
-        .legend-color { width: 20px; height: 20px; border: 1px solid var(--borda-card); border-radius: 3px; transition: transform 0.3s; }
-        .legend-item:hover .legend-color { transform: scale(1.2); }
-        .legend-item.active { font-weight: bold; opacity: 1; }
-        .element-btn.desabilitado { background: #888 !important; opacity: 0.4; cursor: not-allowed; }
-        .element-btn.destacado { filter: brightness(1.2); }
-        .conceito-botao:hover { transform: scale(1.05); box-shadow: 0 4px 14px var(--cor-glow); }
-
-        /* BOTÃO CONCEITOS - destaque visual no menu lateral */
-        .periodic-menu-btn.conceitos-btn {
-            margin-top: 20px;
-            border-top: 2px solid var(--borda-card);
-            padding-top: 18px;
-            background: linear-gradient(135deg, var(--cor-principal) 0%, #002244 100%);
-            color: var(--bg-input);
-            border-color: var(--cor-principal);
-        }
-        [data-theme="dark"] .periodic-menu-btn.conceitos-btn {
-            background: linear-gradient(135deg, var(--cor-principal) 0%, #b8b800 100%);
-            color: #1a1a1a;
-        }
-        .periodic-menu-btn.conceitos-btn:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px var(--cor-glow);
-            filter: brightness(1.1);
-        }
-
-        /* SELETOR DE CONCEITOS */
-        .seletor-conceitos-screen {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--bg-card); border: 3px solid var(--cor-principal); border-radius: 12px;
-            padding: 35px 40px; z-index: 300; width: 90%; max-width: 650px;
-            max-height: 85vh; overflow-y: auto;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5); color: var(--cor-texto);
-            display: none;
-        }
-        .seletor-conceitos-header { color: var(--cor-principal); font-size: 1.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; text-align: center; }
-        .seletor-conceitos-sub { color: var(--cor-texto-secundario); font-size: 0.9rem; text-align: center; margin-bottom: 25px; }
-
-        .seletor-modulo-titulo { color: var(--cor-principal); font-size: 1.1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 18px 0 10px 0; border-bottom: 2px solid var(--borda-card); padding-bottom: 6px; }
-        .seletor-fases-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-        .seletor-fase-btn {
-            background: var(--bg-input); border: 2px solid var(--borda-card); color: var(--cor-texto);
-            padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 0.88rem;
-            transition: all 0.25s; font-weight: bold;
-        }
-        .seletor-fase-btn:hover { border-color: var(--cor-principal); color: var(--cor-principal); transform: translateY(-2px); box-shadow: 0 4px 10px var(--cor-glow); }
-        .seletor-fase-btn.selecionada { background: var(--cor-principal); color: var(--bg-input); border-color: var(--cor-principal); }
-
-        .seletor-auxiliar-section { margin-top: 22px; }
-        .seletor-auxiliar-titulo { color: var(--cor-texto); font-size: 1rem; font-weight: bold; margin-bottom: 12px; }
-        .seletor-auxiliar-grid { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-        .seletor-aux-btn {
-            background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 10px;
-            padding: 14px 18px; cursor: pointer; transition: all 0.25s; display: flex; flex-direction: column;
-            align-items: center; gap: 6px; min-width: 130px; font-size: 0.85rem; color: var(--cor-texto);
-        }
-        .seletor-aux-btn:hover { border-color: var(--cor-principal); transform: translateY(-3px); box-shadow: 0 6px 14px var(--cor-glow); }
-        .seletor-aux-btn.selecionado { background: var(--cor-principal); color: var(--bg-input); border-color: var(--cor-principal); }
-        .seletor-aux-emoji { font-size: 1.8rem; }
-        .seletor-aux-nome { font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; }
-
-        .seletor-ver-btn {
-            background: var(--cor-principal); color: var(--bg-input); border: none;
-            padding: 13px 36px; border-radius: 50px; cursor: pointer; font-size: 1rem;
-            text-transform: uppercase; letter-spacing: 2px; margin-top: 25px; transition: all 0.3s;
-            display: none; width: 100%;
-        }
-        .seletor-ver-btn:hover { transform: scale(1.03); box-shadow: 0 4px 14px var(--cor-glow); }
-
-        .seletor-fechar-btn {
-            background: transparent; border: 2px solid var(--borda-card); color: var(--cor-texto-secundario);
-            padding: 10px 24px; border-radius: 50px; cursor: pointer; font-size: 0.9rem;
-            text-transform: uppercase; letter-spacing: 1px; margin-top: 12px; transition: all 0.3s; width: 100%;
-        }
-        .seletor-fechar-btn:hover { border-color: var(--cor-principal); color: var(--cor-principal); }
-
-        /* CONCEITO LIVRE (sem botão de jogar) */
-        .conceito-livre-botao {
-            background: var(--cor-principal); color: var(--bg-input); border: none;
-            padding: 12px 32px; border-radius: 50px; cursor: pointer; margin-top: 25px;
-            font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;
-        }
-        .conceito-livre-botao:hover { transform: scale(1.05); box-shadow: 0 4px 14px var(--cor-glow); }
-
-        /* =========================================
-           RESPONSIVIDADE
-           ========================================= */
-        @media (max-width: 768px) {
-            .container { padding: 20px 15px; }
-            .game-title { font-size: 2.5rem; }
-            .game-subtitle { font-size: 1rem; margin-bottom: 30px; }
-            .split-layout { flex-direction: column; gap: 30px; }
-            .left-panel { padding-bottom: 30px; }
-            .right-panel { position: static; display: flex; justify-content: center; align-items: center; }
-            .theme-image { width: 80%; max-width: 300px; }
-            .btn-option { font-size: 1rem; }
-            .info-text { font-size: 1.1rem; }
-            .roadmap-container { margin-left: 10px; padding-left: 30px; }
-            .level-card { padding: 15px; }
-            .level-title { font-size: 1.1rem; }
-            .chapter-header h2 { font-size: 1.4rem; }
-            input[type="text"] { width: 100%; max-width: 300px; }
-            .hud { top: auto; bottom: 10px; right: 10px; left: auto; width: auto; padding: 15px; font-size: 0.85rem; }
-            .question-box { padding: 30px; max-width: 90%; }
-            .question-title { font-size: 1.3rem; }
-            .question-text { font-size: 1.1rem; }
-            .option-btn { padding: 12px; font-size: 0.95rem; }
-            .modal-overlay { display: block; }
-            .stats-screen, .config-screen, .auxiliar-screen, .profile-screen, .conceito-box { width: 95%; max-width: none; padding: 30px; }
-            .config-header { font-size: 1.6rem; }
-            .auxiliar-header { font-size: 1.4rem; }
-            .auxiliar-grid { gap: 12px; }
-            .auxiliar-card { width: 140px; padding: 20px 15px; }
-            .auxiliar-sprite { width: 60px; height: 60px; font-size: 2rem; }
-            .auxiliar-nome { font-size: 0.9rem; }
-            .auxiliar-descricao { font-size: 0.75rem; }
-            .profile-header { font-size: 1.6rem; }
-            .profile-section-title { font-size: 1.2rem; }
-            .badges-container { gap: 10px; }
-            .badge-item { padding: 8px 15px; font-size: 0.9rem; }
-            .history-table th, .history-table td { padding: 10px; font-size: 0.85rem; }
-            .top-controls { top: 10px; right: 10px; }
-            .control-btn { padding: 8px 12px; font-size: 0.75rem; }
-            .periodic-table-screen { width: 98%; max-width: 100%; padding: 15px; }
-            .periodic-container { flex-direction: column; }
-            .periodic-menu { flex-direction: row; min-width: auto; margin-bottom: 15px; }
-            .periodic-menu-btn { flex: 1; font-size: 0.7rem; padding: 10px 8px; }
-            .periodic-menu-btn.conceitos-btn { margin-top: 0; border-top: none; padding-top: 10px; }
-            .periodic-grid { grid-template-columns: repeat(10, 1fr); gap: 3px; }
-            .element-btn { padding: 4px 2px; font-size: 0.55rem; min-height: 45px; }
-            .element-num { font-size: 0.4rem; }
-            .element-symbol { font-size: 0.75rem; }
-            .element-mass { font-size: 0.4rem; }
-            .periodic-header { font-size: 1.4rem; }
-            .element-info-header { font-size: 1rem; }
-            .element-details { font-size: 0.8rem; }
-            .legend { gap: 8px; font-size: 0.7rem; }
-            .legend-color { width: 15px; height: 15px; }
-            .lantanideos-actinideos { grid-template-columns: repeat(10, 1fr); }
-            .periodic-controls { flex-direction: column; }
-            .periodic-close-btn { width: 100%; }
-        }
-
-        @media (max-width: 480px) {
-            .container { padding: 15px 10px; }
-            .game-title { font-size: 2rem; letter-spacing: 5px; }
-            .game-subtitle { font-size: 0.9rem; margin-bottom: 25px; }
-            .split-layout { gap: 20px; }
-            .left-panel { padding-bottom: 20px; }
-            .theme-image { width: 90%; max-width: 250px; }
-            .btn-option { font-size: 0.95rem; padding: 8px; }
-            .info-text { font-size: 1rem; }
-            .roadmap-container { margin-left: 5px; padding-left: 20px; }
-            .roadmap-node::before { left: -45px; }
-            .level-card { padding: 12px; }
-            .level-title { font-size: 1rem; }
-            .chapter-header h2 { font-size: 1.2rem; }
-            input[type="text"] { width: 100%; max-width: 250px; padding: 10px 15px; }
-            .hud { bottom: 5px; right: 5px; padding: 10px; font-size: 0.8rem; }
-            .question-box { padding: 20px; }
-            .question-title { font-size: 1.2rem; }
-            .question-text { font-size: 1rem; }
-            .option-btn { padding: 10px; font-size: 0.9rem; }
-            .stats-screen, .config-screen, .auxiliar-screen, .profile-screen, .conceito-box { padding: 20px; }
-            .config-header { font-size: 1.4rem; }
-            .auxiliar-header { font-size: 1.2rem; }
-            .auxiliar-grid { gap: 10px; }
-            .auxiliar-card { width: 120px; padding: 15px 10px; }
-            .auxiliar-sprite { width: 50px; height: 50px; font-size: 1.8rem; }
-            .auxiliar-nome { font-size: 0.8rem; }
-            .auxiliar-descricao { font-size: 0.7rem; }
-            .profile-header { font-size: 1.4rem; }
-            .profile-section-title { font-size: 1.1rem; }
-            .badges-container { gap: 8px; flex-wrap: wrap; }
-            .badge-item { padding: 6px 12px; font-size: 0.8rem; }
-            .history-table th, .history-table td { padding: 8px; font-size: 0.8rem; }
-            .top-controls { top: 5px; right: 5px; gap: 5px; }
-            .control-btn { padding: 6px 10px; font-size: 0.7rem; }
-            .conceito-header { font-size: 1.5rem; }
-            .conceito-texto { padding: 15px; font-size: 0.95rem; }
-            .conceito-botao { padding: 10px 25px; font-size: 0.9rem; }
-        }
-        /* =========================================
-   LAYOUT QUÍMICA ORGÂNICA (CARDS)
-   ========================================= */
-.grid-moleculas {
-    display: grid;
-    /* Isso faz a grade ser responsiva: cria colunas de no mínimo 200px */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 10px;
-}
-
-.card-molecula {
-    /* Fundo escuro com leve gradiente inspirado na sua imagem */
-    background: linear-gradient(135deg, #1a2a40 0%, #0d1624 100%);
-    border: 2px solid #2a4060;
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-}
-
-/* Efeito ao passar o mouse por cima do card */
-.card-molecula:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-    border-color: #4a90e2; /* Borda azul brilhante ao focar */
-}
-
-.card-molecula .tipo-badge {
-    background-color: #4a90e2;
-    color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    display: inline-block;
-    margin-bottom: 15px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Estilo para a imagem 3D da molécula que você vai adicionar depois */
-.card-molecula img.img-molecula {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-    margin-bottom: 15px;
-}
-
-.card-molecula h4 {
-    margin: 0 0 5px 0;
-    font-size: 1.3rem;
-    color: #ffffff;
-    font-family: 'Special Elite', cursive; /* Mantendo a fonte do seu jogo */
-}
-
-.card-molecula p.formula {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #a0b0c0;
-    font-family: monospace; /* Fonte com espaçamento igual para fórmulas */
-}
-    .shop-screen {
-        position: fixed;
-        inset: 0;
-        z-index: 260;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.14);
-        backdrop-filter: blur(20px);
-    }
-
-    [data-theme="dark"] .shop-screen {
-        background: rgba(10, 18, 35, 0.78);
-    }
-
-    .shop-panel {
-        width: min(900px, 95vw);
-        max-height: min(85vh, calc(100vh - 40px));
-        overflow-y: auto;
-        padding: 28px;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 24px;
-        backdrop-filter: blur(14px);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-    }
-
-    [data-theme="dark"] .shop-panel {
-        background: rgba(15, 23, 45, 0.72);
-        border-color: rgba(255, 255, 255, 0.10);
-    }
-
-    .shop-top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        flex-wrap: wrap;
-        margin-bottom: 18px;
-    }
-
-    .shop-header {
-        font-size: 2.4rem;
-        color: var(--cor-principal);
-        text-transform: uppercase;
-        letter-spacing: 4px;
-        margin: 0;
-    }
-
-    .shop-subtitle {
-        color: var(--cor-texto-secundario);
-        font-size: 1rem;
-        margin-bottom: 28px;
-        max-width: 760px;
-        line-height: 1.6;
-    }
-
-    .shop-section {
-        margin-bottom: 30px;
-        padding: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 22px;
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(14px);
-    }
-
-    [data-theme="dark"] .shop-section {
-        background: rgba(15, 23, 45, 0.72);
-        border-color: rgba(255, 255, 255, 0.10);
-    }
-
-    .shop-section h3 {
-        margin: 0 0 18px 0;
-        font-size: 1.45rem;
-        color: var(--cor-principal);
-        letter-spacing: 1px;
-    }
-
-    .shop-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 18px;
-    }
-
-    .shop-card {
-        border-radius: 22px;
-        padding: 24px;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
-        backdrop-filter: blur(12px);
-        transition: transform 0.25s ease, border-color 0.25s ease;
-    }
-
-    [data-theme="dark"] .shop-card {
-        background: rgba(20, 30, 55, 0.72);
-        border-color: rgba(255, 255, 255, 0.08);
-    }
-
-    .shop-card:hover {
-        transform: translateY(-5px);
-        border-color: var(--cor-principal);
-    }
-
-    .shop-card h4 {
-        margin: 0 0 10px 0;
-        font-size: 1.2rem;
-        color: var(--cor-principal);
-    }
-
-    .shop-card p {
-        color: var(--cor-texto-secundario);
-        margin-bottom: 18px;
-        line-height: 1.6;
-    }
-
-    .shop-card .shop-buy-btn {
-        background: var(--cor-principal);
-        border: none;
-        color: var(--bg-input);
-        padding: 12px 18px;
-        border-radius: 999px;
-        cursor: pointer;
-        transition: background 0.2s ease, transform 0.2s ease;
-        font-weight: bold;
-        width: 100%;
-    }
-
-    .shop-card .shop-buy-btn:hover {
-        background: #00294a;
-        transform: translateY(-1px);
-    }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Special+Elite&family=Lobster&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Special+Elite&family=Lobster&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     
 </head>
-<body data-theme="light">
+<body data-theme="light-1">
 
     <div class="top-controls">
         <button class="control-btn" onclick="app.abrirConfig()"> Config</button>
@@ -696,6 +25,110 @@
             <button class="btn-option" onclick="app.entrarComUsuario()">Entrar</button>
         </div>
     </div>
+    <!-- =========================================
+     TELA DE TUTORIAL INICIAL
+     Coloque ANTES da div #main-menu
+========================================= -->
+<div id="tutorial-intro-screen" class="container fade-in" style="display: none; max-width: 1100px;">
+    <!-- CARD PRINCIPAL -->
+    <div class="tutorial-intro-wrapper">
+        <!-- TOPO -->
+        <div class="tutorial-top">
+            <h1 class="tutorial-title">
+                Bem-vindo ao <span>Breaking Game</span>
+            </h1>
+            <p class="tutorial-subtitle">
+                Antes de iniciar sua jornada, aprenda rapidamente como o jogo funciona.
+            </p>
+        </div>
+        <!-- GRID -->
+        <div class="tutorial-grid">
+            <!-- CARD -->
+            <div class="tutorial-card">
+                <div class="tutorial-icon">🧪</div>
+                <h3>Aprenda Química</h3>
+                <p>
+                    Cada fase possui conteúdos diferentes de química
+                    com perguntas, explicações e desafios.
+                </p>
+            </div>
+            <!-- CARD -->
+            <div class="tutorial-card">
+                <div class="tutorial-icon">🗺️</div>
+                <h3>Mapa de Fases</h3>
+                <p>
+                    Avance pelos módulos e desbloqueie novos conteúdos
+                    conforme seu progresso.
+                </p>
+            </div>
+            <!-- CARD -->
+            <div class="tutorial-card">
+                <div class="tutorial-icon">🏆</div>
+                <h3>Sistema de Pontos</h3>
+                <p>
+                    Ganhe pontos, badges e acompanhe
+                    seu desempenho durante o jogo.
+                </p>
+            </div>
+            <!-- CARD -->
+            <div class="tutorial-card">
+                <div class="tutorial-icon">💡</div>
+                <h3>Dicas e Auxiliares</h3>
+                <p>
+                    Utilize professores, assistentes e dicas
+                    para ajudar durante as fases.
+                </p>
+            </div>
+
+        </div>
+        <!-- ETAPAS -->
+        <div class="tutorial-steps">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Escolha uma fase</h4>
+                    <p>Entre no mapa e selecione o conteúdo desejado.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Leia o conceito</h4>
+                    <p>Aprenda a teoria antes de responder.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Responda as perguntas</h4>
+                    <p>Teste seus conhecimentos e ganhe pontos.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Avance no jogo</h4>
+                    <p>Desbloqueie fases e complete sua jornada.</p>
+                </div>
+            </div>
+        </div>
+        <!-- BOTÕES -->
+        <div class="tutorial-actions">
+            <button class="tutorial-btn secondary"
+                onclick="app.pularTutorialIntro()">
+                Pular Tutorial
+            </button>
+            <button class="tutorial-btn primary"
+                onclick="app.abrirTutorialCompleto()">
+                Ver Tutorial Completo
+            </button>
+            <button class="tutorial-btn start"
+                onclick="app.finalizarTutorialIntro()">
+                Começar Jornada →
+            </button>
+        </div>
+    </div>
+</div>
 
     <div id="main-menu" class="container fade-in" style="display: none;">
         <h1 class="game-title">Breaking Game</h1>
@@ -703,10 +136,11 @@
         <p class="info-text"> Pontos: <span id="total-points" class="highlight-text">0</span> |  Progresso: Fase <span id="max-level" class="highlight-text">1</span></p>
         
         <div class="menu-options" style="margin-top: 50px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
-            <button class="btn-option" onclick="app.abrirPanorama()"> Mapa de Fases</button>
-            <button class="btn-option" onclick="app.abrirTabelaPeriodica()"> Tabela Periódica</button>
+            <button class="btn-option" onclick="app.abrirPanorama()"> Jogar</button>
+            <button class="btn-option" onclick="app.abrirTabelaPeriodica()">Materiais de Estudo</button>
             <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
-            <button class="btn-option" onclick="app.abrirPerfil()"> Meu Perfil (Badges e Histórico)</button>
+            <button class="btn-option" onclick="app.abrirPerfil()">Desempenho</button>
+            <button class="btn-option" onclick="app.mostrarTutorialIntro()">📖 Rever Tutorial</button>
             <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
         </div>
     </div>
@@ -770,26 +204,70 @@
         </div>
     </div>
 
-    <div class="config-screen modal-animated" id="config-screen">
-        <h2 class="config-header">Configurações</h2>
-        <div class="config-option">
-            <span>Alto Contraste</span>
-            <input type="checkbox" id="toggle-tema" onchange="app.toggleTema()" style="transform: scale(1.5);">
-        </div>
-        <div class="config-option">
-            <span>Música (Em breve)</span>
-            <input type="checkbox" checked style="transform: scale(1.5);">
-        </div>
+ <div class="config-screen modal-animated" id="config-screen">
+    <h2 class="config-header">Configurações</h2>
+    
+    <div class="config-scroll-container" style="max-height: 60vh; overflow-y: auto; padding-right: 8px; margin-bottom: 20px;">
+        
         <div class="config-option" style="flex-direction: column; align-items: flex-start;">
-            <span style="margin-bottom: 10px;">Tamanho da Fonte</span>
-            <div style="display: flex; gap: 10px; width: 100%;">
-                <button class="size-btn" onclick="app.alterarTamanhoFonte('pequeno')" style="flex: 1; padding: 10px; background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 5px; cursor: pointer; transition: all 0.2s;">Pequeno</button>
-                <button class="size-btn" onclick="app.alterarTamanhoFonte('medio')" style="flex: 1; padding: 10px; background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 5px; cursor: pointer; transition: all 0.2s;">Médio</button>
-                <button class="size-btn" onclick="app.alterarTamanhoFonte('grande')" style="flex: 1; padding: 10px; background: var(--bg-input); border: 2px solid var(--borda-card); border-radius: 5px; cursor: pointer; transition: all 0.2s;">Grande</button>
+            <span class="config-label" style="margin-bottom: 12px; font-weight: 600;">Tema Visual</span>
+            <div class="theme-picker" id="theme-picker">
+                <div class="theme-swatch" data-theme-value="light-1" onclick="app.setTema('light-1')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#FAF3DD,#C8D5B9);"></div>
+                    <span class="theme-swatch-label">Areia</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="light-2" onclick="app.setTema('light-2')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#DEE5E5,#9DC5BB);"></div>
+                    <span class="theme-swatch-label">Névoa</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="light-3" onclick="app.setTema('light-3')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#C5EFCB,#AC8887);"></div>
+                    <span class="theme-swatch-label">Menta</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="dark-1" onclick="app.setTema('dark-1')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#222,#ffff2c);"></div>
+                    <span class="theme-swatch-label">Neon</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="dark-2" onclick="app.setTema('dark-2')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#37392E,#F15152);"></div>
+                    <span class="theme-swatch-label">Pedra</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="dark-3" onclick="app.setTema('dark-3')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#6A041D,#B2FFA9);"></div>
+                    <span class="theme-swatch-label">Vinho</span>
+                </div>
             </div>
         </div>
-        <button class="config-close" onclick="app.fecharConfig()">Fechar</button>
+
+        <div class="config-section" style="margin-top: 20px;">
+            <span class="config-label" style="display: block; margin-bottom: 12px; font-weight: 600;">Estilo da Interface (Fonte)</span>
+            <div class="font-grid">
+                <button class="font-btn" onclick="app.alterarFonte('inter')">Inter</button>
+                <button class="font-btn" style="font-family: 'Special Elite', cursive !important;" onclick="app.alterarFonte('special')">Special Elite</button>
+                <button class="font-btn" style="font-family: 'Lobster', cursive !important;" onclick="app.alterarFonte('lobster')">Lobster</button>
+                <button class="font-btn" style="font-family: 'Times New Roman', serif !important;" onclick="app.alterarFonte('times')">Times New Roman</button>
+                <button class="font-btn" style="font-family: 'JetBrains Mono', monospace !important;" onclick="app.alterarFonte('double')">Mono Spaced</button>
+                <button class="font-btn" style="font-family: 'Playfair Display', serif !important; font-style: italic;" onclick="app.alterarFonte('serif-bold')">Serif Bold</button>
+            </div>
+        </div>
+
+        <div class="config-option" style="flex-direction: column; align-items: flex-start; margin-top: 20px;">
+            <span class="config-label" style="margin-bottom: 12px; font-weight: 600;">Tamanho da Fonte</span>
+            <div style="display: flex; gap: 10px; width: 100%;">
+                <button class="size-btn font-btn" onclick="app.alterarTamanhoFonte('pequeno')" style="flex: 1;">Pequeno</button>
+                <button class="size-btn font-btn" onclick="app.alterarTamanhoFonte('medio')" style="flex: 1;">Médio</button>
+                <button class="size-btn font-btn" onclick="app.alterarTamanhoFonte('grande')" style="flex: 1;">Grande</button>
+            </div>
+        </div>
+
+        <div class="config-option" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <span class="config-label" style="font-weight: 600;">Música (Em breve)</span>
+            <input type="checkbox" checked style="transform: scale(1.5); accent-color: var(--cor-principal);">
+        </div>
     </div>
+
+    <button class="config-close" onclick="app.fecharConfig()" style="width: 100%; padding: 12px; border-radius: 12px; background: var(--cor-principal); color: white; border: none; font-weight: bold; cursor: pointer;">Fechar</button>
+</div>
 
     <div class="auxiliar-screen modal-animated" id="final-warning-screen" style="display: none;">
         <h2 style="color: var(--cor-principal); font-size: 2.2rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;">🏆 DESAFIO FINAL 🏆</h2>
@@ -878,113 +356,209 @@
         </div>
     </div>
 
-    <div class="shop-screen modal-animated" id="shop-screen">
-        <div class="shop-panel">
-            <div class="shop-top">
-                <div>
-                    <h2 class="shop-header">Loja Química</h2>
-                    <p class="shop-subtitle">Use seus pontos para desbloquear recursos e reforçar sua jornada.</p>
-                </div>
-                <button class="config-close" onclick="app.fecharLoja()">Fechar</button>
+   <div class="shop-screen modal-animated" id="shop-screen">
+
+    <div class="shop-panel">
+
+        <!-- TOPO -->
+        <div class="shop-top">
+
+            <div>
+                <h2 class="shop-header">
+                    Loja Química
+                </h2>
+
+                <p class="shop-subtitle">
+                    Use seus pontos para desbloquear recursos,
+                    melhorias e vantagens durante o jogo.
+                </p>
             </div>
 
-            <div class="shop-section">
-                <h3>🌍 Misturas Homogêneas (Soluções)</h3>
-                <div class="shop-grid">
-                    <div class="shop-card">
-                        <h4>🌍 Ar Atmosférico</h4>
-                        <p>Estude N₂, O₂ e CO₂ - solução gasosa essencial para compreender misturas gasosas.</p>
-                        <button class="shop-buy-btn">Comprar por 80 pts</button>
+            <button
+                class="btn-option shop-back-btn"
+                onclick="app.voltarAoMenu()">
+
+                ← Voltar
+
+            </button>
+
+        </div>
+
+        <!-- BARRA DE PESQUISA + FILTROS -->
+        <div class="shop-toolbar">
+            <div class="shop-search-wrapper">
+                <span class="shop-search-icon">🔍</span>
+                <input type="text" id="shop-search-input" class="shop-search-input"
+                    placeholder="Pesquisar item na loja..."
+                    oninput="app.filtrarLoja()">
+            </div>
+            <div class="shop-categories" id="shop-categories">
+                <button class="shop-cat-btn active" data-cat="todos" onclick="app.selecionarCategoriaLoja('todos', this)">Todos</button>
+                <button class="shop-cat-btn" data-cat="recursos" onclick="app.selecionarCategoriaLoja('recursos', this)">📚 Recursos</button>
+                <button class="shop-cat-btn" data-cat="ofertas" onclick="app.selecionarCategoriaLoja('ofertas', this)">⚡ Ofertas</button>
+                <button class="shop-cat-btn" data-cat="dicas" onclick="app.selecionarCategoriaLoja('dicas', this)">💡 Dicas</button>
+                <button class="shop-cat-btn" data-cat="bonus" onclick="app.selecionarCategoriaLoja('bonus', this)">🎁 Bônus</button>
+                <button class="shop-cat-btn" data-cat="visual" onclick="app.selecionarCategoriaLoja('visual', this)">🎨 Visual</button>
+            </div>
+            <p class="shop-empty-msg" id="shop-empty-msg" style="display:none;">Nenhum item encontrado.</p>
+        </div>
+
+        <!-- RECURSOS -->
+        <div class="shop-section">
+
+            <h3 class="shop-section-title">
+                Recursos de Estudo
+            </h3>
+
+            <div class="shop-grid">
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="recursos" data-sub="dicas" data-name="pacote de dicas">
+
+                    <div class="shop-icon">
+                        💡
                     </div>
-                    <div class="shop-card">
-                        <h4>💧 Soro Fisiológico</h4>
-                        <p>Aprenda sobre NaCl + H₂O - solução aquosa com aplicações médicas e industriais.</p>
-                        <button class="shop-buy-btn">Comprar por 85 pts</button>
-                    </div>
-                    <div class="shop-card">
-                        <h4>🥃 Álcool Comercial</h4>
-                        <p>Estude C₂H₅OH + H₂O - solução líquida com propriedades desinfetantes.</p>
-                        <button class="shop-buy-btn">Comprar por 90 pts</button>
-                    </div>
-                    <div class="shop-card">
-                        <h4>🔶 Bronze</h4>
-                        <p>Liga metálica Cu + Sn - compreenda ligas metálicas e sua importância industrial.</p>
-                        <button class="shop-buy-btn">Comprar por 95 pts</button>
-                    </div>
+
+                    <h4>
+                        Pacote de Dicas
+                    </h4>
+
+                    <p>
+                        Receba 3 dicas extras para utilizar
+                        nas fases mais difíceis do jogo.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 150 pts
+                    </button>
+
                 </div>
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="recursos" data-sub="bonus" data-name="bônus de pontos">
+
+                    <div class="shop-icon">
+                        ⚡
+                    </div>
+
+                    <h4>
+                        Bônus de Pontos
+                    </h4>
+
+                    <p>
+                        Ganhe pontos adicionais para desbloquear
+                        conteúdos e avançar mais rapidamente.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 180 pts
+                    </button>
+
+                </div>
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="recursos" data-sub="visual" data-name="tema brilhante">
+
+                    <div class="shop-icon">
+                        🎨
+                    </div>
+
+                    <h4>
+                        Tema Brilhante
+                    </h4>
+
+                    <p>
+                        Desbloqueie um visual exclusivo
+                        com efeitos modernos e iluminados.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 220 pts
+                    </button>
+
+                </div>
+
             </div>
 
-            <div class="shop-section">
-                <h3>🏜️ Misturas Heterogêneas e Coloides</h3>
-                <div class="shop-grid">
-                    <div class="shop-card">
-                        <h4>🏜️ Água e Areia</h4>
-                        <p>SiO₂ + H₂O - suspensão heterogênea separável por filtração.</p>
-                        <button class="shop-buy-btn">Comprar por 75 pts</button>
-                    </div>
-                    <div class="shop-card">
-                        <h4>⛰️ Granito</h4>
-                        <p>Mistura heterogênea de quartzo, feldspato e mica - rocha ígnea essencial.</p>
-                        <button class="shop-buy-btn">Comprar por 85 pts</button>
-                    </div>
-                    <div class="shop-card">
-                        <h4>🩸 Sangue</h4>
-                        <p>Coloide natural - plasma com células e moléculas diversas em suspensão.</p>
-                        <button class="shop-buy-btn">Comprar por 100 pts</button>
-                    </div>
-                </div>
-            </div>
-            //hruiewhfi
-            
+        </div>
 
-            <div class="shop-section">
-                <h3>⚗️ Misturas Especiais e Industriais</h3>
-                <div class="shop-grid">
-                    <div class="shop-card">
-                        <h4>🥃 Álcool 96%</h4>
-                        <p>Mistura azeotrópica - aprenda sobre temperatura de ebulição constante.</p>
-                        <button class="shop-buy-btn">Comprar por 100 pts</button>
-                    </div>
-                    <div class="shop-card">
-                        <h4>🔧 Solda</h4>
-                        <p>Mistura eutética Sn + Pb - ponto de fusão constante em aplicações industriais.</p>
-                        <button class="shop-buy-btn">Comprar por 100 pts</button>
-                    </div>
-                    <div class="shop-card">
-                        <h4>⛽ Petróleo</h4>
-                        <p>Hidrocarbonetos complexos - combustível obtido por destilação.</p>
-                        <button class="shop-buy-btn">Comprar por 110 pts</button>
-                    </div>
-                    <div class="shop-card">
-                        <h4>🧼 Água Sanitária</h4>
-                        <p>NaClO - desinfetante e blequeador com propriedades especiais.</p>
-                        <button class="shop-buy-btn">Comprar por 95 pts</button>
-                    </div>
-                </div>
-            </div>
+        <!-- OFERTAS -->
+        <div class="shop-section">
 
-            <div class="shop-section">
-                <h3>⚡ Ofertas Rápidas e Boosts</h3>
-                <div class="shop-grid">
-                    <div class="shop-card">
-                        <h4>🎯 Pacote de Dicas</h4>
-                        <p>Adquira 3 dicas adicionais para usar em fases futuras e ganhar vantagem nas perguntas mais difíceis.</p>
-                        <button class="shop-buy-btn">Comprar por 150 pts</button>
+            <h3 class="shop-section-title">
+                Ofertas Rápidas
+            </h3>
+
+            <div class="shop-grid">
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="ofertas" data-sub="dicas" data-name="revisão rápida">
+
+                    <div class="shop-icon">
+                        📚
                     </div>
-                    <div class="shop-card">
-                        <h4>⭐ Bônus de Pontos</h4>
-                        <p>Receba 200 pontos extras para ajudar a alcançar novas conquistas e desbloquear conteúdos.</p>
-                        <button class="shop-buy-btn">Comprar por 180 pts</button>
+
+                    <h4>
+                        Revisão Rápida
+                    </h4>
+
+                    <p>
+                        Consulte um resumo instantâneo dos
+                        conteúdos antes da próxima fase.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 120 pts
+                    </button>
+
+                </div>
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="ofertas" data-sub="bonus" data-name="conteúdo extra">
+
+                    <div class="shop-icon">
+                        🔓
                     </div>
-                    <div class="shop-card">
-                        <h4>🛡️ Protetor de Fase</h4>
-                        <p>Não perca pontos ao errar a próxima pergunta - um erro não será contado.</p>
-                        <button class="shop-buy-btn">Comprar por 200 pts</button>
+
+                    <h4>
+                        Conteúdo Extra
+                    </h4>
+
+                    <p>
+                        Libere cards explicativos adicionais
+                        e informações avançadas.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 260 pts
+                    </button>
+
+                </div>
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="ofertas" data-sub="dicas" data-name="kit de laboratório">
+
+                    <div class="shop-icon">
+                        🧪
                     </div>
+
+                    <h4>
+                        Kit de Laboratório
+                    </h4>
+
+                    <p>
+                        Receba acesso a exemplos práticos
+                        e experimentos simulados.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 300 pts
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <div class="periodic-table-screen modal-animated" id="periodic-table-screen">
         <div class="periodic-container">
@@ -1263,6 +837,6 @@
         <button class="conceito-livre-botao" onclick="app.fecharConceitoLivre()">← Voltar ao Seletor</button>
     </div>
 
-    <script src="script.js"></script>
+    <script src="teste.js"></script>
 </body>
 </html>
