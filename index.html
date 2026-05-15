@@ -13,8 +13,10 @@
 <body data-theme="light-1">
 
     <div class="top-controls">
-        <button class="control-btn" onclick="app.abrirConfig()"> Config</button>
-        <button class="control-btn" id="btn-tema" onclick="app.toggleTema()"> Tema</button>
+        <button class="control-btn" id="btn-usuario" onclick="app.abrirConfig()">
+            <span style="font-size: 1.1rem;">👤</span>
+            <span>Usuário</span>
+        </button>
     </div>
 
     <div id="login-screen" class="container">
@@ -29,7 +31,7 @@
      TELA DE TUTORIAL INICIAL
      Coloque ANTES da div #main-menu
 ========================================= -->
-<div id="tutorial-intro-screen" class="container fade-in" style="display: none; max-width: 1100px;">
+<div id="tutorial-intro-screen" class="tutorial-intro-overlay fade-in" style="display: none;">
     <!-- CARD PRINCIPAL -->
     <div class="tutorial-intro-wrapper">
         <!-- TOPO -->
@@ -37,94 +39,35 @@
             <h1 class="tutorial-title">
                 Bem-vindo ao <span>Breaking Game</span>
             </h1>
-            <p class="tutorial-subtitle">
-                Antes de iniciar sua jornada, aprenda rapidamente como o jogo funciona.
-            </p>
         </div>
-        <!-- GRID -->
+        <!-- GRID INFORMATIVO -->
         <div class="tutorial-grid">
-            <!-- CARD -->
             <div class="tutorial-card">
                 <div class="tutorial-icon">🧪</div>
                 <h3>Aprenda Química</h3>
-                <p>
-                    Cada fase possui conteúdos diferentes de química
-                    com perguntas, explicações e desafios.
-                </p>
+                <p>Cada fase possui conteúdos diferentes de química com perguntas, explicações e desafios.</p>
             </div>
-            <!-- CARD -->
             <div class="tutorial-card">
                 <div class="tutorial-icon">🗺️</div>
                 <h3>Mapa de Fases</h3>
-                <p>
-                    Avance pelos módulos e desbloqueie novos conteúdos
-                    conforme seu progresso.
-                </p>
+                <p>Avance pelos módulos e desbloqueie novos conteúdos conforme seu progresso.</p>
             </div>
-            <!-- CARD -->
             <div class="tutorial-card">
                 <div class="tutorial-icon">🏆</div>
                 <h3>Sistema de Pontos</h3>
-                <p>
-                    Ganhe pontos, badges e acompanhe
-                    seu desempenho durante o jogo.
-                </p>
+                <p>Ganhe pontos, badges e acompanhe seu desempenho durante o jogo.</p>
             </div>
-            <!-- CARD -->
             <div class="tutorial-card">
                 <div class="tutorial-icon">💡</div>
                 <h3>Dicas e Auxiliares</h3>
-                <p>
-                    Utilize professores, assistentes e dicas
-                    para ajudar durante as fases.
-                </p>
-            </div>
-
-        </div>
-        <!-- ETAPAS -->
-        <div class="tutorial-steps">
-            <div class="step-item">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h4>Escolha uma fase</h4>
-                    <p>Entre no mapa e selecione o conteúdo desejado.</p>
-                </div>
-            </div>
-            <div class="step-item">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h4>Leia o conceito</h4>
-                    <p>Aprenda a teoria antes de responder.</p>
-                </div>
-            </div>
-            <div class="step-item">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h4>Responda as perguntas</h4>
-                    <p>Teste seus conhecimentos e ganhe pontos.</p>
-                </div>
-            </div>
-            <div class="step-item">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h4>Avance no jogo</h4>
-                    <p>Desbloqueie fases e complete sua jornada.</p>
-                </div>
+                <p>Utilize professores, assistentes e dicas para ajudar durante as fases.</p>
             </div>
         </div>
-        <!-- BOTÕES -->
+        <!-- BOTÃO ÚNICO -->
         <div class="tutorial-actions">
-            <button class="tutorial-btn secondary"
-                onclick="app.pularTutorialIntro()">
-                Pular Tutorial
-            </button>
-            <button class="tutorial-btn primary"
-                onclick="app.abrirTutorialCompleto()">
-                Ver Tutorial Completo
-            </button>
             <button class="tutorial-btn start"
                 onclick="app.finalizarTutorialIntro()">
-                Começar Jornada →
+                Acessar Dashboard →
             </button>
         </div>
     </div>
@@ -140,6 +83,7 @@
             <button class="btn-option" onclick="app.abrirTabelaPeriodica()">Materiais de Estudo</button>
             <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
             <button class="btn-option" onclick="app.abrirPerfil()">Desempenho</button>
+            <button class="btn-option" onclick="app.mostrarTutorialIntro()">📖 Rever Tutorial</button>
             <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
         </div>
     </div>
@@ -204,9 +148,24 @@
     </div>
 
  <div class="config-screen modal-animated" id="config-screen">
-    <h2 class="config-header">Configurações</h2>
-    
-    <div class="config-scroll-container" style="max-height: 60vh; overflow-y: auto; padding-right: 8px; margin-bottom: 20px;">
+    <h2 class="config-header">Dashboard do Usuário</h2>
+
+    <div class="user-dashboard-card" style="display: flex; align-items: center; gap: 16px; padding: 18px; border-radius: 16px; background: var(--bg-card-strong, var(--bg-card)); border: 1px solid var(--borda-card); margin-bottom: 20px;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--grad-primary, var(--cor-principal)); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800; flex-shrink: 0;">
+            <span id="dash-avatar">U</span>
+        </div>
+        <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 1.15rem; font-weight: 700; color: var(--cor-texto); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                <span id="dash-username">-</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 6px; color: var(--cor-texto-secundario); font-size: 0.9rem;">
+                <span>🏆 <strong id="dash-points" style="color: var(--cor-principal);">0</strong> pts</span>
+                <span>🗺️ Fase <strong id="dash-level" style="color: var(--cor-principal);">1</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="config-scroll-container" style="max-height: 55vh; overflow-y: auto; padding-right: 8px; margin-bottom: 20px;">
         
         <div class="config-option" style="flex-direction: column; align-items: flex-start;">
             <span class="config-label" style="margin-bottom: 12px; font-weight: 600;">Tema Visual</span>
@@ -234,6 +193,38 @@
                 <div class="theme-swatch" data-theme-value="dark-3" onclick="app.setTema('dark-3')">
                     <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#6A041D,#B2FFA9);"></div>
                     <span class="theme-swatch-label">Vinho</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="light-4" onclick="app.setTema('light-4')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#D6F599,#436436);"></div>
+                    <span class="theme-swatch-label">Lima</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="light-5" onclick="app.setTema('light-5')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#FAF3DD,#60435F);"></div>
+                    <span class="theme-swatch-label">Ameixa</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="light-6" onclick="app.setTema('light-6')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#F19953,#2660A4);"></div>
+                    <span class="theme-swatch-label">Pôr do Sol</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="light-7" onclick="app.setTema('light-7')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#EDF7B5,#22031F);"></div>
+                    <span class="theme-swatch-label">Limão</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="dark-4" onclick="app.setTema('dark-4')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#462255,#62A87C);"></div>
+                    <span class="theme-swatch-label">Ametista</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="dark-5" onclick="app.setTema('dark-5')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#011627,#EF2D56);"></div>
+                    <span class="theme-swatch-label">Marinho</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="dark-6" onclick="app.setTema('dark-6')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#183A37,#F7F0F0);"></div>
+                    <span class="theme-swatch-label">Pinheiro</span>
+                </div>
+                <div class="theme-swatch" data-theme-value="dark-7" onclick="app.setTema('dark-7')">
+                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#334139,#C52184);"></div>
+                    <span class="theme-swatch-label">Magenta</span>
                 </div>
             </div>
         </div>
@@ -355,56 +346,209 @@
         </div>
     </div>
 
-    <div class="shop-screen modal-animated" id="shop-screen">
-        <div class="shop-panel">
-            <div class="shop-top">
-                <div>
-                    <h2 class="shop-header">Loja Química</h2>
-                    <p class="shop-subtitle">Use seus pontos para desbloquear recursos e reforçar sua jornada.</p>
-                </div>
-                <button class="btn-option" style="font-size: 1rem; margin-bottom: 20px;" onclick="app.voltarAoMenu()">
-    ← Voltar
-</button>
+   <div class="shop-screen modal-animated" id="shop-screen">
+
+    <div class="shop-panel">
+
+        <!-- TOPO -->
+        <div class="shop-top">
+
+            <div>
+                <h2 class="shop-header">
+                    Loja Química
+                </h2>
+
+                <p class="shop-subtitle">
+                    Use seus pontos para desbloquear recursos,
+                    melhorias e vantagens durante o jogo.
+                </p>
             </div>
 
-            <div class="shop-section">
-                <h3>Recursos de Estudo</h3>
-                <div class="shop-grid">
-                    <div class="shop-card">
-                        <h4>Pacote de Dicas</h4>
-                        <p>Adquira 3 dicas adicionais para usar em fases futuras e ganhar vantagem nas perguntas mais difíceis.</p>
-                        <button class="shop-buy-btn">Comprar por 150 pts</button>
+            <button
+                class="btn-option shop-back-btn"
+                onclick="app.voltarAoMenu()">
+
+                ← Voltar
+
+            </button>
+
+        </div>
+
+        <!-- BARRA DE PESQUISA + FILTROS -->
+        <div class="shop-toolbar">
+            <div class="shop-search-wrapper">
+                <span class="shop-search-icon">🔍</span>
+                <input type="text" id="shop-search-input" class="shop-search-input"
+                    placeholder="Pesquisar item na loja..."
+                    oninput="app.filtrarLoja()">
+            </div>
+            <div class="shop-categories" id="shop-categories">
+                <button class="shop-cat-btn active" data-cat="todos" onclick="app.selecionarCategoriaLoja('todos', this)">Todos</button>
+                <button class="shop-cat-btn" data-cat="recursos" onclick="app.selecionarCategoriaLoja('recursos', this)">📚 Recursos</button>
+                <button class="shop-cat-btn" data-cat="ofertas" onclick="app.selecionarCategoriaLoja('ofertas', this)">⚡ Ofertas</button>
+                <button class="shop-cat-btn" data-cat="dicas" onclick="app.selecionarCategoriaLoja('dicas', this)">💡 Dicas</button>
+                <button class="shop-cat-btn" data-cat="bonus" onclick="app.selecionarCategoriaLoja('bonus', this)">🎁 Bônus</button>
+                <button class="shop-cat-btn" data-cat="visual" onclick="app.selecionarCategoriaLoja('visual', this)">🎨 Visual</button>
+            </div>
+            <p class="shop-empty-msg" id="shop-empty-msg" style="display:none;">Nenhum item encontrado.</p>
+        </div>
+
+        <!-- RECURSOS -->
+        <div class="shop-section">
+
+            <h3 class="shop-section-title">
+                Recursos de Estudo
+            </h3>
+
+            <div class="shop-grid">
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="recursos" data-sub="dicas" data-name="pacote de dicas">
+
+                    <div class="shop-icon">
+                        💡
                     </div>
-                    <div class="shop-card">
-                        <h4>Bônus de Pontos</h4>
-                        <p>Receba 200 pontos extras para ajudar a alcançar novas conquistas e desbloquear conteúdos.</p>
-                        <button class="shop-buy-btn">Comprar por 180 pts</button>
-                    </div>
-                    <div class="shop-card">
-                        <h4>Tema Brilhante</h4>
-                        <p>Desbloqueie um tema visual exclusivo que deixa a sua tela ainda mais estilosa.</p>
-                        <button class="shop-buy-btn">Comprar por 220 pts</button>
-                    </div>
+
+                    <h4>
+                        Pacote de Dicas
+                    </h4>
+
+                    <p>
+                        Receba 3 dicas extras para utilizar
+                        nas fases mais difíceis do jogo.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 150 pts
+                    </button>
+
                 </div>
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="recursos" data-sub="bonus" data-name="bônus de pontos">
+
+                    <div class="shop-icon">
+                        ⚡
+                    </div>
+
+                    <h4>
+                        Bônus de Pontos
+                    </h4>
+
+                    <p>
+                        Ganhe pontos adicionais para desbloquear
+                        conteúdos e avançar mais rapidamente.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 180 pts
+                    </button>
+
+                </div>
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="recursos" data-sub="visual" data-name="tema brilhante">
+
+                    <div class="shop-icon">
+                        🎨
+                    </div>
+
+                    <h4>
+                        Tema Brilhante
+                    </h4>
+
+                    <p>
+                        Desbloqueie um visual exclusivo
+                        com efeitos modernos e iluminados.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 220 pts
+                    </button>
+
+                </div>
+
             </div>
 
-            <div class="shop-section">
-                <h3>Ofertas Rápidas</h3>
-                <div class="shop-grid">
-                    <div class="shop-card">
-                        <h4>Revisão Rápida</h4>
-                        <p>Ganhe um resumo instantâneo de conteúdo para lembrar os conceitos antes da próxima fase.</p>
-                        <button class="shop-buy-btn">Comprar por 120 pts</button>
+        </div>
+
+        <!-- OFERTAS -->
+        <div class="shop-section">
+
+            <h3 class="shop-section-title">
+                Ofertas Rápidas
+            </h3>
+
+            <div class="shop-grid">
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="ofertas" data-sub="dicas" data-name="revisão rápida">
+
+                    <div class="shop-icon">
+                        📚
                     </div>
-                    <div class="shop-card">
-                        <h4>Desbloqueio de Conteúdo</h4>
-                        <p>Tenha acesso extra a cards explicativos e informações detalhadas na tabela periódica.</p>
-                        <button class="shop-buy-btn">Comprar por 260 pts</button>
+
+                    <h4>
+                        Revisão Rápida
+                    </h4>
+
+                    <p>
+                        Consulte um resumo instantâneo dos
+                        conteúdos antes da próxima fase.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 120 pts
+                    </button>
+
+                </div>
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="ofertas" data-sub="bonus" data-name="conteúdo extra">
+
+                    <div class="shop-icon">
+                        🔓
                     </div>
+
+                    <h4>
+                        Conteúdo Extra
+                    </h4>
+
+                    <p>
+                        Libere cards explicativos adicionais
+                        e informações avançadas.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 260 pts
+                    </button>
+
+                </div>
+
+                <!-- ITEM -->
+                <div class="shop-card" data-section="ofertas" data-sub="dicas" data-name="kit de laboratório">
+
+                    <div class="shop-icon">
+                        🧪
+                    </div>
+
+                    <h4>
+                        Kit de Laboratório
+                    </h4>
+
+                    <p>
+                        Receba acesso a exemplos práticos
+                        e experimentos simulados.
+                    </p>
+
+                    <button class="shop-buy-btn">
+                        Comprar • 300 pts
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <div class="periodic-table-screen modal-animated" id="periodic-table-screen">
         <div class="periodic-container">

@@ -398,6 +398,46 @@ const app = {
                 document.getElementById('tutorial-intro-screen').style.display = 'flex';
             },
 
+            // =========================================
+            // FILTRO E PESQUISA DA LOJA
+            // =========================================
+            categoriaLojaAtual: 'todos',
+
+            selecionarCategoriaLoja: function(cat, btn) {
+                this.categoriaLojaAtual = cat;
+                document.querySelectorAll('#shop-categories .shop-cat-btn').forEach(b => b.classList.remove('active'));
+                if (btn) btn.classList.add('active');
+                this.filtrarLoja();
+            },
+
+            filtrarLoja: function() {
+                const input = document.getElementById('shop-search-input');
+                const termo = (input ? input.value : '').trim().toLowerCase();
+                const cat = this.categoriaLojaAtual || 'todos';
+                const cards = document.querySelectorAll('#shop-screen .shop-card');
+                let visiveis = 0;
+
+                cards.forEach(card => {
+                    const nome = (card.dataset.name || card.textContent || '').toLowerCase();
+                    const sec = card.dataset.section || '';
+                    const sub = card.dataset.sub || '';
+                    const matchCat = cat === 'todos' || sec === cat || sub === cat;
+                    const matchTermo = !termo || nome.includes(termo);
+                    const visivel = matchCat && matchTermo;
+                    card.style.display = visivel ? '' : 'none';
+                    if (visivel) visiveis++;
+                });
+
+                document.querySelectorAll('#shop-screen .shop-section').forEach(sec => {
+                    const algumVisivel = Array.from(sec.querySelectorAll('.shop-card'))
+                        .some(c => c.style.display !== 'none');
+                    sec.classList.toggle('is-empty', !algumVisivel);
+                });
+
+                const empty = document.getElementById('shop-empty-msg');
+                if (empty) empty.style.display = visiveis === 0 ? 'block' : 'none';
+            },
+
             pularTutorialIntro: function() {
                 localStorage.setItem('tutorialVisualizado', 'true');
                 document.getElementById('tutorial-intro-screen').style.display = 'none';
@@ -552,7 +592,7 @@ const app = {
                 });
             },
 
-            temasDisponiveis: ['light-1','light-2','light-3','dark-1','dark-2','dark-3'],
+            temasDisponiveis: ['light-1','light-2','light-3','light-4','light-5','light-6','light-7','dark-1','dark-2','dark-3','dark-4','dark-5','dark-6','dark-7'],
 
             toggleTema() {
                 const body = document.body;
@@ -590,9 +630,22 @@ const app = {
                 document.querySelectorAll('.theme-swatch').forEach(el => {
                     el.classList.toggle('active', el.getAttribute('data-theme-value') === atual);
                 });
-                const modal = document.getElementById('config-modal'); 
-                modal.style.display = 'block';
-                
+                const modal = document.getElementById('config-modal');
+                if (modal) modal.style.display = 'block';
+
+                // Popula dados do usuário no dashboard
+                const nome = this.usuarioAtual || (document.getElementById('username-display')?.textContent) || 'Visitante';
+                const pontos = (this.contaPadrao && this.contaPadrao.pontos) ?? (document.getElementById('total-points')?.textContent) ?? 0;
+                const fase = (this.contaPadrao && this.contaPadrao.maxLevel) ?? (document.getElementById('max-level')?.textContent) ?? 1;
+                const dashName = document.getElementById('dash-username');
+                const dashAv = document.getElementById('dash-avatar');
+                const dashPts = document.getElementById('dash-points');
+                const dashLvl = document.getElementById('dash-level');
+                if (dashName) dashName.textContent = nome;
+                if (dashAv) dashAv.textContent = (String(nome).trim()[0] || 'U').toUpperCase();
+                if (dashPts) dashPts.textContent = pontos;
+                if (dashLvl) dashLvl.textContent = fase;
+
                 // Reseta o scroll para o topo toda vez que abrir
                 const configBox = document.querySelector('.config-box');
                 if (configBox) configBox.scrollTop = 0;

@@ -248,6 +248,214 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             --grad-accent: linear-gradient(135deg, #FF4A1C 0%, #B2FFA9 100%);
         }
 
+        /* TEMA CLARO 4 — Lima & Floresta */
+        [data-theme="light-4"] {
+            --bg-base: #D6F599;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, #D2FF28 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 10%, #D6F599 0%, transparent 55%),
+                radial-gradient(700px 700px at 50% 120%, #c0e07f 0%, transparent 55%),
+                linear-gradient(180deg, #D6F599 0%, #b9da7a 100%);
+            --cor-principal: #436436;
+            --cor-principal-2: #5a8449;
+            --cor-acento: #D2FF28;
+            --cor-texto: #1a2410;
+            --cor-texto-secundario: #436436;
+            --glass-bg: rgba(255, 255, 255, 0.42);
+            --glass-bg-strong: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(67, 100, 54, 0.20);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(67, 100, 54, 0.22);
+            --bg-input: rgba(255, 255, 255, 0.7);
+            --cor-glow: rgba(67, 100, 54, 0.35);
+            --bg-overlay: rgba(20, 30, 10, 0.55);
+            --grad-primary: linear-gradient(135deg, #436436 0%, #5a8449 60%, #D2FF28 100%);
+            --grad-accent: linear-gradient(135deg, #D2FF28 0%, #436436 100%);
+        }
+
+        /* TEMA CLARO 5 — Creme & Ameixa */
+        [data-theme="light-5"] {
+            --bg-base: #FAF3DD;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, #8FC0A9 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 10%, #FAF3DD 0%, transparent 55%),
+                radial-gradient(700px 700px at 50% 120%, #efe7c9 0%, transparent 55%),
+                linear-gradient(180deg, #FAF3DD 0%, #e8dfb8 100%);
+            --cor-principal: #60435F;
+            --cor-principal-2: #7d5b7c;
+            --cor-acento: #8FC0A9;
+            --cor-texto: #2a1d2a;
+            --cor-texto-secundario: #60435F;
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-bg-strong: rgba(255, 255, 255, 0.66);
+            --glass-border: rgba(96, 67, 95, 0.20);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(96, 67, 95, 0.22);
+            --bg-input: rgba(255, 255, 255, 0.72);
+            --cor-glow: rgba(143, 192, 169, 0.40);
+            --bg-overlay: rgba(40, 25, 40, 0.55);
+            --grad-primary: linear-gradient(135deg, #60435F 0%, #7d5b7c 60%, #8FC0A9 100%);
+            --grad-accent: linear-gradient(135deg, #8FC0A9 0%, #60435F 100%);
+        }
+
+        /* TEMA CLARO 6 — Pôr do Sol */
+        [data-theme="light-6"] {
+            --bg-base: #F19953;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, #2660A4 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 10%, #F19953 0%, transparent 55%),
+                radial-gradient(700px 700px at 50% 120%, #EDF7F6 0%, transparent 55%),
+                linear-gradient(180deg, #F19953 0%, #d97f3a 100%);
+            --cor-principal: #EDF7F6;
+            --cor-principal-2: #ffffff;
+            --cor-acento: #2660A4;
+            --cor-texto: #1a1a1a;
+            --cor-texto-secundario: #2660A4;
+            --glass-bg: rgba(255, 255, 255, 0.40);
+            --glass-bg-strong: rgba(255, 255, 255, 0.62);
+            --glass-border: rgba(38, 96, 164, 0.25);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(38, 96, 164, 0.28);
+            --bg-input: rgba(255, 255, 255, 0.75);
+            --cor-glow: rgba(38, 96, 164, 0.40);
+            --bg-overlay: rgba(20, 30, 50, 0.55);
+            --grad-primary: linear-gradient(135deg, #2660A4 0%, #F19953 100%);
+            --grad-accent: linear-gradient(135deg, #EDF7F6 0%, #2660A4 100%);
+        }
+
+        /* TEMA CLARO 7 — Limão & Mata */
+        [data-theme="light-7"] {
+            --bg-base: #EDF7B5;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, #53917E 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 10%, #EDF7B5 0%, transparent 55%),
+                radial-gradient(700px 700px at 50% 120%, #d8e29a 0%, transparent 55%),
+                linear-gradient(180deg, #EDF7B5 0%, #ccd793 100%);
+            --cor-principal: #22031F;
+            --cor-principal-2: #461a42;
+            --cor-acento: #53917E;
+            --cor-texto: #1a0118;
+            --cor-texto-secundario: #22031F;
+            --glass-bg: rgba(255, 255, 255, 0.42);
+            --glass-bg-strong: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(34, 3, 31, 0.18);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(34, 3, 31, 0.20);
+            --bg-input: rgba(255, 255, 255, 0.72);
+            --cor-glow: rgba(34, 3, 31, 0.35);
+            --bg-overlay: rgba(34, 3, 31, 0.60);
+            --grad-primary: linear-gradient(135deg, #22031F 0%, #53917E 100%);
+            --grad-accent: linear-gradient(135deg, #53917E 0%, #22031F 100%);
+        }
+
+        /* TEMA ESCURO 4 — Ameixa & Menta */
+        [data-theme="dark-4"] {
+            --bg-base: #462255;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, rgba(98, 168, 124, 0.22) 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 0%, rgba(165, 216, 255, 0.18) 0%, transparent 55%),
+                radial-gradient(800px 700px at 50% 120%, rgba(98, 168, 124, 0.15) 0%, transparent 55%),
+                linear-gradient(180deg, #462255 0%, #1f0f26 100%);
+            --cor-principal: #62A87C;
+            --cor-principal-2: #A5D8FF;
+            --cor-acento: #A5D8FF;
+            --cor-texto: #f4ecff;
+            --cor-texto-secundario: #d5c8e0;
+            --glass-bg: rgba(255, 255, 255, 0.07);
+            --glass-bg-strong: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(98, 168, 124, 0.30);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(165, 216, 255, 0.30);
+            --bg-input: rgba(255, 255, 255, 0.07);
+            --cor-glow: rgba(98, 168, 124, 0.45);
+            --bg-overlay: rgba(0, 0, 0, 0.78);
+            --grad-primary: linear-gradient(135deg, #62A87C 0%, #A5D8FF 100%);
+            --grad-accent: linear-gradient(135deg, #A5D8FF 0%, #462255 100%);
+        }
+
+        /* TEMA ESCURO 5 — Marinho & Coral */
+        [data-theme="dark-5"] {
+            --bg-base: #011627;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, rgba(239, 45, 86, 0.22) 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 0%, rgba(46, 196, 182, 0.20) 0%, transparent 55%),
+                radial-gradient(800px 700px at 50% 120%, rgba(239, 45, 86, 0.15) 0%, transparent 55%),
+                linear-gradient(180deg, #011627 0%, #000810 100%);
+            --cor-principal: #EF2D56;
+            --cor-principal-2: #2EC4B6;
+            --cor-acento: #2EC4B6;
+            --cor-texto: #ffffff;
+            --cor-texto-secundario: #c9d6df;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-bg-strong: rgba(255, 255, 255, 0.11);
+            --glass-border: rgba(46, 196, 182, 0.30);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(239, 45, 86, 0.32);
+            --bg-input: rgba(255, 255, 255, 0.06);
+            --cor-glow: rgba(239, 45, 86, 0.45);
+            --bg-overlay: rgba(0, 0, 0, 0.80);
+            --grad-primary: linear-gradient(135deg, #EF2D56 0%, #2EC4B6 100%);
+            --grad-accent: linear-gradient(135deg, #2EC4B6 0%, #EF2D56 100%);
+        }
+
+        /* TEMA ESCURO 6 — Pinheiro & Areia */
+        [data-theme="dark-6"] {
+            --bg-base: #183A37;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, rgba(247, 240, 240, 0.14) 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 0%, rgba(132, 108, 91, 0.22) 0%, transparent 55%),
+                radial-gradient(800px 700px at 50% 120%, rgba(247, 240, 240, 0.10) 0%, transparent 55%),
+                linear-gradient(180deg, #183A37 0%, #0a1f1d 100%);
+            --cor-principal: #F7F0F0;
+            --cor-principal-2: #ffffff;
+            --cor-acento: #846C5B;
+            --cor-texto: #f7f0f0;
+            --cor-texto-secundario: #cdb9aa;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-bg-strong: rgba(255, 255, 255, 0.11);
+            --glass-border: rgba(132, 108, 91, 0.32);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(132, 108, 91, 0.35);
+            --bg-input: rgba(255, 255, 255, 0.06);
+            --cor-glow: rgba(247, 240, 240, 0.30);
+            --bg-overlay: rgba(0, 0, 0, 0.78);
+            --grad-primary: linear-gradient(135deg, #F7F0F0 0%, #846C5B 100%);
+            --grad-accent: linear-gradient(135deg, #846C5B 0%, #183A37 100%);
+        }
+
+        /* TEMA ESCURO 7 — Magenta & Musgo */
+        [data-theme="dark-7"] {
+            --bg-base: #334139;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, rgba(197, 33, 132, 0.22) 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 0%, rgba(147, 116, 88, 0.22) 0%, transparent 55%),
+                radial-gradient(800px 700px at 50% 120%, rgba(197, 33, 132, 0.15) 0%, transparent 55%),
+                linear-gradient(180deg, #334139 0%, #18211c 100%);
+            --cor-principal: #C52184;
+            --cor-principal-2: #e23ea0;
+            --cor-acento: #937458;
+            --cor-texto: #f5e6f0;
+            --cor-texto-secundario: #c9b8a3;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-bg-strong: rgba(255, 255, 255, 0.11);
+            --glass-border: rgba(197, 33, 132, 0.30);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(147, 116, 88, 0.32);
+            --bg-input: rgba(255, 255, 255, 0.06);
+            --cor-glow: rgba(197, 33, 132, 0.45);
+            --bg-overlay: rgba(0, 0, 0, 0.78);
+            --grad-primary: linear-gradient(135deg, #C52184 0%, #937458 100%);
+            --grad-accent: linear-gradient(135deg, #937458 0%, #C52184 100%);
+        }
+
         /* =========================================
            SELETOR DE TEMAS (na config)
            ========================================= */
@@ -1030,9 +1238,9 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
 
 .shop-panel {
 
-    width: min(420px, 92vw);
+    width: min(1400px, 92vw);
 
-    max-height: 80vh;
+    max-height: 90vh;
 
     overflow-y: auto;
 
@@ -1073,7 +1281,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         }
         .shop-subtitle { color: var(--cor-texto-secundario); font-size: 0.98rem; margin-bottom: 24px; max-width: 760px; line-height: 1.6; }
         .shop-section {
-            margin-bottom: 26px; padding: 22px;
+            margin-bottom: 26px; padding: 11px;
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-xl);
             background: var(--glass-bg);
@@ -1083,16 +1291,22 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             margin: 0 0 16px 0; font-size: 1.3rem; letter-spacing: 0.06em; font-weight: 700;
             background: var(--grad-primary); -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+        .shop-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    height: auto;
+}
         .shop-card {
-            border-radius: var(--radius-lg); padding: 22px;
+            border-radius: var(--radius-lg); padding: 11px;
             background: var(--glass-bg-strong);
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             backdrop-filter: blur(12px);
             display: flex; flex-direction: column;
         }
-        .shop-card:hover { transform: translateY(-5px); border-color: var(--cor-principal); box-shadow: var(--glass-shadow-lg); }
+        .shop-card:hover { transform: translateY(0px); border-color: var(--cor-principal); box-shadow: var(--glass-shadow-lg); }
         .shop-card h4 {
             margin: 0 0 10px 0; font-size: 1.15rem; font-weight: 700;
             background: var(--grad-primary); -webkit-background-clip: text; background-clip: text; color: transparent;
@@ -1503,4 +1717,239 @@ button:focus {
         width: 100%;
     }
 
+}
+/* =========================================
+   CENTRALIZAR TELA DO TUTORIAL
+========================================= */
+
+/* Overlay centralizado de verdade — ocupa a viewport e centraliza o card */
+#tutorial-intro-screen.tutorial-intro-overlay,
+#tutorial-intro-screen {
+    position: fixed;
+    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    margin: 0;
+    padding: 24px;
+    transform: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow-y: auto;
+    background: var(--bg-overlay, rgba(15, 23, 42, 0.45));
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+}
+
+#tutorial-intro-screen .tutorial-intro-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+}
+.tutorial-intro-wrapper {
+    width: 100%;
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+    border-radius: 24px;
+
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(14px);
+
+    border: 1px solid var(--glass-border);
+
+    box-shadow: var(--glass-shadow-lg);
+}
+.tutorial-grid {
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 20px;
+
+    width: 100%;
+}
+/* =========================================
+   GRID DA LOJA
+========================================= */
+
+.shop-items {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+
+    width: 100%;
+    height: 100%;
+}
+
+/* CARD DOS ITENS */
+.shop-item {
+    background: var(--bg-card);
+
+    border: 1px solid var(--borda-card);
+
+    border-radius: 18px;
+
+    padding: 20px;
+
+    text-align: center;
+
+    backdrop-filter: blur(12px);
+
+    transition: 0.3s;
+}
+
+.shop-item:hover {
+    transform: translateY(-5px) scale(1.02);
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+@media (max-width: 900px) {
+
+    .shop-items {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .shop-items {
+        grid-template-columns: 1fr;
+    }
+
+}
+.shop-icon {
+    font-size: 3rem;
+
+    margin-bottom: 15px;
+}
+
+.shop-price {
+    display: block;
+
+    margin: 15px 0;
+
+    font-size: 1.1rem;
+
+    font-weight: bold;
+
+    color: var(--cor-principal);
+}
+
+.shop-buy-btn {
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: var(--grad-primary);
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.shop-buy-btn:hover {
+    transform: scale(1.03);
+}
+
+/* =========================================
+   LOJA - BARRA DE PESQUISA E CATEGORIAS
+   ========================================= */
+.shop-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px;
+    margin-bottom: 22px;
+    background: var(--bg-card-strong, var(--bg-card));
+    border: 1px solid var(--borda-card);
+    border-radius: var(--radius-lg, 16px);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--glass-shadow, 0 4px 12px rgba(0,0,0,0.06));
+}
+.shop-search-wrapper {
+    position: relative;
+    width: 100%;
+}
+.shop-search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    opacity: 0.7;
+    pointer-events: none;
+}
+.shop-search-input {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    font-size: 1rem;
+    border: 2px solid var(--borda-card);
+    border-radius: var(--radius-md, 12px);
+    background: var(--bg-input);
+    color: var(--cor-texto);
+    outline: none;
+    transition: all 0.2s ease;
+}
+.shop-search-input:focus {
+    border-color: var(--cor-principal);
+    box-shadow: 0 0 0 4px var(--cor-glow, rgba(79,70,229,0.2));
+}
+.shop-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.shop-cat-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--borda-card);
+    background: var(--bg-input);
+    color: var(--cor-texto);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.shop-cat-btn:hover {
+    border-color: var(--cor-principal);
+    transform: translateY(-1px);
+}
+.shop-cat-btn.active {
+    background: var(--grad-primary, var(--cor-principal));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px var(--cor-glow, rgba(79,70,229,0.35));
+}
+.shop-empty-msg {
+    text-align: center;
+    color: var(--cor-texto-secundario);
+    font-style: italic;
+    margin: 0;
+    padding: 8px 0;
+}
+.shop-section.is-empty {
+    display: none;
 }
