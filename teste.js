@@ -1,9 +1,3 @@
-import {db} from 'database/db.mjs';
-import {get} from 'firebase/database.mjs';
-
-try {
-    
-}
 const app = {
             usuarioAtual: null,
             // --- NOVAS PROPRIEDADES ADICIONADAS ---
