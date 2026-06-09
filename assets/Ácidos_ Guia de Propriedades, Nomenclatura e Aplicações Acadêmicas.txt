@@ -1,0 +1,27 @@
+﻿Os principais ácidos abordados em concursos e exames acadêmicos são selecionados devido à sua relevância industrial, presença no cotidiano e por ilustrarem regras fundamentais de nomenclatura e força química. Abaixo estão os mais recorrentes, classificados por sua importância e características.
+1. Ácidos de Uso Frequente no Cotidiano e Indústria
+Estes são os "campeões" de audiência em provas devido às suas aplicações práticas:
+* Ácido Sulfúrico ($H_2SO_4$): Considerado um dos indicadores de desenvolvimento industrial de um país 1. É um ácido forte usado em baterias de automóveis (como eletrólito), na fabricação de fertilizantes fosfatados e em processos metalúrgicos 2-4.
+* Ácido Clorídrico ($HCl$): Quando impuro, é vendido como ácido muriático para limpeza de pedras e azulejos 5, 6. É um ácido forte presente no suco gástrico humano, auxiliando na digestão 3, 5.
+* Ácido Nítrico ($HNO_3$): Um ácido forte amplamente utilizado na indústria de explosivos (como TNT e nitroglicerina), corantes e fertilizantes 7-9.
+* Ácido Acético ($CH_3COOH$): Principal componente do vinagre (solução diluída) 3, 6, 10. É o exemplo clássico de ácido fraco orgânico usado em cálculos de equilíbrio químico ($K_a$) 11-13.
+* Ácido Fosfórico ($H_3PO_4$): Um ácido moderado usado como acidulante em refrigerantes de cola e na preparação de fertilizantes 2, 3, 14.
+* Ácido Carbônico ($H_2CO_3$): Ácido fraco e instável encontrado em bebidas gaseificadas e águas minerais 2, 3. É uma exceção importante: pela regra de oxigênios menos hidrogênios deveria ser moderado, mas experimentalmente é fraco 2.
+2. Classificação por Força (Tema recorrente em provas)
+As provas costumam exigir a identificação da força ácida, seja pelo grau de ionização ($\alpha$) ou pela estrutura molecular:
+* Fortes ($\alpha \geq 50\%$): $HCl, HBr, HI, HNO_3, H_2SO_4, HClO_4, HClO_3$ 15-18.
+* Moderados / Semifortes ($5\% < \alpha < 50\%$): $HF$ (único hidrácido moderado), $H_3PO_4, H_2SO_3$ 2, 17-19.
+* Fracos ($\alpha \leq 5\%$): $HCN, H_2S, H_2CO_3, H_3BO_3$ (ácido bórico) e a maioria dos ácidos orgânicos como o fórmico e o acético 2, 17, 18, 20.
+3. Nomenclatura Essencial
+As regras de nomenclatura da IUPAC são base de muitas questões:
+* Hidrácidos (sem oxigênio): Terminação -ídrico.
+* Exemplos: Ácido fluorídrico ($HF$), ácido cianídrico ($HCN$), ácido sulfídrico ($H_2S$) 21-23.
+* Oxiácidos (com oxigênio): Terminação baseada no Nox do elemento central ou número de oxigênios.
+* -ico: Para o maior Nox ou maior número de oxigênios (Ex: $H_2SO_4$ - sulfúrico) 24, 25.
+* -oso: Para o menor Nox ou menor número de oxigênios (Ex: $H_2SO_3$ - sulfuroso) 24, 25.
+* Prefixos Per- ($HClO_4$) e Hipo- ($HClO$) são usados quando há quatro estados de oxidação possíveis para o elemento central 26.
+4. Outros Ácidos de Destaque
+* Ácido Fluorídrico ($HF$): Usado para gravar vidros, pois tem a propriedade única de reagir com o silicato do vidro 9, 27.
+* Ácido Cianídrico ($HCN$): Extremamente tóxico, conhecido por seu uso histórico em câmaras de gás e processos industriais de plásticos 19, 20.
+* Ácido Perclórico ($HClO_4$): Um dos ácidos inorgânicos mais fortes conhecidos, usado em análises químicas e medicina 19, 28.
+* Superácidos: Em níveis mais avançados, podem surgir menções ao Ácido Fluoroantimônico ($HSbF_6$), o ácido mais forte já criado 28.

@@ -1,0 +1,874 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breaking Game - Aprenda Química Jogando</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Special+Elite&family=Lobster&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Special+Elite&family=Lobster&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    
+</head>
+<body data-theme="light-1">
+
+    <div class="top-controls">
+        <button class="control-btn" id="btn-inventory" onclick="app.abrirInventario()">
+            <span style="font-size: 1.1rem;">🎒</span>
+            <span>Inventário</span>
+        </button>
+        <button class="control-btn" id="btn-usuario" onclick="app.abrirConfig()">
+            <span style="font-size: 1.1rem;">👤</span>
+            <span>Usuário</span>
+        </button>
+    </div>
+
+    <div id="login-screen" class="container">
+        <h1 class="game-title">Breaking Game</h1>
+        <p class="game-subtitle">Aprenda Química Jogando</p>
+        <input type="text" id="username-input" placeholder="Seu nome aqui..." autofocus>
+        <div class="menu-options" style="margin-top: 30px;">
+            <button class="btn-option" onclick="app.entrarComUsuario()">Entrar</button>
+        </div>
+    </div>
+    <!-- =========================================
+     TELA DE TUTORIAL INICIAL
+     Coloque ANTES da div #main-menu
+========================================= -->
+<div id="tutorial-intro-screen" class="tutorial-intro-overlay fade-in" style="display: none;">
+    <!-- CARD PRINCIPAL -->
+    <div class="tutorial-intro-wrapper">
+        <!-- TOPO -->
+        <div class="tutorial-top">
+            <h1 class="tutorial-title">
+                Bem-vindo ao <span>Breaking Game</span>
+            </h1>
+        </div>
+        <!-- GRID INFORMATIVO -->
+        <div class="tutorial-grid">
+            <div class="tutorial-card">
+                <div class="tutorial-icon">🧪</div>
+                <h3>Aprenda Química</h3>
+                <p>Cada fase possui conteúdos diferentes de química com perguntas, explicações e desafios.</p>
+            </div>
+            <div class="tutorial-card">
+                <div class="tutorial-icon">🗺️</div>
+                <h3>Mapa de Fases</h3>
+                <p>Avance pelos módulos e desbloqueie novos conteúdos conforme seu progresso.</p>
+            </div>
+            <div class="tutorial-card">
+                <div class="tutorial-icon">🏆</div>
+                <h3>Sistema de Pontos</h3>
+                <p>Ganhe pontos, badges e acompanhe seu desempenho durante o jogo.</p>
+            </div>
+            <div class="tutorial-card">
+                <div class="tutorial-icon">💡</div>
+                <h3>Dicas e Auxiliares</h3>
+                <p>Utilize professores, assistentes e dicas para ajudar durante as fases.</p>
+            </div>
+        </div>
+        <!-- BOTÃO ÚNICO -->
+        <div class="tutorial-actions">
+            <button class="tutorial-btn start"
+                onclick="app.finalizarTutorialIntro()">
+                Acessar Dashboard →
+            </button>
+        </div>
+    </div>
+</div>
+
+    <div id="main-menu" class="container fade-in" style="display: none;">
+        <h1 class="game-title">Breaking Game</h1>
+        <p class="info-text"> Usuário: <span id="username-display" class="highlight-text">-</span></p>
+        <p class="info-text"> Pontos: <span id="total-points" class="highlight-text">0</span> |  Progresso: Fase <span id="max-level" class="highlight-text">1</span></p>
+        
+        <div class="menu-options" style="margin-top: 50px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+            <button class="btn-option" onclick="app.abrirPanorama()"> Jogar</button>
+            <button class="btn-option" onclick="app.abrirTabelaPeriodica()">Materiais de Estudo</button>
+            <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
+            <button class="btn-option" onclick="app.abrirPerfil()">Desempenho</button>
+            <button class="btn-option" onclick="app.mostrarTutorialIntro()"> Rever Tutorial</button>
+            <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
+        </div>
+    </div>
+
+    <div id="levels-screen" class="container" style="display: none; max-width: 1400px; margin: 0 auto;">
+        <div class="split-layout">
+            <div class="left-panel">
+                <h1 class="game-title" style="font-size: 2rem; margin-bottom: 30px;">Roadmap</h1>
+                <button class="btn-option" style="font-size: 1rem; margin-bottom: 20px;" onclick="app.voltarAoMenu()">← Voltar</button>
+                <div id="roadmap-content" class="roadmap-container"></div>
+            </div>
+            <div class="right-panel">
+                <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=600" alt="Química" class="theme-image">
+            </div>
+        </div>
+    </div>
+
+    <div class="hud" id="game-hud">
+        <div style="margin-bottom: 5px;">Fase: <span id="nivel-tag">-</span></div>
+        <div>Pontos Fase: <span id="pontuacao-atual">0</span> | Acertos: <span id="acertos-atual">0</span>/5</div>
+        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--borda-card); font-size: 0.9rem;">Total Geral: <span id="total-points-hud">0</span></div>
+    </div>
+
+    <div class="modal-overlay" id="modal-overlay"></div>
+    
+    <div class="conceito-box modal-animated" id="conceito-box" style="display: none;">
+        <h3 class="conceito-header">Conceito da Fase</h3>
+        <p class="conceito-auxiliar" id="conceito-auxiliar-nome"></p>
+        <div class="conceito-texto" id="conceito-conteudo"></div>
+        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 25px;">
+            <button class="conceito-botao" style="background: #888888;" onclick="app.fecharConceitoVoltarMapa()">← Voltar ao Mapa</button>
+            <button class="conceito-botao" onclick="app.passarParaPerguntas()">Começar a Jogar →</button>
+        </div>
+    </div>
+
+    <div class="question-box modal-animated" id="question-box" style="display: none;">
+        <h3 id="question-title" style="color: var(--cor-principal); margin-bottom:15px; font-size: 1.5rem;"></h3>
+        <p id="question-text" style="margin-bottom:25px; font-size: 1.2rem; line-height: 1.4;"></p>
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+            <button id="btn-dica" class="hint-btn" onclick="app.usarDica()">💡 Dica (-60 pts)</button>
+        </div>
+        <div id="dica-display" class="hint-display"></div>
+        <div id="options-list"></div>
+        <div id="feedback" style="margin-top:20px; padding:15px; display:none; font-weight: bold; border-radius: 8px; text-align: center; font-size: 1.2rem;"></div>
+        <div style="display: flex; gap: 12px; margin-top: 20px; align-items: center;">
+            <button id="btn-voltar-mapa" class="btn-option" style="font-size: 0.9rem; background: #888888; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;" onclick="app.confirmarVoltarMapa()">← Sair</button>
+            <button id="btn-proxima" class="btn-option" style="font-size: 1.1rem; display: none; background: var(--cor-principal); color: var(--bg-input); border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; flex: 1;" onclick="app.proximaPergunta()">Próxima →</button>
+        </div>
+    </div>
+
+    <div class="stats-screen modal-animated" id="stats-screen">
+        <h2 id="result-title" style="color: var(--cor-principal); margin-bottom: 15px; font-size: 2rem;">🏆 Fase Concluída!</h2>
+        <div style="margin: 20px 0; text-align: left; border: 1px solid var(--borda-card); padding: 20px; background: var(--bg-input); border-radius: 8px;">
+            <p style="font-size: 1.3rem; margin-bottom: 10px;">Pontos Ganhos: <span id="final-score" class="highlight-text">0</span></p>
+            <p style="font-size: 1.3rem;">Taxa de Acerto: <span id="acerto-pct" class="highlight-text">0</span>%</p>
+            <p id="badge-alert" class="pop-animation" style="color: #00c850; font-weight: bold; margin-top: 15px; display: none; text-align: center; background: rgba(0, 200, 80, 0.1); padding: 10px; border-radius: 5px;">🎉 Nova Badge Desbloqueada! Verifique seu perfil.</p>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 10px;">
+            <button class="btn-option" style="font-size: 1rem; background: #888888; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;" onclick="app.voltarAoMenu()">🏠 Menu Principal</button>
+            <button class="btn-option" style="font-size: 1.2rem;" onclick="app.abrirPanorama()">Continuar Jornada →</button>
+        </div>
+    </div>
+
+ <div class="config-screen modal-animated" id="config-screen">
+    <h2 class="config-header">Dashboard do Usuário</h2>
+
+    <div class="user-dashboard-card" style="display: flex; align-items: center; gap: 16px; padding: 18px; border-radius: 16px; background: var(--bg-card-strong, var(--bg-card)); border: 1px solid var(--borda-card); margin-bottom: 20px;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--grad-primary, var(--cor-principal)); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800; flex-shrink: 0;">
+            <span id="dash-avatar">U</span>
+        </div>
+        <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 1.15rem; font-weight: 700; color: var(--cor-texto); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                <span id="dash-username">-</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 6px; color: var(--cor-texto-secundario); font-size: 0.9rem;">
+                <span>🏆 <strong id="dash-points" style="color: var(--cor-principal);">0</strong> pts</span>
+                <span>🗺️ Fase <strong id="dash-level" style="color: var(--cor-principal);">1</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="config-scroll-container" style="max-height: 55vh; overflow-y: auto; padding-right: 8px; margin-bottom: 20px;">
+        <div class="config-option" style="flex-direction: column; align-items: flex-start; margin-top: 20px;">
+            <span class="config-label" style="margin-bottom: 12px; font-weight: 600;">Tamanho da Fonte</span>
+            <div style="display: flex; gap: 10px; width: 100%;">
+                <button class="size-btn font-btn" onclick="app.alterarTamanhoFonte('pequeno')" style="flex: 1;">Pequeno</button>
+                <button class="size-btn font-btn" onclick="app.alterarTamanhoFonte('medio')" style="flex: 1;">Médio</button>
+                <button class="size-btn font-btn" onclick="app.alterarTamanhoFonte('grande')" style="flex: 1;">Grande</button>
+            </div>
+        </div>
+
+        <div class="config-option" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <span class="config-label" style="font-weight: 600;">Música (Em breve)</span>
+            <input type="checkbox" checked style="transform: scale(1.5); accent-color: var(--cor-principal);">
+        </div>
+    </div>
+
+    <button class="config-close" onclick="app.fecharConfig()" style="width: 100%; padding: 12px; border-radius: 12px; background: var(--cor-principal); color: white; border: none; font-weight: bold; cursor: pointer;">Fechar</button>
+</div>
+
+    <div class="stats-panel modal-animated" id="stats-panel">
+        <h2 class="config-header">🎵 Escolha sua Playlist</h2>
+        <p style="text-align: center; color: var(--cor-texto-secundario); margin-bottom: 24px; font-size: 0.95rem;">Selecione uma playlist para acompanhar seus estudos</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+            
+            <!-- Música Clássica -->
+            <div class="playlist-card" data-playlist="classica" onclick="app.selecionarPlaylist('classica', this)">
+                <div class="playlist-icon"></div>
+                <div class="playlist-title">Música Clássica</div>
+                <div class="playlist-desc">Concentração e Elegância</div>
+            </div>
+
+            <!-- Rock -->
+            <div class="playlist-card" data-playlist="rock" onclick="app.selecionarPlaylist('rock', this)">
+                <div class="playlist-icon"></div>
+                <div class="playlist-title">Rock</div>
+                <div class="playlist-desc">Energia e Ritmo</div>
+            </div>
+
+            <!-- Jazz -->
+            <div class="playlist-card" data-playlist="jazz" onclick="app.selecionarPlaylist('jazz', this)">
+                <div class="playlist-icon"></div>
+                <div class="playlist-title">Jazz</div>
+                <div class="playlist-desc">Suave e Sofisticado</div>
+            </div>
+
+            <!-- Pop -->
+            <div class="playlist-card" data-playlist="pop" onclick="app.selecionarPlaylist('pop', this)">
+                <div class="playlist-icon"></div>
+                <div class="playlist-title">Pop</div>
+                <div class="playlist-desc">Moderno e Animado</div>
+            </div>
+
+        </div>
+
+        <!-- MPB em destaque (full width) -->
+        <div class="playlist-card" data-playlist="mpb" onclick="app.selecionarPlaylist('mpb', this)" style="margin-bottom: 24px;">
+            <div class="playlist-icon">🎶</div>
+            <div class="playlist-title">MPB - Música Popular Brasileira</div>
+            <div class="playlist-desc">Autêntico e Envolvente</div>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+            <button class="config-close" onclick="app.fecharEstatisticas()" style="flex: 1; padding: 12px; border-radius: 12px; background: #888888; color: white; border: none; font-weight: bold; cursor: pointer;">Cancelar</button>
+            <button class="config-close" id="btn-confirmar-playlist" onclick="app.confirmarPlaylist()" style="flex: 1; padding: 12px; border-radius: 12px; background: var(--cor-principal); color: white; border: none; font-weight: bold; cursor: pointer; opacity: 0.5; pointer-events: none;">Confirmar</button>
+        </div>
+    </div>
+
+    <div class="stats-panel modal-animated" id="inventory-screen">
+        <h2 class="config-header"> Inventário do Usuário</h2>
+        <p style="text-align: center; color: var(--cor-texto-secundario); margin-bottom: 22px; font-size: 0.98rem;">Veja seus itens comprados, altere visuais e fontes, e aplique os itens que já possui.</p>
+
+        <div class="inventory-grid">
+            <div class="inventory-card">
+                <div class="inventory-card-header">Temas adquiridos</div>
+                <div id="inventory-theme-list" class="inventory-item-grid"></div>
+            </div>
+            <div class="inventory-card">
+                <div class="inventory-card-header">Estilos de Fonte</div>
+                <div id="inventory-font-list" class="inventory-item-grid"></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 22px; display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap;">
+            <button class="config-close" onclick="app.fecharInventario()" style="flex: 1; min-width: 140px; padding: 12px; border-radius: 12px; background: #888888; color: white; border: none; font-weight: bold; cursor: pointer;">Fechar</button>
+            <button class="config-close" onclick="app.fecharInventario(); app.carregarMenuPrincipal();" style="flex: 1; min-width: 140px; padding: 12px; border-radius: 12px; background: var(--cor-principal); color: white; border: none; font-weight: bold; cursor: pointer;">Atualizar Menu</button>
+        </div>
+    </div>
+
+    <div class="auxiliar-screen modal-animated" id="final-warning-screen" style="display: none;">
+        <h2 style="color: var(--cor-principal); font-size: 2.2rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;">🏆 DESAFIO FINAL 🏆</h2>
+        <div style="background: rgba(255, 193, 7, 0.15); border: 3px solid #ffc107; border-radius: 12px; padding: 30px; margin: 20px 0; text-align: center;">
+            <p style="font-size: 1.8rem; color: var(--cor-texto); margin: 10px 0; font-weight: bold;">Esta é a ÚLTIMA FASE!</p>
+            <p style="font-size: 1.1rem; color: var(--cor-texto-secundario); line-height: 1.6; margin: 15px 0;">
+                Você completará uma <strong>Prova Abrangente</strong> com <strong>10 perguntas</strong> que cobrem <strong>TODOS os módulos</strong> que você estudou.
+            </p>
+            <div style="background: var(--bg-card); border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: left;">
+                <p style="color: var(--cor-texto); margin: 8px 0;"><strong>⚠️ Importante:</strong></p>
+                <ul style="color: var(--cor-texto-secundario); margin: 10px 0; padding-left: 20px;">
+                    <li>Sem auxiliares disponíveis (você está sozinho!)</li>
+                    <li>Sem dicas disponíveis (use todo o conhecimento!)</li>
+                    <li>Perguntas de integração (precisam conectar múltiplos conceitos)</li>
+                    <li>Se conseguir 60% ou mais, você COMPLETA O JOGO!</li>
+                </ul>
+            </div>
+            <p style="font-size: 1.2rem; color: #00c850; font-weight: bold; margin-top: 20px;">Você está pronto para o desafio final?</p>
+        </div>
+        <button class="auxiliar-confirmar" id="btn-iniciar-final" style="display: inline-block; background: var(--cor-principal); color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; margin-right: 15px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;">
+            ⚡ Começar Desafio →
+        </button>
+        <button class="auxiliar-confirmar" onclick="document.getElementById('final-warning-screen').style.display='none'; document.getElementById('modal-overlay').style.display='none';" style="display: inline-block; background: #888888; color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;">
+            ← Voltar ao Panorama
+        </button>
+    </div>
+
+    <div class="auxiliar-screen modal-animated" id="auxiliar-screen">
+        <h2 class="auxiliar-header">Escolha seu Auxiliar</h2>
+        <p class="auxiliar-subtitulo">Ele te ajudará com dicas ao longo da fase</p>
+        <div class="auxiliar-grid">
+            <div class="auxiliar-card" id="card-prof" onclick="app.selecionarAuxiliar('professor')">
+                <div class="auxiliar-sprite"></div>
+                <div class="auxiliar-nome">Prof. Químico</div>
+                <div class="auxiliar-descricao">Explica os conceitos de forma didática e detalhada.</div>
+            </div>
+            <div class="auxiliar-card" id="card-lab" onclick="app.selecionarAuxiliar('assistente')">
+                <div class="auxiliar-sprite"></div>
+                <div class="auxiliar-nome">Assistente Lab</div>
+                <div class="auxiliar-descricao">Dicas práticas focadas em exemplos do laboratório.</div>
+            </div>
+            <div class="auxiliar-card" id="card-atom" onclick="app.selecionarAuxiliar('conselheiro')">
+                <div class="auxiliar-sprite"></div>
+                <div class="auxiliar-nome">Cons. Atômico</div>
+                <div class="auxiliar-descricao">Raciocínio lógico e conexões com a tabela periódica.</div>
+            </div>
+        </div>
+        <button class="auxiliar-confirmar" id="btn-confirmar-auxiliar" onclick="app.confirmarAuxiliar()">
+            Confirmar e Jogar →
+        </button>
+        <button class="auxiliar-confirmar" style="display: inline-block; background: #888888;" onclick="app.fecharAuxiliarVoltarMapa()">
+            ← Voltar ao Mapa
+        </button>
+    </div>
+
+    <div class="profile-screen modal-animated" id="profile-screen">
+        <h2 class="profile-header">Meu Perfil</h2>
+        
+        <div class="profile-section-title"> Minhas Conquistas (Passe o mouse!)</div>
+        <div class="badges-container" id="badges-list">
+            </div>
+
+        <div class="profile-section-title" style="margin-top: 30px;"> Desempenho dos Alunos por Fase</div>
+        <div class="chart-section" style="background: var(--bg-card); border: 2px solid var(--borda-card); border-radius: 16px; padding: 18px;">
+            <div style="position: relative; height: 350px; width: 100%;">
+                <canvas id="desempenho-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="profile-section-title" style="margin-top: 30px;"> Histórico de Desempenho</div>
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Data e Hora</th>
+                    <th>Fase</th>
+                    <th>Acertos</th>
+                    <th>Pontos</th>
+                </tr>
+            </thead>
+            <tbody id="history-list">
+                </tbody>
+        </table>
+
+        <div style="text-align: center; margin-top: 35px;">
+            <button class="config-close" onclick="app.fecharPerfil()">Fechar Perfil</button>
+        </div>
+    </div>
+
+   <div class="shop-screen modal-animated" id="shop-screen">
+
+    <div class="shop-panel">
+
+        <!-- TOPO -->
+        <div class="shop-top">
+
+            <div>
+                <h2 class="shop-header">
+                    Loja Química
+                </h2>
+
+                <p class="shop-subtitle">
+                    Use seus pontos para desbloquear recursos,
+                    melhorias e vantagens durante o jogo.
+                </p>
+            </div>
+
+            <button
+                class="btn-option shop-back-btn"
+                onclick="app.voltarAoMenu()">
+
+                ← Voltar
+
+            </button>
+
+        </div>
+
+        <!-- BARRA DE PESQUISA + FILTROS -->
+        <div class="shop-toolbar">
+            <div class="shop-search-wrapper">
+                <span class="shop-search-icon">🔍</span>
+                <input type="text" id="shop-search-input" class="shop-search-input"
+                    placeholder="Pesquisar item na loja..."
+                    oninput="app.filtrarLoja()">
+            </div>
+            <div class="shop-categories" id="shop-categories">
+                <button class="shop-cat-btn active" data-cat="todos" onclick="app.selecionarCategoriaLoja('todos', this)">Todos</button>
+                <button class="shop-cat-btn" data-cat="recursos" onclick="app.selecionarCategoriaLoja('recursos', this)">📚 Recursos</button>
+                <button class="shop-cat-btn" data-cat="ofertas" onclick="app.selecionarCategoriaLoja('ofertas', this)">⚡ Ofertas</button>
+                <button class="shop-cat-btn" data-cat="dicas" onclick="app.selecionarCategoriaLoja('dicas', this)">💡 Dicas</button>
+                <button class="shop-cat-btn" data-cat="bonus" onclick="app.selecionarCategoriaLoja('bonus', this)">🎁 Bônus</button>
+                <button class="shop-cat-btn" data-cat="visual" onclick="app.selecionarCategoriaLoja('visual', this)">🎨 Visual</button>
+            </div>
+            <p class="shop-empty-msg" id="shop-empty-msg" style="display:none;">Nenhum item encontrado.</p>
+        </div>
+       <div class="shop-section">
+            <h3 class="shop-section-title">Recursos</h3>
+            <div class="shop-grid">
+                
+                <div class="shop-card" data-tags="recursos">
+                    <div class="shop-card-icon">✨</div>
+                    <h4 class="shop-card-title">Dobro de Pontos</h4>
+                    <p class="shop-card-desc">Ative e ganhe o dobro de pontuação ao acertar as questões.</p>
+                    <button class="btn-option">Comprar</button>
+                </div>
+
+                <div class="shop-card" data-tags="recursos">
+                    <div class="shop-card-icon">💡</div>
+                    <h4 class="shop-card-title">Pacote com Três Dicas</h4>
+                    <p class="shop-card-desc">Adiciona 3 dicas extras ao seu inventário de jogo.</p>
+                    <button class="btn-option">Comprar</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="shop-section">
+            <h3 class="shop-section-title">Ofertas</h3>
+            <div class="shop-grid">
+
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 2</h4>
+                    <p class="shop-card-desc">Paleta suave e moderna com tons pastel.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-2')">Comprar por 100 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 3</h4>
+                    <p class="shop-card-desc">Estilo orgânico e relaxante para longas sessões.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-3')">Comprar por 150 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 4</h4>
+                    <p class="shop-card-desc">Visual energético com detalhes em verde-lima.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-4')">Comprar por 200 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 5</h4>
+                    <p class="shop-card-desc">Contraste equilibrado em tons de creme e roxo.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-5')">Comprar por 250 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 6</h4>
+                    <p class="shop-card-desc">Visual refrescante em tons de azul e laranja.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-6')">Comprar por 300 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 7</h4>
+                    <p class="shop-card-desc">Fundo claro combinado com detalhes em roxo escuro.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-7')">Comprar por 350 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 2</h4>
+                    <p class="shop-card-desc">Fundo asfalto escuro com realces em vermelho vibrante.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-2')">Comprar por 150 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 3</h4>
+                    <p class="shop-card-desc">Paleta neon cibernética sobre fundo vinho escuro.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-3')">Comprar por 200 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 4</h4>
+                    <p class="shop-card-desc">Imersão total em tons profundos de roxo e azul.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-4')">Comprar por 250 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 5</h4>
+                    <p class="shop-card-desc">Estilo minimalista futurista com detalhes ciano.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-5')">Comprar por 300 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 6</h4>
+                    <p class="shop-card-desc">Visual aconchegante em tons terrosos e verde floresta.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-6')">Comprar por 350 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 7</h4>
+                    <p class="shop-card-desc">Visual premium com realces magenta e dourados.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-7')">Comprar por 400 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas extra">
+                    <div class="shop-card-icon">🌟</div>
+                    <h4 class="shop-card-title">Tema Escuro 1</h4>
+                    <p class="shop-card-desc">Estilo customizado premium com tons verdes marcantes.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-1')">Comprar por 100 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas fontes">
+                    <div class="shop-card-icon">🔤</div>
+                    <h4 class="shop-card-title" style="font-family: monospace;">Fonte: Double Struck</h4>
+                    <p class="shop-card-desc">Modifique a tipografia do painel para o formato Double Struck.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('double')">Comprar por 150 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas fontes">
+                    <div class="shop-card-icon">🔤</div>
+                    <h4 class="shop-card-title" style="font-style: italic; font-weight: bold;">Fonte: Serif Bold Italic</h4>
+                    <p class="shop-card-desc">Altere o texto do jogo para uma variante elegante e serifada.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('serif-bold')">Comprar por 160 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas fontes">
+                    <div class="shop-card-icon">🔤</div>
+                    <h4 class="shop-card-title" style="font-family: 'Lobster', sans-serif;">Fonte: Lobster</h4>
+                    <p class="shop-card-desc">Deixe a interface com o estilo descontraído da fonte Lobster.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('lobster')">Comprar por 130 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas fontes">
+                    <div class="shop-card-icon">🔤</div>
+                    <h4 class="shop-card-title" style="font-family: 'Times New Roman', serif;">Fonte: Times New Roman</h4>
+                    <p class="shop-card-desc">Aplique a clássica tipografia acadêmica Times New Roman.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('times')">Comprar por 140 pts</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="shop-section">
+            <h3 class="shop-section-title">Dicas e Customização</h3>
+            <div class="shop-grid">
+
+                <div class="shop-card" data-tags="dicas skins">
+                    <div class="shop-card-icon">🤖</div>
+                    <h4 class="shop-card-title">Pacote Skins de Auxiliar</h4>
+                    <p class="shop-card-desc">Desbloqueie todas as 12 skins exclusivas para seus assistentes virtuais.</p>
+                    <button class="btn-option">Comprar</button>
+                </div>
+
+                <div class="shop-card" data-tags="dicas skins">
+                    <div class="shop-card-icon">🎭</div>
+                    <h4 class="shop-card-title">Skins do Herói</h4>
+                    <p class="shop-card-desc">Conjunto completo contendo os 4 visuais exclusivos para o personagem principal.</p>
+                    <button class="btn-option">Comprar</button>
+                </div>
+
+                <div class="shop-card" data-tags="dicas skins">
+                    <div class="shop-card-icon">🏆</div>
+                    <h4 class="shop-card-title">Skins de Conquista Secreta</h4>
+                    <p class="shop-card-desc">Acesso imediato às 4 skins raras de conquistas ocultas do game.</p>
+                    <button class="btn-option">Comprar</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="periodic-table-screen modal-animated" id="periodic-table-screen">
+        <div class="periodic-container">
+            <div class="periodic-menu">
+                <button class="periodic-menu-btn active" onclick="app.mostrarTabelaPeriodicaView('tabela', this)">🧪 Tabela Periódica</button>
+                <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('organica', this)">🔗 Química Orgânica</button>
+                <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('misturas', this)">⚗️ Misturas</button>
+                <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('eletronegatividade', this)">⚡ Eletronegatividade</button>
+                <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('gabaritos', this)">✅ Gabaritos</button>
+                <button class="periodic-menu-btn conceitos-btn" onclick="app.abrirSeletorConceitos()">📖 Ver Conceitos</button>
+            </div>
+            <div class="periodic-content">
+                <h2 class="periodic-header" id="periodic-content-header">⚗️ Tabela Periódica Interativa (118 Elementos)</h2>
+                <div id="tabela-view">
+                    <div class="periodic-grid" id="periodic-grid"></div>
+                    <div class="legend">
+                        <div class="legend-item" onclick="app.filtrarPorClasse('alcalinos', this)" style="cursor: pointer;"><div class="legend-color" style="background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%);"></div><span>Alcalinos</span></div>
+                        <div class="legend-item" onclick="app.filtrarPorClasse('alcalino-terrosos', this)" style="cursor: pointer;"><div class="legend-color" style="background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);"></div><span>Alcalino-terrosos</span></div>
+                        <div class="legend-item" onclick="app.filtrarPorClasse('metais-transicao', this)" style="cursor: pointer;"><div class="legend-color" style="background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);"></div><span>Metais Transição</span></div>
+                        <div class="legend-item" onclick="app.filtrarPorClasse('metais', this)" style="cursor: pointer;"><div class="legend-color" style="background: linear-gradient(135deg, #D4541F 0%, #E86D2E 100%);"></div><span>Metais</span></div>
+                        <div class="legend-item" onclick="app.filtrarPorClasse('semi-metais', this)" style="cursor: pointer;"><div class="legend-color" style="background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);"></div><span>Semi-metais</span></div>
+                        <div class="legend-item" onclick="app.filtrarPorClasse('nao-metais', this)" style="cursor: pointer;"><div class="legend-color" style="background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);"></div><span>Não-metais</span></div>
+                        <div class="legend-item" onclick="app.filtrarPorClasse('halogenios', this)" style="cursor: pointer;"><div class="legend-color" style="background: linear-gradient(135deg, #EAB308 0%, #CA8A04 100%);"></div><span>Halogênios</span></div>
+                        <div class="legend-item" onclick="app.filtrarPorClasse('gases-nobres', this)" style="cursor: pointer;"><div class="legend-color" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);"></div><span>Gases nobres</span></div>
+                    </div>
+                </div>
+                <div id="eletronegatividade-view" style="display: none; max-height: 65vh; overflow-y: auto;">
+                    <div class="electro-table-card">
+                        <h3 style="color: var(--cor-principal); font-size: 1.6rem; text-align: center; margin-bottom: 18px;">⚡ Eletronegatividade dos Elementos</h3>
+                        <p class="electro-intro">A eletronegatividade aumenta da esquerda para a direita e de baixo para cima na tabela periódica.</p>
+                        <div class="electro-arrows">
+                            <div class="arrow-item">↗️ Mais eletronegativo</div>
+                            <div class="arrow-item">↙️ Menos eletronegativo</div>
+                        </div>
+                        <div class="periodic-grid" id="electro-grid"></div>
+                        <div class="legend" style="margin-top: 14px; justify-content: space-evenly; gap: 10px;">
+                            <div class="legend-item" onclick="app.filtrarPorEletronegatividade('mais', this)"><div class="legend-color" style="background: linear-gradient(135deg, #0ea5e9 0%, #0f766e 100%);"></div><span>≥ 3.8</span></div>
+                            <div class="legend-item" onclick="app.filtrarPorEletronegatividade('alto', this)"><div class="legend-color" style="background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);"></div><span>3.2 – 3.8</span></div>
+                            <div class="legend-item" onclick="app.filtrarPorEletronegatividade('medio', this)"><div class="legend-color" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);"></div><span>2.6 – 3.2</span></div>
+                            <div class="legend-item" onclick="app.filtrarPorEletronegatividade('baixo', this)"><div class="legend-color" style="background: linear-gradient(135deg, #fb7185 0%, #be123c 100%);"></div><span>2.0 – 2.6</span></div>
+                            <div class="legend-item" onclick="app.filtrarPorEletronegatividade('menor', this)"><div class="legend-color" style="background: linear-gradient(135deg, #94a3b8 0%, #475569 100%);"></div><span>< 2.0</span></div>
+                        </div>
+                        <div style="margin-top: 20px; color: var(--cor-texto-secundario); font-size: 0.95rem; line-height: 1.5;">Clique nos elementos para ver o valor e a descrição no painel lateral.</div>
+                    </div>
+                </div>
+                <div id="organica-view" style="display: none; max-height: 65vh; overflow-y: auto;">
+    <div id="grid-organica" class="grid-moleculas"></div>
+</div>
+                <div id="misturas-view" style="display: none; max-height: 65vh; overflow-y: auto;">
+                    <h3 style="color: var(--cor-principal); font-size: 1.6rem; text-align: center; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px;">⚗️ Composição Química e Classificação de Misturas</h3>
+
+                    <!-- CATEGORIA 1 -->
+                    <div style="margin-bottom: 30px;">
+                        <h4 style="color: var(--cor-principal); font-size: 1.3rem; margin-bottom: 15px; border-bottom: 2px solid var(--cor-principal); padding-bottom: 8px;">1. Misturas Homogêneas (Soluções)</h4>
+                        
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">🌬️ AR ATMOSFÉRICO</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> N₂ (Nitrogênio) + O₂ (Oxigênio) + CO₂ (Dióxido)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Solução gasosa</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Incolor, inodoro (sem odor)</p>
+                                </div>
+                                <span style="background: #4a90e2; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Homogênea</span>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">💉 SORO FISIOLÓGICO / SALMOURA</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> NaCl (Cloreto de Sódio) + H₂O (Água)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Solução aquosa</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Uso médico e conservação de alimentos</p>
+                                </div>
+                                <span style="background: #4a90e2; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Homogênea</span>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">🍶 ÁLCOOL COMERCIAL (Hidratado)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> C₂H₅OH (Etanol) + H₂O (Água)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Solução líquida</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Desinfetante, solvente</p>
+                                </div>
+                                <span style="background: #4a90e2; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Homogênea</span>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">🎨 BRONZE</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> Cu (Cobre) + Sn (Estanho)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Liga metálica</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Sólido, resistente, aplicações industriais</p>
+                                </div>
+                                <span style="background: #4a90e2; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Homogênea</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORIA 2 -->
+                    <div style="margin-bottom: 30px;">
+                        <h4 style="color: var(--cor-principal); font-size: 1.3rem; margin-bottom: 15px; border-bottom: 2px solid var(--cor-principal); padding-bottom: 8px;">2. Misturas Heterogêneas e Coloides</h4>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">🏜️ ÁGUA E AREIA</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> SiO₂ (Dióxido de Silício) + H₂O (Água)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Suspensão heterogênea</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Fases visíveis, separáveis por filtração</p>
+                                </div>
+                                <span style="background: #e85d75; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Heterogênea</span>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">🪨 GRANITO</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> SiO₂ (Quartzo) + Feldspato + Mica</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Mistura heterogênea mineral</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Rocha ígnea, aplicações na construção</p>
+                                </div>
+                                <span style="background: #e85d75; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Heterogênea</span>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">🩸 SANGUE (Coloide)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> Plasma + Células (íons e moléculas diversas)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Coloide</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Aspecto homogêneo, natureza coloidal</p>
+                                </div>
+                                <span style="background: #f09e44; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Coloide</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORIA 3 -->
+                    <div style="margin-bottom: 30px;">
+                        <h4 style="color: var(--cor-principal); font-size: 1.3rem; margin-bottom: 15px; border-bottom: 2px solid var(--cor-principal); padding-bottom: 8px;">3. Misturas Azeotrópicas e Eutéticas</h4>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">🔥 MISTURA AZEOTRÓPICA (Álcool 96%)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> 96% C₂H₅OH (Etanol) + 4% H₂O (Água)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Azeotrópica</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Temperatura de ebulição constante</p>
+                                </div>
+                                <span style="background: #7c3aed; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Especial</span>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">🔌 MISTURA EUTÉTICA (Solda)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> Sn (Estanho) + Pb (Chumbo)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Eutética</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Ponto de fusão constante, aplicação industrial</p>
+                                </div>
+                                <span style="background: #7c3aed; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Especial</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORIA 4 -->
+                    <div style="margin-bottom: 30px;">
+                        <h4 style="color: var(--cor-principal); font-size: 1.3rem; margin-bottom: 15px; border-bottom: 2px solid var(--cor-principal); padding-bottom: 8px;">4. Misturas de Importância Industrial</h4>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">⛽ PETRÓLEO</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> Hidrocarbonetos (C₃H₈, C₄H₁₀, etc.)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Mistura complexa</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Obtido por destilação, combustível, lubrificantes</p>
+                                </div>
+                                <span style="background: #059669; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Industrial</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORIA 5 -->
+                    <div style="margin-bottom: 30px;">
+                        <h4 style="color: var(--cor-principal); font-size: 1.3rem; margin-bottom: 15px; border-bottom: 2px solid var(--cor-principal); padding-bottom: 8px;">5. Saneantes (Produtos de Limpeza - Misturas Perigosas)</h4>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">🧼 ÁGUA SANITÁRIA</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> NaClO (Hipoclorito de Sódio)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Solução desinfetante</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Desinfetante, blequeador, uso doméstico</p>
+                                </div>
+                                <span style="background: #dc2626; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Perigosa</span>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">🌫️ AMÔNIA (Amoníaco)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> NH₃ (Amoníaco)</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Solução aquosa</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Limpador, desengordurante, odor forte</p>
+                                </div>
+                                <span style="background: #dc2626; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Perigosa</span>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p style="color: var(--cor-principal); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px;">⚠️ ÁCIDO CLORÍDRICO</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Composição:</strong> HCl (Ácido Clorídrico) - Ácido muriático</p>
+                                    <p style="color: var(--cor-texto); margin: 5px 0; font-size: 0.95rem;"><strong>Tipo:</strong> Solução aquosa de ácido forte</p>
+                                    <p style="color: var(--cor-texto-secundario); margin: 5px 0; font-size: 0.9rem;"><strong>Características:</strong> Limpeza pesada, remoção de calcário</p>
+                                </div>
+                                <span style="background: #dc2626; color: white; padding: 8px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Perigosa</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NOTA COMPLEMENTAR -->
+                    <div style="background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(74, 144, 226, 0.05) 100%); border-left: 4px solid #4a90e2; padding: 18px; border-radius: 8px; margin-top: 25px;">
+                        <p style="color: var(--cor-principal); font-weight: bold; font-size: 1rem; margin-bottom: 10px;">📝 Nota Complementar</p>
+                        <p style="color: var(--cor-texto-secundario); font-size: 0.95rem; margin: 0;">Outras substâncias puras citadas como componentes de misturas: <strong>O₃ (Ozônio)</strong> • <strong>CH₄ (Metano)</strong> • <strong>Fe (Ferro)</strong></p>
+                    </div>
+                </div>
+                <div id="gabaritos-view" style="display: none; max-height: 65vh; overflow-y: auto;">
+                  <div style="background: var(--bg-input); padding: 20px; border-radius: 8px; text-align: left;">
+                        <h3 style="color: var(--cor-principal); font-size: 1.5rem; text-align: center; margin-bottom: 20px;">✅ Gabaritos Oficiais</h3>
+                         <p style="text-align: center; color: var(--cor-texto-secundario); margin-bottom: 20px; font-size: 0.9rem;">Clique nas fases abaixo para expandir e ver as respostas corretas.</p>
+                     <div id="lista-gabaritos-container"></div>
+                    </div>
+                    </div>
+                <div class="element-info" id="element-info">
+                    <div class="element-info-header"></div>
+                    <div class="element-details" id="element-details"></div>
+                </div>
+                <div class="periodic-controls">
+                    <button class="periodic-close-btn" onclick="app.fecharTabelaPeriodica()">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELETOR DE CONCEITOS (acessível pela Tabela Periódica) -->
+    <div class="seletor-conceitos-screen modal-animated" id="seletor-conceitos-screen">
+        <h2 class="seletor-conceitos-header">📖 Revisão de Conceitos</h2>
+        <p class="seletor-conceitos-sub">Escolha uma fase e um auxiliar para revisar o conteúdo sem precisar jogar.</p>
+
+        <div id="seletor-fases-container"></div>
+
+        <div class="seletor-auxiliar-section" id="seletor-auxiliar-section" style="display: none;">
+            <p class="seletor-auxiliar-titulo">Escolha quem vai explicar:</p>
+            <div class="seletor-auxiliar-grid">
+                <button class="seletor-aux-btn" id="saux-professor" onclick="app.selecionarAuxConceito('professor')">
+                    <span class="seletor-aux-emoji">🧑‍🏫</span>
+                    <span class="seletor-aux-nome">Prof. Químico</span>
+                    <span style="font-size: 0.75rem; color: var(--cor-texto-secundario);">Didático e detalhado</span>
+                </button>
+                <button class="seletor-aux-btn" id="saux-assistente" onclick="app.selecionarAuxConceito('assistente')">
+                    <span class="seletor-aux-emoji">🔬</span>
+                    <span class="seletor-aux-nome">Assistente Lab</span>
+                    <span style="font-size: 0.75rem; color: var(--cor-texto-secundario);">Foco em exemplos</span>
+                </button>
+                <button class="seletor-aux-btn" id="saux-conselheiro" onclick="app.selecionarAuxConceito('conselheiro')">
+                    <span class="seletor-aux-emoji">⚛️</span>
+                    <span class="seletor-aux-nome">Cons. Atômico</span>
+                    <span style="font-size: 0.75rem; color: var(--cor-texto-secundario);">Raciocínio lógico</span>
+                </button>
+            </div>
+        </div>
+
+        <button class="seletor-ver-btn" id="seletor-ver-btn" onclick="app.verConceitoLivre()">
+            Ver Conceito →
+        </button>
+        <button class="seletor-fechar-btn" onclick="app.fecharSeletorConceitos()">← Voltar à Tabela</button>
+    </div>
+
+    <!-- MODAL DE CONCEITO LIVRE (sem botão "Começar a Jogar") -->
+    <div class="conceito-box modal-animated" id="conceito-livre-box" style="display: none;">
+        <h3 class="conceito-header" id="conceito-livre-titulo">Conceito da Fase</h3>
+        <p class="conceito-auxiliar" id="conceito-livre-auxiliar-nome"></p>
+        <div class="conceito-texto" id="conceito-livre-conteudo"></div>
+        <button class="conceito-livre-botao" onclick="app.fecharConceitoLivre()">← Voltar ao Seletor</button>
+    </div>
+
+    <script src="index.mjs"></script>
+</body>
+</html>

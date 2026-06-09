@@ -1,0 +1,118 @@
+﻿COMPOSIÇÃO QUÍMICA E CLASSIFICAÇÃO DE MISTURAS COMUNS
+
+═══════════════════════════════════════════════════════════════════
+
+1. MISTURAS HOMOGÊNEAS (Soluções)
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • AR ATMOSFÉRICO                                                 │
+│   Composição: N₂ (Nitrogênio) + O₂ (Oxigênio) + CO₂ (Dióxido)   │
+│   Tipo: Solução gasosa                                           │
+│   Características: Incolor, inodoro (sem odor)                   │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • SORO FISIOLÓGICO / SALMOURA                                    │
+│   Composição: NaCl (Cloreto de Sódio) + H₂O (Água)             │
+│   Tipo: Solução aquosa                                           │
+│   Características: Uso médico e conservação de alimentos         │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • ÁLCOOL COMERCIAL (Hidratado)                                   │
+│   Composição: C₂H₅OH (Etanol) + H₂O (Água)                      │
+│   Tipo: Solução líquida                                          │
+│   Características: Desinfetante, solvente                        │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • BRONZE                                                          │
+│   Composição: Cu (Cobre) + Sn (Estanho)                         │
+│   Tipo: Liga metálica                                            │
+│   Características: Sólido, resistente, aplicações industriais   │
+└─────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════
+
+2. MISTURAS HETEROGÊNEAS E COLOIDES
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • ÁGUA E AREIA                                                    │
+│   Composição: SiO₂ (Dióxido de Silício) + H₂O (Água)           │
+│   Tipo: Suspensão heterogênea                                    │
+│   Características: Fases visíveis, separáveis por filtração     │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • GRANITO                                                         │
+│   Composição: SiO₂ (Quartzo) + Feldspato + Mica                 │
+│   Tipo: Mistura heterogênea mineral                              │
+│   Características: Rocha ígnea, aplicações na construção         │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • SANGUE (Coloide)                                                │
+│   Composição: Plasma + Células (íons e moléculas diversas)      │
+│   Tipo: Coloide                                                   │
+│   Características: Aspecto homogêneo, natureza coloidal          │
+└─────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════
+
+3. MISTURAS AZEOTRÓPICAS E EUTÉTICAS
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • MISTURA AZEOTRÓPICA (Álcool 96%)                               │
+│   Composição: 96% C₂H₅OH (Etanol) + 4% H₂O (Água)              │
+│   Tipo: Azeotrópica                                              │
+│   Características: Temperatura de ebulição constante             │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • MISTURA EUTÉTICA (Solda)                                        │
+│   Composição: Sn (Estanho) + Pb (Chumbo)                        │
+│   Tipo: Eutética                                                  │
+│   Características: Ponto de fusão constante, aplicação industrial│
+└─────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════
+
+4. MISTURAS DE IMPORTÂNCIA INDUSTRIAL
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • PETRÓLEO                                                        │
+│   Composição: Hidrocarbonetos (C₃H₈, C₄H₁₀, etc.)              │
+│   Tipo: Mistura complexa                                         │
+│   Características: Obtido por destilação, combustível, lubrifantes│
+└─────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════
+
+5. SANEANTES (Produtos de Limpeza - Misturas Perigosas)
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • ÁGUA SANITÁRIA                                                  │
+│   Composição: NaClO (Hipoclorito de Sódio)                       │
+│   Tipo: Solução desinfetante                                     │
+│   Características: Desinfetante, blequeador, uso doméstico       │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • AMÔNIA (Amoníaco)                                               │
+│   Composição: NH₃ (Amoníaco)                                     │
+│   Tipo: Solução aquosa                                           │
+│   Características: Limpador, desengordurante, odor forte         │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ • ÁCIDO CLORÍDRICO                                                │
+│   Composição: HCl (Ácido Clorídrico) - Ácido muriático           │
+│   Tipo: Solução aquosa de ácido forte                            │
+│   Características: Limpeza pesada, remoção de calcário           │
+└─────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════
+
+NOTA COMPLEMENTAR:
+Outras substâncias puras citadas como componentes de misturas:
+• O₃ (Ozônio)  • CH₄ (Metano)  • Fe (Ferro)
