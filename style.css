@@ -457,6 +457,160 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         }
 
         /* =========================================
+           TEMAS PARA DALTONISMO / CORES AMIGÁVEIS
+           Cada bloco atende a um tipo específico: generic, deuteranomalia,
+           protanomalia, protanopia, deuteranopia, tritanomalia, tritanopia.
+           Paletas baseadas em esquemas "colorblind-safe" (azul/laranja/teal/yellow)
+           ========================================= */
+
+        /* TEMA: Daltonismo — Genérico (segurança de contraste e cores universais) */
+        [data-theme="daltonismo"] {
+            --bg-base: #f4f7fb;
+            --bg-gradient: linear-gradient(180deg, #f4f7fb 0%, #eef6ff 100%);
+            --cor-principal: #0072b2; /* azul seguro */
+            --cor-principal-2: #56b4e9;
+            --cor-acento: #e69f00; /* laranja */
+            --cor-texto: #0b2030;
+            --cor-texto-secundario: #264653;
+            --glass-bg: rgba(255,255,255,0.78);
+            --glass-bg-strong: rgba(255,255,255,0.9);
+            --glass-border: rgba(0,0,0,0.06);
+            --bg-card: var(--glass-bg);
+            --borda-card: rgba(0,0,0,0.06);
+            --bg-input: rgba(255,255,255,0.95);
+            --cor-glow: rgba(0,114,178,0.18);
+            --bg-overlay: rgba(6,20,30,0.55);
+            --grad-primary: linear-gradient(135deg, #0072b2 0%, #56b4e9 100%);
+            --grad-accent: linear-gradient(135deg, #e69f00 0%, #0072b2 100%);
+        }
+
+        /* TEMA: Deuteranomalia (deficiência verde - use azul/laranja) */
+        [data-theme="deuteranomalia"] {
+            --bg-base: #fbfcfe;
+            --bg-gradient: linear-gradient(180deg, #fbfcfe 0%, #f0f7fb 100%);
+            --cor-principal: #0072b2; /* azul predominante */
+            --cor-principal-2: #56b4e9;
+            --cor-acento: #e69f00; /* laranja forte para contraste */
+            --cor-texto: #0d2230;
+            --cor-texto-secundario: #30536a;
+            --glass-bg: rgba(255,255,255,0.8);
+            --glass-bg-strong: rgba(255,255,255,0.92);
+            --glass-border: rgba(0,114,178,0.08);
+            --bg-card: var(--glass-bg);
+            --borda-card: rgba(0,114,178,0.08);
+            --bg-input: rgba(255,255,255,0.96);
+            --cor-glow: rgba(86,180,233,0.16);
+            --bg-overlay: rgba(5,22,34,0.58);
+            --grad-primary: linear-gradient(135deg, #0072b2 0%, #56b4e9 100%);
+            --grad-accent: linear-gradient(135deg, #e69f00 0%, #0072b2 100%);
+        }
+
+        /* TEMA: Protanomalia (deficiência vermelha reduzida) */
+        [data-theme="protanomalia"] {
+            --bg-base: #fffaf4;
+            --bg-gradient: linear-gradient(180deg, #fffaf4 0%, #f9f6ef 100%);
+            --cor-principal: #0072b2; /* azul para evitar dependência de vermelho */
+            --cor-principal-2: #f0e442; /* amarelo seguro */
+            --cor-acento: #56b4e9;
+            --cor-texto: #0b1f2a;
+            --cor-texto-secundario: #3b4f5f;
+            --glass-bg: rgba(255,255,255,0.82);
+            --glass-bg-strong: rgba(255,255,255,0.94);
+            --glass-border: rgba(0,0,0,0.06);
+            --bg-card: var(--glass-bg);
+            --borda-card: rgba(0,0,0,0.06);
+            --bg-input: rgba(255,255,255,0.96);
+            --cor-glow: rgba(240,228,66,0.14);
+            --bg-overlay: rgba(10,18,22,0.56);
+            --grad-primary: linear-gradient(135deg, #0072b2 0%, #56b4e9 100%);
+            --grad-accent: linear-gradient(135deg, #f0e442 0%, #0072b2 100%);
+        }
+
+        /* TEMA: Protanopia (perda de vermelho) — evitar vermelhos/rosas */
+        [data-theme="protanopia"] {
+            --bg-base: #f6fbff;
+            --bg-gradient: linear-gradient(180deg, #f6fbff 0%, #eef7ff 100%);
+            --cor-principal: #0072b2;
+            --cor-principal-2: #56b4e9;
+            --cor-acento: #e69f00; /* laranja visível */
+            --cor-texto: #08202a;
+            --cor-texto-secundario: #2b4856;
+            --glass-bg: rgba(255,255,255,0.82);
+            --glass-bg-strong: rgba(255,255,255,0.94);
+            --glass-border: rgba(0,114,178,0.08);
+            --bg-card: var(--glass-bg);
+            --borda-card: rgba(0,114,178,0.08);
+            --bg-input: rgba(255,255,255,0.97);
+            --cor-glow: rgba(0,114,178,0.16);
+            --bg-overlay: rgba(8,18,28,0.6);
+            --grad-primary: linear-gradient(135deg, #0072b2 0%, #56b4e9 100%);
+            --grad-accent: linear-gradient(135deg, #e69f00 0%, #0072b2 100%);
+        }
+
+        /* TEMA: Deuteranopia (perda de verde) — evitar verdes/vermelhos dependentes */
+        [data-theme="deuteranopia"] {
+            --bg-base: #fbfcff;
+            --bg-gradient: linear-gradient(180deg, #fbfcff 0%, #f1f8ff 100%);
+            --cor-principal: #0072b2;
+            --cor-principal-2: #e69f00;
+            --cor-acento: #56b4e9;
+            --cor-texto: #071820;
+            --cor-texto-secundario: #2d4856;
+            --glass-bg: rgba(255,255,255,0.82);
+            --glass-bg-strong: rgba(255,255,255,0.94);
+            --glass-border: rgba(0,0,0,0.06);
+            --bg-card: var(--glass-bg);
+            --borda-card: rgba(0,0,0,0.06);
+            --bg-input: rgba(255,255,255,0.97);
+            --cor-glow: rgba(86,180,233,0.16);
+            --bg-overlay: rgba(7,18,26,0.58);
+            --grad-primary: linear-gradient(135deg, #0072b2 0%, #56b4e9 100%);
+            --grad-accent: linear-gradient(135deg, #e69f00 0%, #0072b2 100%);
+        }
+
+        /* TEMA: Tritanomalia (anomalia azul) — reduzir dependência do azul */
+        [data-theme="tritanomalia"] {
+            --bg-base: #fff9f3;
+            --bg-gradient: linear-gradient(180deg, #fff9f3 0%, #fff3e8 100%);
+            --cor-principal: #d55e00; /* vermelho/laranja para substituir azul */
+            --cor-principal-2: #009e73; /* teal seguro */
+            --cor-acento: #f0e442; /* amarelo visível */
+            --cor-texto: #201612;
+            --cor-texto-secundario: #4a2f21;
+            --glass-bg: rgba(255,255,255,0.86);
+            --glass-bg-strong: rgba(255,255,255,0.96);
+            --glass-border: rgba(0,0,0,0.06);
+            --bg-card: var(--glass-bg);
+            --borda-card: rgba(0,0,0,0.06);
+            --bg-input: rgba(255,255,255,0.98);
+            --cor-glow: rgba(213,94,0,0.14);
+            --bg-overlay: rgba(18,12,10,0.56);
+            --grad-primary: linear-gradient(135deg, #d55e00 0%, #009e73 100%);
+            --grad-accent: linear-gradient(135deg, #f0e442 0%, #d55e00 100%);
+        }
+
+        /* TEMA: Tritanopia (perda de azul) — paleta sem depender do azul) */
+        [data-theme="tritanopia"] {
+            --bg-base: #fffaf6;
+            --bg-gradient: linear-gradient(180deg, #fffaf6 0%, #fff1ea 100%);
+            --cor-principal: #d55e00;
+            --cor-principal-2: #009e73;
+            --cor-acento: #f0e442;
+            --cor-texto: #211613;
+            --cor-texto-secundario: #4b3326;
+            --glass-bg: rgba(255,255,255,0.86);
+            --glass-bg-strong: rgba(255,255,255,0.96);
+            --glass-border: rgba(0,0,0,0.06);
+            --bg-card: var(--glass-bg);
+            --borda-card: rgba(0,0,0,0.06);
+            --bg-input: rgba(255,255,255,0.98);
+            --cor-glow: rgba(213,94,0,0.14);
+            --bg-overlay: rgba(18,12,10,0.56);
+            --grad-primary: linear-gradient(135deg, #d55e00 0%, #009e73 100%);
+            --grad-accent: linear-gradient(135deg, #f0e442 0%, #d55e00 100%);
+        }
+
+        /* =========================================
            SELETOR DE TEMAS (na config)
            ========================================= */
         .theme-picker {
@@ -782,7 +936,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
            ========================================= */
         .question-box,
         .stats-screen, .config-screen, .auxiliar-screen, .profile-screen,
-        .conceito-box, .seletor-conceitos-screen, .periodic-table-screen {
+        .conceito-box, .seletor-conceitos-screen, .periodic-table-screen, .stats-panel {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             background: var(--glass-bg-strong);
@@ -799,6 +953,12 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         .question-box { z-index: 200; max-width: 620px; width: 92%; }
         .stats-screen { max-width: 520px; width: 92%; }
         .config-screen { max-width: 520px; width: 92%; }
+        .stats-panel { max-width: 520px; width: 92%; }
+        #inventory-screen { max-width: 780px; width: 96%; max-height: 88vh; overflow: hidden; }
+        #inventory-screen .inventory-card { min-height: 360px; padding: 22px; }
+        #inventory-screen .inventory-item-grid { max-height: 56vh; overflow-y: auto; padding-right: 8px; }
+        #inventory-screen .inventory-item-grid::-webkit-scrollbar { width: 8px; }
+        #inventory-screen .inventory-item-grid::-webkit-scrollbar-thumb { background: rgba(79, 70, 229, 0.35); border-radius: 999px; }
         .auxiliar-screen { max-width: 700px; width: 92%; }
         .profile-screen { max-width: 760px; width: 92%; max-height: 85vh; overflow-y: auto; padding: 32px; }
         .conceito-box { z-index: 250; width: 92%; max-width: 720px; max-height: 80vh; overflow-y: auto; }
@@ -983,6 +1143,59 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         .history-table tr:last-child td { border-bottom: none; }
 
         /* =========================================
+           PLAYLIST CARDS
+           ========================================= */
+        .playlist-card {
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+        .playlist-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--cor-principal);
+            box-shadow: 0 12px 28px var(--cor-glow);
+        }
+        .playlist-card.selecionado {
+            background: var(--grad-primary);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 12px 30px var(--cor-glow);
+            transform: scale(1.02);
+        }
+        .playlist-card.selecionado .playlist-title,
+        .playlist-card.selecionado .playlist-desc {
+            color: white;
+        }
+        .playlist-icon {
+            font-size: 2.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .playlist-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cor-texto);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .playlist-desc {
+            font-size: 0.85rem;
+            color: var(--cor-texto-secundario);
+            font-weight: 500;
+        }
+
+        /* =========================================
            DICAS
            ========================================= */
         .hint-btn {
@@ -1106,6 +1319,71 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         .legend-item.active { box-shadow: 0 0 0 2px var(--cor-principal); }
         .element-btn.desabilitado { opacity: 0.25; cursor: not-allowed; filter: grayscale(0.7); }
         .element-btn.destacado { filter: brightness(1.15); transform: scale(1.05); }
+
+        .electro-table-card {
+            background: var(--bg-card);
+            border: 1px solid var(--borda-card);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: var(--glass-shadow);
+        }
+        .electro-intro {
+            margin-bottom: 20px;
+            color: var(--cor-texto-secundario);
+            text-align: center;
+            line-height: 1.6;
+        }
+        .electro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 14px;
+        }
+        .electro-card {
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 16px;
+            padding: 18px 14px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+        }
+        .electro-card-symbol {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: 0.03em;
+        }
+        .electro-card-name {
+            display: block;
+            font-size: 0.92rem;
+            margin-bottom: 6px;
+            opacity: 0.95;
+        }
+        .electro-card-value {
+            display: block;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .electro-arrows {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 16px 0;
+            flex-wrap: wrap;
+        }
+        .arrow-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            border-radius: 999px;
+            background: var(--glass-bg);
+            border: 1px solid var(--borda-card);
+            color: var(--cor-texto);
+            font-weight: 700;
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+        }
 
         /* Botão Conceitos destaque */
         .periodic-menu-btn.conceitos-btn {
@@ -1426,6 +1704,92 @@ button:focus {
     border: 2px solid var(--cor-principal);
     background: var(--glass-bg-strong);
 }
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 0.95fr;
+    gap: 20px;
+    margin-top: 14px;
+}
+
+.inventory-card {
+    background: var(--bg-card);
+    border: 1px solid var(--borda-card);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+}
+
+.inventory-card-header {
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--cor-principal);
+}
+
+.inventory-item-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.inventory-item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg-strong);
+}
+
+.inventory-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.inventory-theme-preview {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.55);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.inventory-item-card.active {
+    border-color: var(--cor-principal);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.12);
+}
+
+.inventory-item-title {
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.inventory-item-subtitle {
+    color: var(--cor-texto-secundario);
+    font-size: 0.9rem;
+}
+
+.inventory-item-button {
+    background: var(--cor-principal);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inventory-item-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(79, 70, 229, 0.18);
+}
+
+.inventory-font-grid {
+    grid-template-columns: 1fr;
+}
+
 /* Localize ou adicione este seletor */
 .config-box {
     max-height: 85vh; /* Define uma altura máxima (85% da tela) */

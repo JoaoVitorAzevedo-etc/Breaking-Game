@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +13,10 @@
 <body data-theme="light-1">
 
     <div class="top-controls">
+        <button class="control-btn" id="btn-inventory" onclick="app.abrirInventario()">
+            <span style="font-size: 1.1rem;">🎒</span>
+            <span>Inventário</span>
+        </button>
         <button class="control-btn" id="btn-usuario" onclick="app.abrirConfig()">
             <span style="font-size: 1.1rem;">👤</span>
             <span>Usuário</span>
@@ -83,7 +87,7 @@
             <button class="btn-option" onclick="app.abrirTabelaPeriodica()">Materiais de Estudo</button>
             <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
             <button class="btn-option" onclick="app.abrirPerfil()">Desempenho</button>
-            <button class="btn-option" onclick="app.mostrarTutorialIntro()">📖 Rever Tutorial</button>
+            <button class="btn-option" onclick="app.mostrarTutorialIntro()"> Rever Tutorial</button>
             <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
         </div>
     </div>
@@ -123,7 +127,7 @@
         <h3 id="question-title" style="color: var(--cor-principal); margin-bottom:15px; font-size: 1.5rem;"></h3>
         <p id="question-text" style="margin-bottom:25px; font-size: 1.2rem; line-height: 1.4;"></p>
         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
-            <button id="btn-dica" class="hint-btn" onclick="app.usarDica()">💡 Dica (-10 pts)</button>
+            <button id="btn-dica" class="hint-btn" onclick="app.usarDica()">💡 Dica (-60 pts)</button>
         </div>
         <div id="dica-display" class="hint-display"></div>
         <div id="options-list"></div>
@@ -166,81 +170,6 @@
     </div>
 
     <div class="config-scroll-container" style="max-height: 55vh; overflow-y: auto; padding-right: 8px; margin-bottom: 20px;">
-        
-        <div class="config-option" style="flex-direction: column; align-items: flex-start;">
-            <span class="config-label" style="margin-bottom: 12px; font-weight: 600;">Tema Visual</span>
-            <div class="theme-picker" id="theme-picker">
-                <div class="theme-swatch" data-theme-value="light-1" onclick="app.setTema('light-1')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#FAF3DD,#C8D5B9);"></div>
-                    <span class="theme-swatch-label">Areia</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="light-2" onclick="app.setTema('light-2')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#DEE5E5,#9DC5BB);"></div>
-                    <span class="theme-swatch-label">Névoa</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="light-3" onclick="app.setTema('light-3')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#C5EFCB,#AC8887);"></div>
-                    <span class="theme-swatch-label">Menta</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="dark-1" onclick="app.setTema('dark-1')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#222,#ffff2c);"></div>
-                    <span class="theme-swatch-label">Neon</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="dark-2" onclick="app.setTema('dark-2')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#37392E,#F15152);"></div>
-                    <span class="theme-swatch-label">Pedra</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="dark-3" onclick="app.setTema('dark-3')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#6A041D,#B2FFA9);"></div>
-                    <span class="theme-swatch-label">Vinho</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="light-4" onclick="app.setTema('light-4')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#D6F599,#436436);"></div>
-                    <span class="theme-swatch-label">Lima</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="light-5" onclick="app.setTema('light-5')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#FAF3DD,#60435F);"></div>
-                    <span class="theme-swatch-label">Ameixa</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="light-6" onclick="app.setTema('light-6')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#F19953,#2660A4);"></div>
-                    <span class="theme-swatch-label">Pôr do Sol</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="light-7" onclick="app.setTema('light-7')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#EDF7B5,#22031F);"></div>
-                    <span class="theme-swatch-label">Limão</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="dark-4" onclick="app.setTema('dark-4')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#462255,#62A87C);"></div>
-                    <span class="theme-swatch-label">Ametista</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="dark-5" onclick="app.setTema('dark-5')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#011627,#EF2D56);"></div>
-                    <span class="theme-swatch-label">Marinho</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="dark-6" onclick="app.setTema('dark-6')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#183A37,#F7F0F0);"></div>
-                    <span class="theme-swatch-label">Pinheiro</span>
-                </div>
-                <div class="theme-swatch" data-theme-value="dark-7" onclick="app.setTema('dark-7')">
-                    <div class="theme-swatch-preview" style="background: linear-gradient(135deg,#334139,#C52184);"></div>
-                    <span class="theme-swatch-label">Magenta</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="config-section" style="margin-top: 20px;">
-            <span class="config-label" style="display: block; margin-bottom: 12px; font-weight: 600;">Estilo da Interface (Fonte)</span>
-            <div class="font-grid">
-                <button class="font-btn" onclick="app.alterarFonte('inter')">Inter</button>
-                <button class="font-btn" style="font-family: 'Special Elite', cursive !important;" onclick="app.alterarFonte('special')">Special Elite</button>
-                <button class="font-btn" style="font-family: 'Lobster', cursive !important;" onclick="app.alterarFonte('lobster')">Lobster</button>
-                <button class="font-btn" style="font-family: 'Times New Roman', serif !important;" onclick="app.alterarFonte('times')">Times New Roman</button>
-                <button class="font-btn" style="font-family: 'JetBrains Mono', monospace !important;" onclick="app.alterarFonte('double')">Mono Spaced</button>
-                <button class="font-btn" style="font-family: 'Playfair Display', serif !important; font-style: italic;" onclick="app.alterarFonte('serif-bold')">Serif Bold</button>
-            </div>
-        </div>
-
         <div class="config-option" style="flex-direction: column; align-items: flex-start; margin-top: 20px;">
             <span class="config-label" style="margin-bottom: 12px; font-weight: 600;">Tamanho da Fonte</span>
             <div style="display: flex; gap: 10px; width: 100%;">
@@ -258,6 +187,76 @@
 
     <button class="config-close" onclick="app.fecharConfig()" style="width: 100%; padding: 12px; border-radius: 12px; background: var(--cor-principal); color: white; border: none; font-weight: bold; cursor: pointer;">Fechar</button>
 </div>
+
+    <div class="stats-panel modal-animated" id="stats-panel">
+        <h2 class="config-header">🎵 Escolha sua Playlist</h2>
+        <p style="text-align: center; color: var(--cor-texto-secundario); margin-bottom: 24px; font-size: 0.95rem;">Selecione uma playlist para acompanhar seus estudos</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+            
+            <!-- Música Clássica -->
+            <div class="playlist-card" data-playlist="classica" onclick="app.selecionarPlaylist('classica', this)">
+                <div class="playlist-icon"></div>
+                <div class="playlist-title">Música Clássica</div>
+                <div class="playlist-desc">Concentração e Elegância</div>
+            </div>
+
+            <!-- Rock -->
+            <div class="playlist-card" data-playlist="rock" onclick="app.selecionarPlaylist('rock', this)">
+                <div class="playlist-icon"></div>
+                <div class="playlist-title">Rock</div>
+                <div class="playlist-desc">Energia e Ritmo</div>
+            </div>
+
+            <!-- Jazz -->
+            <div class="playlist-card" data-playlist="jazz" onclick="app.selecionarPlaylist('jazz', this)">
+                <div class="playlist-icon"></div>
+                <div class="playlist-title">Jazz</div>
+                <div class="playlist-desc">Suave e Sofisticado</div>
+            </div>
+
+            <!-- Pop -->
+            <div class="playlist-card" data-playlist="pop" onclick="app.selecionarPlaylist('pop', this)">
+                <div class="playlist-icon"></div>
+                <div class="playlist-title">Pop</div>
+                <div class="playlist-desc">Moderno e Animado</div>
+            </div>
+
+        </div>
+
+        <!-- MPB em destaque (full width) -->
+        <div class="playlist-card" data-playlist="mpb" onclick="app.selecionarPlaylist('mpb', this)" style="margin-bottom: 24px;">
+            <div class="playlist-icon">🎶</div>
+            <div class="playlist-title">MPB - Música Popular Brasileira</div>
+            <div class="playlist-desc">Autêntico e Envolvente</div>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+            <button class="config-close" onclick="app.fecharEstatisticas()" style="flex: 1; padding: 12px; border-radius: 12px; background: #888888; color: white; border: none; font-weight: bold; cursor: pointer;">Cancelar</button>
+            <button class="config-close" id="btn-confirmar-playlist" onclick="app.confirmarPlaylist()" style="flex: 1; padding: 12px; border-radius: 12px; background: var(--cor-principal); color: white; border: none; font-weight: bold; cursor: pointer; opacity: 0.5; pointer-events: none;">Confirmar</button>
+        </div>
+    </div>
+
+    <div class="stats-panel modal-animated" id="inventory-screen">
+        <h2 class="config-header"> Inventário do Usuário</h2>
+        <p style="text-align: center; color: var(--cor-texto-secundario); margin-bottom: 22px; font-size: 0.98rem;">Veja seus itens comprados, altere visuais e fontes, e aplique os itens que já possui.</p>
+
+        <div class="inventory-grid">
+            <div class="inventory-card">
+                <div class="inventory-card-header">Temas adquiridos</div>
+                <div id="inventory-theme-list" class="inventory-item-grid"></div>
+            </div>
+            <div class="inventory-card">
+                <div class="inventory-card-header">Estilos de Fonte</div>
+                <div id="inventory-font-list" class="inventory-item-grid"></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 22px; display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap;">
+            <button class="config-close" onclick="app.fecharInventario()" style="flex: 1; min-width: 140px; padding: 12px; border-radius: 12px; background: #888888; color: white; border: none; font-weight: bold; cursor: pointer;">Fechar</button>
+            <button class="config-close" onclick="app.fecharInventario(); app.carregarMenuPrincipal();" style="flex: 1; min-width: 140px; padding: 12px; border-radius: 12px; background: var(--cor-principal); color: white; border: none; font-weight: bold; cursor: pointer;">Atualizar Menu</button>
+        </div>
+    </div>
 
     <div class="auxiliar-screen modal-animated" id="final-warning-screen" style="display: none;">
         <h2 style="color: var(--cor-principal); font-size: 2.2rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;">🏆 DESAFIO FINAL 🏆</h2>
@@ -392,159 +391,182 @@
             </div>
             <p class="shop-empty-msg" id="shop-empty-msg" style="display:none;">Nenhum item encontrado.</p>
         </div>
-
-        <!-- RECURSOS -->
-        <div class="shop-section">
-
-            <h3 class="shop-section-title">
-                Recursos de Estudo
-            </h3>
-
+       <div class="shop-section">
+            <h3 class="shop-section-title">Recursos</h3>
             <div class="shop-grid">
-
-                <!-- ITEM -->
-                <div class="shop-card" data-section="recursos" data-sub="dicas" data-name="pacote de dicas">
-
-                    <div class="shop-icon">
-                        💡
-                    </div>
-
-                    <h4>
-                        Pacote de Dicas
-                    </h4>
-
-                    <p>
-                        Receba 3 dicas extras para utilizar
-                        nas fases mais difíceis do jogo.
-                    </p>
-
-                    <button class="shop-buy-btn">
-                        Comprar • 150 pts
-                    </button>
-
+                
+                <div class="shop-card" data-tags="recursos">
+                    <div class="shop-card-icon">✨</div>
+                    <h4 class="shop-card-title">Dobro de Pontos</h4>
+                    <p class="shop-card-desc">Ative e ganhe o dobro de pontuação ao acertar as questões.</p>
+                    <button class="btn-option">Comprar</button>
                 </div>
 
-                <!-- ITEM -->
-                <div class="shop-card" data-section="recursos" data-sub="bonus" data-name="bônus de pontos">
-
-                    <div class="shop-icon">
-                        ⚡
-                    </div>
-
-                    <h4>
-                        Bônus de Pontos
-                    </h4>
-
-                    <p>
-                        Ganhe pontos adicionais para desbloquear
-                        conteúdos e avançar mais rapidamente.
-                    </p>
-
-                    <button class="shop-buy-btn">
-                        Comprar • 180 pts
-                    </button>
-
-                </div>
-
-                <!-- ITEM -->
-                <div class="shop-card" data-section="recursos" data-sub="visual" data-name="tema brilhante">
-
-                    <div class="shop-icon">
-                        🎨
-                    </div>
-
-                    <h4>
-                        Tema Brilhante
-                    </h4>
-
-                    <p>
-                        Desbloqueie um visual exclusivo
-                        com efeitos modernos e iluminados.
-                    </p>
-
-                    <button class="shop-buy-btn">
-                        Comprar • 220 pts
-                    </button>
-
+                <div class="shop-card" data-tags="recursos">
+                    <div class="shop-card-icon">💡</div>
+                    <h4 class="shop-card-title">Pacote com Três Dicas</h4>
+                    <p class="shop-card-desc">Adiciona 3 dicas extras ao seu inventário de jogo.</p>
+                    <button class="btn-option">Comprar</button>
                 </div>
 
             </div>
-
         </div>
 
-        <!-- OFERTAS -->
         <div class="shop-section">
-
-            <h3 class="shop-section-title">
-                Ofertas Rápidas
-            </h3>
-
+            <h3 class="shop-section-title">Ofertas</h3>
             <div class="shop-grid">
 
-                <!-- ITEM -->
-                <div class="shop-card" data-section="ofertas" data-sub="dicas" data-name="revisão rápida">
-
-                    <div class="shop-icon">
-                        📚
-                    </div>
-
-                    <h4>
-                        Revisão Rápida
-                    </h4>
-
-                    <p>
-                        Consulte um resumo instantâneo dos
-                        conteúdos antes da próxima fase.
-                    </p>
-
-                    <button class="shop-buy-btn">
-                        Comprar • 120 pts
-                    </button>
-
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 2</h4>
+                    <p class="shop-card-desc">Paleta suave e moderna com tons pastel.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-2')">Comprar por 100 pts</button>
                 </div>
 
-                <!-- ITEM -->
-                <div class="shop-card" data-section="ofertas" data-sub="bonus" data-name="conteúdo extra">
-
-                    <div class="shop-icon">
-                        🔓
-                    </div>
-
-                    <h4>
-                        Conteúdo Extra
-                    </h4>
-
-                    <p>
-                        Libere cards explicativos adicionais
-                        e informações avançadas.
-                    </p>
-
-                    <button class="shop-buy-btn">
-                        Comprar • 260 pts
-                    </button>
-
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 3</h4>
+                    <p class="shop-card-desc">Estilo orgânico e relaxante para longas sessões.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-3')">Comprar por 150 pts</button>
                 </div>
 
-                <!-- ITEM -->
-                <div class="shop-card" data-section="ofertas" data-sub="dicas" data-name="kit de laboratório">
-
-                    <div class="shop-icon">
-                        🧪
-                    </div>
-
-                    <h4>
-                        Kit de Laboratório
-                    </h4>
-
-                    <p>
-                        Receba acesso a exemplos práticos
-                        e experimentos simulados.
-                    </p>
-
-                    <button class="shop-buy-btn">
-                        Comprar • 300 pts
-                    </button>
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 4</h4>
+                    <p class="shop-card-desc">Visual energético com detalhes em verde-lima.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-4')">Comprar por 200 pts</button>
                 </div>
+
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 5</h4>
+                    <p class="shop-card-desc">Contraste equilibrado em tons de creme e roxo.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-5')">Comprar por 250 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 6</h4>
+                    <p class="shop-card-desc">Visual refrescante em tons de azul e laranja.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-6')">Comprar por 300 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas claro">
+                    <div class="shop-card-icon">☀️</div>
+                    <h4 class="shop-card-title">Tema Claro 7</h4>
+                    <p class="shop-card-desc">Fundo claro combinado com detalhes em roxo escuro.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('light-7')">Comprar por 350 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 2</h4>
+                    <p class="shop-card-desc">Fundo asfalto escuro com realces em vermelho vibrante.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-2')">Comprar por 150 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 3</h4>
+                    <p class="shop-card-desc">Paleta neon cibernética sobre fundo vinho escuro.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-3')">Comprar por 200 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 4</h4>
+                    <p class="shop-card-desc">Imersão total em tons profundos de roxo e azul.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-4')">Comprar por 250 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 5</h4>
+                    <p class="shop-card-desc">Estilo minimalista futurista com detalhes ciano.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-5')">Comprar por 300 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 6</h4>
+                    <p class="shop-card-desc">Visual aconchegante em tons terrosos e verde floresta.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-6')">Comprar por 350 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas escuro">
+                    <div class="shop-card-icon">🌙</div>
+                    <h4 class="shop-card-title">Tema Escuro 7</h4>
+                    <p class="shop-card-desc">Visual premium com realces magenta e dourados.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-7')">Comprar por 400 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas temas extra">
+                    <div class="shop-card-icon">🌟</div>
+                    <h4 class="shop-card-title">Tema Escuro 1</h4>
+                    <p class="shop-card-desc">Estilo customizado premium com tons verdes marcantes.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('dark-1')">Comprar por 100 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas fontes">
+                    <div class="shop-card-icon">🔤</div>
+                    <h4 class="shop-card-title" style="font-family: monospace;">Fonte: Double Struck</h4>
+                    <p class="shop-card-desc">Modifique a tipografia do painel para o formato Double Struck.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('double')">Comprar por 150 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas fontes">
+                    <div class="shop-card-icon">🔤</div>
+                    <h4 class="shop-card-title" style="font-style: italic; font-weight: bold;">Fonte: Serif Bold Italic</h4>
+                    <p class="shop-card-desc">Altere o texto do jogo para uma variante elegante e serifada.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('serif-bold')">Comprar por 160 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas fontes">
+                    <div class="shop-card-icon">🔤</div>
+                    <h4 class="shop-card-title" style="font-family: 'Lobster', sans-serif;">Fonte: Lobster</h4>
+                    <p class="shop-card-desc">Deixe a interface com o estilo descontraído da fonte Lobster.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('lobster')">Comprar por 130 pts</button>
+                </div>
+
+                <div class="shop-card" data-tags="ofertas fontes">
+                    <div class="shop-card-icon">🔤</div>
+                    <h4 class="shop-card-title" style="font-family: 'Times New Roman', serif;">Fonte: Times New Roman</h4>
+                    <p class="shop-card-desc">Aplique a clássica tipografia acadêmica Times New Roman.</p>
+                    <button class="btn-option" onclick="app.comprarTemaNaLoja('times')">Comprar por 140 pts</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="shop-section">
+            <h3 class="shop-section-title">Dicas e Customização</h3>
+            <div class="shop-grid">
+
+                <div class="shop-card" data-tags="dicas skins">
+                    <div class="shop-card-icon">🤖</div>
+                    <h4 class="shop-card-title">Pacote Skins de Auxiliar</h4>
+                    <p class="shop-card-desc">Desbloqueie todas as 12 skins exclusivas para seus assistentes virtuais.</p>
+                    <button class="btn-option">Comprar</button>
+                </div>
+
+                <div class="shop-card" data-tags="dicas skins">
+                    <div class="shop-card-icon">🎭</div>
+                    <h4 class="shop-card-title">Skins do Herói</h4>
+                    <p class="shop-card-desc">Conjunto completo contendo os 4 visuais exclusivos para o personagem principal.</p>
+                    <button class="btn-option">Comprar</button>
+                </div>
+
+                <div class="shop-card" data-tags="dicas skins">
+                    <div class="shop-card-icon">🏆</div>
+                    <h4 class="shop-card-title">Skins de Conquista Secreta</h4>
+                    <p class="shop-card-desc">Acesso imediato às 4 skins raras de conquistas ocultas do game.</p>
+                    <button class="btn-option">Comprar</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div> </div>
             </div>
         </div>
     </div>
@@ -556,6 +578,7 @@
                 <button class="periodic-menu-btn active" onclick="app.mostrarTabelaPeriodicaView('tabela', this)">🧪 Tabela Periódica</button>
                 <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('organica', this)">🔗 Química Orgânica</button>
                 <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('misturas', this)">⚗️ Misturas</button>
+                <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('eletronegatividade', this)">⚡ Eletronegatividade</button>
                 <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('gabaritos', this)">✅ Gabaritos</button>
                 <button class="periodic-menu-btn conceitos-btn" onclick="app.abrirSeletorConceitos()">📖 Ver Conceitos</button>
             </div>
@@ -572,6 +595,25 @@
                         <div class="legend-item" onclick="app.filtrarPorClasse('nao-metais', this)" style="cursor: pointer;"><div class="legend-color" style="background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);"></div><span>Não-metais</span></div>
                         <div class="legend-item" onclick="app.filtrarPorClasse('halogenios', this)" style="cursor: pointer;"><div class="legend-color" style="background: linear-gradient(135deg, #EAB308 0%, #CA8A04 100%);"></div><span>Halogênios</span></div>
                         <div class="legend-item" onclick="app.filtrarPorClasse('gases-nobres', this)" style="cursor: pointer;"><div class="legend-color" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);"></div><span>Gases nobres</span></div>
+                    </div>
+                </div>
+                <div id="eletronegatividade-view" style="display: none; max-height: 65vh; overflow-y: auto;">
+                    <div class="electro-table-card">
+                        <h3 style="color: var(--cor-principal); font-size: 1.6rem; text-align: center; margin-bottom: 18px;">⚡ Eletronegatividade dos Elementos</h3>
+                        <p class="electro-intro">A eletronegatividade aumenta da esquerda para a direita e de baixo para cima na tabela periódica.</p>
+                        <div class="electro-arrows">
+                            <div class="arrow-item">↗️ Mais eletronegativo</div>
+                            <div class="arrow-item">↙️ Menos eletronegativo</div>
+                        </div>
+                        <div class="periodic-grid" id="electro-grid"></div>
+                        <div class="legend" style="margin-top: 14px; justify-content: space-evenly; gap: 10px;">
+                            <div class="legend-item" onclick="app.filtrarPorEletronegatividade('mais', this)"><div class="legend-color" style="background: linear-gradient(135deg, #0ea5e9 0%, #0f766e 100%);"></div><span>≥ 3.8</span></div>
+                            <div class="legend-item" onclick="app.filtrarPorEletronegatividade('alto', this)"><div class="legend-color" style="background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);"></div><span>3.2 – 3.8</span></div>
+                            <div class="legend-item" onclick="app.filtrarPorEletronegatividade('medio', this)"><div class="legend-color" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);"></div><span>2.6 – 3.2</span></div>
+                            <div class="legend-item" onclick="app.filtrarPorEletronegatividade('baixo', this)"><div class="legend-color" style="background: linear-gradient(135deg, #fb7185 0%, #be123c 100%);"></div><span>2.0 – 2.6</span></div>
+                            <div class="legend-item" onclick="app.filtrarPorEletronegatividade('menor', this)"><div class="legend-color" style="background: linear-gradient(135deg, #94a3b8 0%, #475569 100%);"></div><span>< 2.0</span></div>
+                        </div>
+                        <div style="margin-top: 20px; color: var(--cor-texto-secundario); font-size: 0.95rem; line-height: 1.5;">Clique nos elementos para ver o valor e a descrição no painel lateral.</div>
                     </div>
                 </div>
                 <div id="organica-view" style="display: none; max-height: 65vh; overflow-y: auto;">
@@ -827,6 +869,6 @@
         <button class="conceito-livre-botao" onclick="app.fecharConceitoLivre()">← Voltar ao Seletor</button>
     </div>
 
-    <script src="teste.js"></script>
+    <script src="index.mjs"></script>
 </body>
 </html>
