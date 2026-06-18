@@ -1,16 +1,18 @@
 import { app } from './config.mjs';
 import {
-	getFirestore,
-	collection,
-	doc,
-	setDoc,
-	getDoc,
-	getDocs,
-	updateDoc,
-	deleteDoc,
-	query,
-	where,
-	addDoc
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  addDoc,
+  writeBatch,
+  serverTimestamp
 } from 'firebase/firestore';
 
 const db = getFirestore(app);
@@ -51,13 +53,102 @@ async function getCollection(collectionName) {
 	const snap = await getDocs(collection(db, collectionName));
 	return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
+async function executeBatch(operations) {
+  const batch = writeBatch(db);
+
+  for (const operation of operations) {
+
+    const ref = doc(
+      db,
+      operation.collection,
+      operation.id
+    );
+
+    switch (operation.type) {
+
+      case 'set':
+        batch.set(ref, operation.data, {
+          merge: true
+        });
+        break;
+
+      case 'update':
+        batch.update(ref, operation.data);
+        break;
+
+      case 'delete':
+        batch.delete(ref);
+        break;
+
+      default:
+        throw new Error(
+          `Operação inválida: ${operation.type}`
+        );
+    }
+  }
+
+  await batch.commit();
+
+  return true;
+}
+async function salvarFimDeFase({
+  uid,
+  xp,
+  moedas,
+  nivel,
+  pontuacao,
+  fase
+}) {
+
+  const batch = writeBatch(db);
+
+  batch.update(
+    doc(db, "usuarios", uid),
+    {
+      xp,
+      nivel
+    }
+  );
+
+  batch.update(
+    doc(db, "inventarios", uid),
+    {
+      moedas
+    }
+  );
+
+  batch.set(
+    doc(db, "ranking", uid),
+    {
+      pontuacaoTotal: pontuacao
+    },
+    { merge: true }
+  );
+
+  batch.set(
+    doc(
+      db,
+      "historico",
+      crypto.randomUUID()
+    ),
+    {
+      uid,
+      fase,
+      pontuacao,
+      criadoEm: serverTimestamp()
+    }
+  );
+
+  await batch.commit();
+}
 
 export {
-	db,
-	createDocument,
-	readDocument,
-	updateDocument,
-	deleteDocument,
-	queryCollection,
-	getCollection
+  db,
+  createDocument,
+  readDocument,
+  updateDocument,
+  deleteDocument,
+  queryCollection,
+  getCollection,
+  executeBatch
 };
