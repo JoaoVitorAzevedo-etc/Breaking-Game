@@ -12,7 +12,9 @@ import {
   where,
   addDoc,
   writeBatch,
-  serverTimestamp
+  serverTimestamp,
+  arrayUnion,
+  increment
 } from 'firebase/firestore';
 
 const db = getFirestore(app);
@@ -24,6 +26,36 @@ async function createDocument(collectionName, data, id) {
 		return ref;
 	}
 	return await addDoc(collection(db, collectionName), data);
+}
+async function addToArray(
+  collectionName,
+  id,
+  field,
+  value
+) {
+
+  const ref =
+    doc(db, collectionName, id);
+
+  await updateDoc(ref, {
+    [field]:
+      arrayUnion(value)
+  });
+}
+async function incrementField(
+  collectionName,
+  id,
+  field,
+  amount
+) {
+
+  const ref =
+    doc(db, collectionName, id);
+
+  await updateDoc(ref, {
+    [field]:
+      increment(amount)
+  });
 }
 
 async function readDocument(collectionName, id) {
@@ -141,6 +173,51 @@ async function salvarFimDeFase({
 
   await batch.commit();
 }
+async function addToArray(
+	collection,
+	id,
+	field,
+	value
+) {
+
+	const ref =
+		doc(
+			db,
+			collection,
+			id
+		);
+
+	await updateDoc(
+		ref,
+		{
+			[field]:
+				arrayUnion(value)
+		}
+	);
+}
+
+async function incrementField(
+	collection,
+	id,
+	field,
+	value
+) {
+
+	const ref =
+		doc(
+			db,
+			collection,
+			id
+		);
+
+	await updateDoc(
+		ref,
+		{
+			[field]:
+				increment(value)
+		}
+	);
+}
 
 export {
   db,
@@ -150,5 +227,6 @@ export {
   deleteDocument,
   queryCollection,
   getCollection,
-  executeBatch
+  executeBatch,
+  salvarFimDeFase
 };

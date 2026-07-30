@@ -1,35 +1,245 @@
-import { createDocument, getCollection, queryCollection, updateDocument, readDocument } from '../firebase/firestore.mjs';
+import {
+	createDocument,
+	readDocument,
+	getCollection
+} from '../firebase/firestore.mjs';
 
 const COLLECTION = 'ranking';
 
-async function updateRanking(uid, nome, pontos) {
-	const existing = await readDocument(COLLECTION, uid);
-	if (existing) {
-		const newPoints = Math.max(existing.pontos || 0, pontos);
-		await updateDocument(COLLECTION, uid, { nome, pontos: newPoints });
-		return { uid, nome, pontos: newPoints };
+/**
+ * Atualiza ou cria a posição do jogador no ranking
+ */
+async function updateRanking(uid) {
+
+	const user =
+		await readDocument(
+			'usuarios',
+			uid
+		);
+
+	if (!user) {
+		return null;
 	}
-	await createDocument(COLLECTION, { uid, nome, pontos }, uid);
-	return { uid, nome, pontos };
+
+	const rankingData = {
+
+		uid,
+
+		nome:
+			user.nome ||
+			'Jogador',
+
+		pontuacaoTotal:
+			user.pontuacaoTotal || 0,
+
+		nivel:
+			user.nivel || 1,
+
+		badges:
+			Array.isArray(
+				user.badges
+			)
+				? user.badges.length
+				: 0,
+
+		historico:
+			Array.isArray(
+				user.historico
+			)
+				? user.historico.length
+				: 0,
+
+		atualizadoEm:
+			Date.now()
+	};
+
+	await createDocument(
+		COLLECTION,
+		rankingData,
+		uid
+	);
+
+	return rankingData;
 }
 
-async function getTop10() {
-	const all = await getCollection(COLLECTION);
-	return all.sort((a, b) => (b.pontos || 0) - (a.pontos || 0)).slice(0, 10);
+/**
+ * Retorna todo o ranking ordenado
+ */
+async function getRanking() {
+
+	const ranking =
+		await getCollection(
+			COLLECTION
+		);
+
+	return ranking.sort(
+		(a, b) =>
+			(b.pontuacaoTotal || 0) -
+			(a.pontuacaoTotal || 0)
+	);
 }
 
-async function getPlayerPosition(uid) {
-	const all = await getCollection(COLLECTION);
-	const sorted = all.sort((a, b) => (b.pontos || 0) - (a.pontos || 0));
-	const index = sorted.findIndex(p => p.uid === uid);
-	return index >= 0 ? { position: index + 1, total: sorted.length, player: sorted[index] } : null;
+/**
+ * Top jogadores
+ */
+async function getTopPlayers(
+	limit = 10
+) {
+
+	const ranking =
+		await getRanking();
+
+	return ranking.slice(
+		0,
+		limit
+	);
 }
 
-async function getStats() {
-	const all = await getCollection(COLLECTION);
-	const totalPlayers = all.length;
-	const avg = all.reduce((s, p) => s + (p.pontos || 0), 0) / Math.max(1, totalPlayers);
-	return { totalPlayers, averagePoints: avg };
+/**
+ * Retorna posição do jogador
+ */
+async function getPlayerRank(
+	uid
+) {
+
+	const ranking =
+		await getRanking();
+
+	const position =
+		ranking.findIndex(
+			player =>
+				player.uid === uid
+		);
+
+	if (
+		position === -1
+	) {
+		return null;
+	}
+
+	return {
+		position:
+			position + 1,
+		player:
+			ranking[position]
+	};
 }
 
-export { updateRanking, getTop10, getPlayerPosition, getStats };
+/**
+ * Retorna dados de um jogador
+ */
+async function getPlayerRankingData(
+	uid
+) {
+
+	return await readDocument(
+		COLLECTION,
+		uid
+	);
+}
+
+/**
+ * Estatísticas gerais
+ */
+async function getRankingStats() {
+
+	const ranking =
+		await getRanking();
+
+	const totalPlayers =
+		ranking.length;
+
+	const totalPoints =
+		ranking.reduce(
+			(total, player) =>
+				total +
+				(player.pontuacaoTotal || 0),
+			0
+		);
+
+	const averagePoints =
+		totalPlayers > 0
+			? Math.round(
+					totalPoints /
+					totalPlayers
+			  )
+			: 0;
+
+	const highestScore =
+		ranking[0]
+			?.pontuacaoTotal || 0;
+
+	return {
+
+		totalPlayers,
+
+		totalPoints,
+
+		averagePoints,
+
+		highestScore
+	};
+}
+
+/**
+ * Retorna jogadores próximos do usuário
+ */
+async function getNearbyPlayers(
+	uid,
+	range = 2
+) {
+
+	const ranking =
+		await getRanking();
+
+	const index =
+		ranking.findIndex(
+			player =>
+				player.uid === uid
+		);
+
+	if (
+		index === -1
+	) {
+		return [];
+	}
+
+	const start =
+		Math.max(
+			0,
+			index - range
+		);
+
+	const end =
+		Math.min(
+			ranking.length,
+			index + range + 1
+		);
+
+	return ranking
+		.slice(start, end)
+		.map(
+			(player, i) => ({
+				posicao:
+					start + i + 1,
+				...player
+			})
+		);
+}
+
+export {
+
+	updateRanking,
+
+	getRanking,
+
+	getTopPlayers,
+
+	getPlayerRank,
+
+	getPlayerRankingData,
+
+	getRankingStats,
+
+	getNearbyPlayers
+};

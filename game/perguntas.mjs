@@ -1,182 +1,1385 @@
-conceitos: {
-                nivel1: {
-                    professor: "Olá! Nesta fase, vamos estudar <strong>Separação de Misturas</strong>. Existem vários métodos para separar componentes de uma mistura, e cada um é escolhido conforme o estado físico dos componentes. Os principais são: <strong>Filtração</strong> (separa sólidos de líquidos), <strong>Destilação</strong> (separa líquidos com pontos de ebulição diferentes), <strong>Decantação</strong> (usa a diferença de densidade), <strong>Catação</strong> (separação manual) e <strong>Centrifugação</strong> (usa força centrífuga).",
-                    assistente: "Na prática do laboratório, a escolha do método depende do que você precisa separar! Se tem sólido e líquido, use filtração com papel de filtro. Se são dois líquidos, destile aquecendo. Se é sólido mais denso em água, decante deixando o pesado no fundo. Catação é quando você separa com a mão (tipo catar feijão). E centrifugação acelera a decantação girando rápido!",
-                    conselheiro: "Pense logicamente: cada substância tem propriedades! Tamanho diferente? Separe por peneira ou filtração. Densidade diferente? Deixe em repouso (decantação) ou gire (centrifugação). Ponto de ebulição diferente? Aqueça e destile. O segredo é identificar qual propriedade diferencia seus componentes e escolher o método certo."
-                },
-                nivel2: {
-                    professor: "Bem-vindo à fase de <strong>Forças Intermoleculares</strong>! Estas são as forças que mantêm as moléculas unidas. Existem três tipos principais: <strong>Forças de London</strong> (mais fracas, entre moléculas apolares), <strong>Dipolo-Dipolo</strong> (entre moléculas polares), e <strong>Ligações de Hidrogênio</strong> (mais fortes, quando H está ligado a O, N ou F). Quanto mais forte a intermolecular, maior o ponto de ebulição!",
-                    assistente: "No laboratório, você nota que algumas substâncias fervem fácil (como gasolina) e outras custam mais (como água). Por quê? Forças fracas (London) = baixo ponto de ebulição. Forças fortes (Hidrogênio) = alto ponto de ebulição. A água ferve a 100°C porque tem ligações de hidrogênio super fortes!",
-                    conselheiro: "Conecte os conceitos: moléculas apolares (sem carga) têm só forças de London - fracas. Moléculas polares têm dipolo-dipolo - médias. Moléculas com H ligado a O, N ou F fazem ligações de H - as mais fortes! Quanto mais forte a ligação, mais energia (calor) é preciso para separar as moléculas."
-                },
-                nivel3: {
-                    professor: "Chegamos à <strong>Polaridade Molecular</strong>! Uma molécula é polar quando tem um desequilíbrio de carga (um lado mais positivo, outro mais negativo). Isso depende de dois fatores: <strong>Diferença de eletronegatividade</strong> entre os átomos E <strong>Geometria da molécula</strong>. Se os vetores se anulam (geometria linear), a molécula é apolar. Se não se anulam (angular, tetraédrica assimétrica), é polar!",
-                    assistente: "Na prática: água (H2O) é polar porque tem geometria angular e os dipolos não se anulam. CO2 é apolar porque é linear e os vetores se cancelam. Essa propriedade explica por que 'semelhante dissolve semelhante' - água (polar) dissolve sal (polar), mas não dissolve óleo (apolar)!",
-                    conselheiro: "Lógica importante: eletronegatividade + geometria = polaridade. Se a molécula é simétrica, os vetores se anulam (apolar). Se é assimétrica, há dipolo resultante (polar). Visualmente: linear = pode ser apolar, angular = geralmente polar, tetraédrica simétrica = apolar, tetraédrica assimétrica = polar!"
-                },
-                nivel4: {
-                    professor: "Nesta fase, exploramos as <strong>Ligações Químicas</strong>! Existem três tipos principais: <strong>Ligação Iônica</strong> (transferência de elétrons entre Metal e Não-Metal), <strong>Ligação Covalente</strong> (compartilhamento de elétrons entre Não-Metais), e <strong>Ligação Metálica</strong> (nuvem de elétrons em metais). A <strong>Regra do Octeto</strong> explica que átomos buscam 8 elétrons na valência para estabilidade.",
-                    assistente: "Em reações reais: Metal + Não-Metal = Iônico (NaCl, MgO). Não-Metal + Não-Metal = Covalente (H2O, CO2). Em metais, os elétrons fluem livremente como em um 'mar' - por isso conduzem eletricidade! Lembre-se: octeto = 8 elétrons na última camada = estável como um gás nobre.",
-                    conselheiro: "Pense na tendência dos átomos: todos querem ser estáveis como gases nobres. Metais doam elétrons (ficam positivos). Não-metais recebem (ficam negativos). A atração entre cargas opostas cria a ligação iônica. Se compartilham, é covalente. O padrão está em reconhecer os padrões nas reações!"
-                },
-                nivel5: {
-                    professor: "Bem-vindo ao estudo das <strong>Propriedades da Matéria</strong>! Classificamos em <strong>Extensivas</strong> (dependem da quantidade: massa, volume, peso) e <strong>Intensivas</strong> (independem: densidade, ponto de fusão, ponto de ebulição). Também temos <strong>Mudanças de Estado Físico</strong>: Fusão (sólido→líquido), Ebulição (líquido→gás), Sublimação (sólido→gás direto), e seus inversos.",
-                    assistente: "Na prática: densidade = massa/volume é intensiva (1g de ouro e 10g têm mesma densidade). Ponto de fusão do gelo é sempre 0°C, não importa quanto gelo tenha (intensiva). Sublimação: gelo seco vira gás sem passar por líquido! Isso impressiona no lab, mas é química pura.",
-                    conselheiro: "Lembrete lógico: extensiva varia com a quantidade (E de extenso). Intensiva não varia (I de independente). Fenômenos químicos mudam a natureza (nova substância). Físicos apenas mudam estado sem formar nova substância. Identifique o padrão: mudança de estado = físico; formação de novo composto = químico."
-                },
-                nivel6: {
-                    professor: "Entramos em <strong>Estequiometria</strong>! Este é o cálculo das proporções entre reagentes e produtos. Começamos com <strong>Massa Molar</strong> (soma das massas atômicas dos elementos em uma molécula), <strong>Mol</strong> (unidade que relaciona número de partículas), e <strong>Coeficientes Estequiométricos</strong> (os números na frente das fórmulas que mostram as proporções). Volume molar é 22,4 L para 1 mol de gás nas CNTP.",
-                    assistente: "No laboratório, you PRECISA de estequiometria para calcular reagentes! Se uma reação precisa de 2 mols de H2 para 1 mol de O2, você deve pesar e medir as quantidades corretas. Reagente limitante é aquele que acaba primeiro, determinando a quantidade máxima de produto. Sempre sobra reagente em excesso!",
-                    conselheiro: "Pense: química é proporção! Os números na equação (coeficientes) dizem a relação entre mols. Para encontrar gramas, multiplique mols pela massa molar. Para encontrar volume de gás, multiplique mols por 22,4L. Identifique qual reagente é limitante (aquele com menor proporção molar) e ele controla tudo!"
-                },
-                nivel7: {
-                    professor: "Bem-vindo ao estudo de <strong>Soluções</strong>! Uma solução é uma mistura homogênea de soluto (o que se dissolve) e solvente (o que dissolve, geralmente água). <strong>Solubilidade</strong> é a quantidade máxima de soluto que o solvente consegue dissolver. <strong>Concentração</strong> mede quanto soluto tem na solução. <strong>Molaridade (M)</strong> é mols de soluto por litro de solução. <strong>Diluição</strong> aumenta o volume sem adicionar mais soluto.",
-                    assistente: "Na prática: sal dissolvido em água forma uma solução (homogênea). Se você adiciona mais sal que o máximo solúvel, fica saturada + precipitado. Para diluir, adiciona mais solvente. A fórmula importante: M₁V₁ = M₂V₂. Se conhece a molaridade inicial e volume, pode calcular a diluição!",
-                    conselheiro: "Lógica simples: soluto é o que desaparece visualmente (dissolvido). Solvente é a maior parte. Molaridade conta mols em um litro. Diluição dilui sem mudar a quantidade de soluto - o soluto fica mais espalhado! Saturation = máximo permitido. Além disso, fica supersaturada (instável) ou com precipitado."
-                },
-                nivel8: {
-                    professor: "Entramos em <strong>Eletroquímica</strong>! Aqui estudamos reações que envolvem transferência de elétrons. <strong>Pilha</strong> produz energia elétrica de uma reação química espontânea. <strong>Ânodo</strong> é onde ocorre oxidação (perda de elétrons), <strong>Cátodo</strong> é onde ocorre redução (ganho de elétrons). <strong>Eletrólise</strong> é o oposto: usa energia elétrica para forçar uma reação não espontânea.",
-                    assistente: "No laboratório, a pilha tem dois compartimentos: ânodo (lado negativo) e cátodo (lado positivo). Os elétrons fluem do ânodo (que perde) para o cátodo (que ganha). A ponte salina mantém o equilíbrio de íons. Em eletrólise, você conecta uma bateria externa para forçar uma reação - é como fazer o inverso da pilha!",
-                    conselheiro: "Memorize: OIL RIG (Oxidação = Perda de elétrons, Redução = Ganho). Ânodo = oxidação (perde elétrons). Cátodo = reduction (ganha elétrons). Pilha: espontânea, produz energia. Eletrólise: forçada, consome energia. Ferrugem é oxidação não desejada de metal. Corrosão é oxidação + ambientes úmidos/ácidos."
-                },
-                nivel9: {
-                    professor: "<strong>Termoquímica</strong> estuda a energia nas reações! <strong>Reações Exotérmicas</strong> liberam calor (ΔH negativo). <strong>Reações Endotérmicas</strong> absorvem calor (ΔH positivo). <strong>Entalpia (H)</strong> é o conteúdo energético. <strong>Energia de Ativação</strong> é a barreira inicial que precisa ser superada. <strong>Quebrar ligações</strong> sempre consome energia (endotérmico). <strong>Formar ligações</strong> sempre libera energia (exotérmico).",
-                    assistente: "No laboratório, você sente a diferença! Combustão é exotérmica - arde e esquenta. Gelo derretendo é endotérmico - precisa de calor. Se a reação libera mais calor do que precisa para começar, é espontânea e exotérmica. Se precisa de mais calor do que libera, é endotérmica e menos espontânea.",
-                    conselheiro: "Lógica energética: quebrar ligações = custo de energia. Fazer ligações = ganho de energia. Se o ganho > custo, é exotérmico (libera calor). Se custo > ganho, é endotérmico (absorve calor). Energia de ativação é como uma 'montanha' que precisa transpor - catalisadores diminuem essa montanha!"
-                },
-                nivel10: {
-                    professor: "Nesta fase, aprendemos sobre <strong>Cinética Química</strong> - velocidade das reações! <strong>Teoria das Colisões</strong> diz que reações precisam de: choques entre moléculas, orientação correta e energia mínima. <strong>Fatores que aceleram</strong>: aumento de temperatura, aumento de superfície, aumento de concentração, e <strong>Catalisadores</strong> (diminuem energia de ativação sem serem consumidos).",
-                    assistente: "Na prática: carne cozinha mais rápido se picada (mais área). Reação arde mais rápido se aquecida. Enzimas são catalizadores naturais - fazem reações biológicas possíveis em temperatura corporal! Catalizadores entram e saem da reação - não mudam, apenas facilitam.",
-                    conselheiro: "Velocidade da reação depende de COLISÕES EFETIVAS. Mais colisões = reação mais rápida. Aumentar temperatura = moléculas colidem mais vezes com mais energia. Aumentar concentração = mais moléculas, mais colisões. Aumentar área = mais contato, mais colisões. Catalizador = diminui a energia necessária (caminho mais fácil)."
-                },
-                nivel11: {
-                    professor: "Bem-vindo à <strong>Química Orgânica</strong> - o estudo do carbono! <strong>Funções Orgânicas</strong> são grupos de moléculas com propriedades semelhantes. Os principais: <strong>Álcoois (-OH)</strong>, <strong>Aldeídos (-CHO)</strong>, <strong>Cetonas (-CO-)</strong>, <strong>Ácidos Carboxílicos (-COOH)</strong>, <strong>Éteres (-O-)</strong>, <strong>Ésteres (-COO-)</strong>, <strong>Amidas (-CONH-)</strong>. O nome da molécula começa com prefixo (número de C) e sufixo (função).",
-                    assistente: "No laboratório, você identifica funções pelo grupo característico! -OH vira álcool. -CHO é aldeído (aldoxo). -CO- em meio de cadeia é cetona. -COOH é ácido (carboxílico). Éteres não reagem tanto. Ésteres têm cheiro agradável (como banana). A nomenclatura segue: prefixo (quantos C) + sufixo (qual função).",
-                    conselheiro: "Padrão importante: cada função tem um grupo específico! Aprenda a identificar os grupos funcionais na estrutura. Prefixo: Met(1), Et(2), Prop(3), But(4), Pent(5)... Sufixo: -ol (álcool), -al (aldeído), -ona (cetona), -oico (ácido). Combine: metanol = 1 carbono + álcool = CH3OH."
-                },
-                nivel12: {
-                    professor: "<strong>Reações Orgânicas</strong> modificam moléculas orgânicas! Principais tipos: <strong>Combustão</strong> (queima produzindo CO2 + H2O), <strong>Esterificação</strong> (ácido + álcool = éster), <strong>Adição</strong> (quebra de dupla ligação para adicionar átomos), <strong>Saponificação</strong> (hidrólise de gordura = sabão), <strong>Polimerização</strong> (monômeros unem formando polímeros como plástico).",
-                    assistente: "Na prática do laboratório: combustão completa libera muita energia - por isso combustíveis funcionam! Esterificação faz óleos e gorduras. Sabão é feito saponificando óleo com base (NaOH) - reação química que mudou a história! Plástico é polímero: moléculas pequenas ligam formando cadeias gigantes.",
-                    conselheiro: "Reconheça as reações pela mudança: combustão = aquecimento + O2 = CO2 + H2O. Esterificação = + álcool = éster + água. Adição = dupla ligação abre = novos grupos entram. Saponificação = gordura + base = sabão + glicerol. Polimerização = monômeros ligam = cadeia longa."
-                },
-                nivel13: {
-                    professor: "Finalizamos com <strong>Isomeria</strong> - moléculas diferentes com mesma fórmula molecular! Tipos: <strong>Isomeria Plana</strong> (diferente sequência de átomos), <strong>Isomeria Geométrica</strong> (CIS/TRANS em torno de dupla ligação), <strong>Isomeria Óptica</strong> (carbono quiral = 4 grupos diferentes, produz duas formas espelhadas). <strong>Tautomeria</strong> é equilíbrio dinâmico entre duas formas (ceto-enólico).",
-                    assistente: "No laboratório, isômeros são COMPOSTOS DIFERENTES com propriedades diferentes, apesar da mesma fórmula! Etanol (álcool) e metoximetano (éter) são isômeros - mas comportamentos completamente diferentes! Isomeria óptica: moléculas que são imagem espelhada (como mãos) afetam luz polarizada diferente.",
-                    conselheiro: "Isomeria é sobre ARRANJO! Mesmos átomos, ordem diferente = propriedades diferentes. Carbono quiral (4 ligações diferentes) cria estereoisômeros - muito importante em medicamentos e moléculas biológicas! CIS/TRANS: mesmo lado (CIS) vs. lados opostos (TRANS) muda tudo - exemplo: manteigas diferem nisso!"
-                },
-                nivel14: {
-                    professor: "<strong>PROVA FINAL - REVISÃO ABRANGENTE!</strong> Esta é la última fase do Breaking Game! Aqui reunimos conceitos de TODOS os módulos em um único desafio. Você enfrentará perguntas que exigem integração de conhecimentos: desde separação de misturas até isomeria de moléculas orgânicas. Este é seu momento de demonstrar o domínio completo de Química!",
-                    assistente: "Você chegou no final! Este é um desafio onde você precisa de TUDO que aprendeu. Não há auxiliares aqui - você está sozinho em campo! Use a memória, a lógica prática e os padrões que observou em cada laboratório. Se conseguir passar, você é um verdadeiro químico!",
-                    conselheiro: "Momento da verdade! A inteligência química está em reconhecer PADRÕES e CONEXÕES. Cada pergunta testa sua capacidade de integrar conceitos. Pense nas estruturas, nas reações, nas propriedades. Você tem TODO o conhecimento dentro de você. Apenas reconheça os padrões!"
-                }
-            },
-            
-            questoes: {
-                nivel1: [
-                    { pergunta: "Para separar um sólido de um líquido, qual método você usaria?", opcoes: ["Destilação", "Filtração", "Decantação", "Evaporação"], resposta: 1, explicacao: "Filtração é ideal para separar sólidos de líquidos usando um filtro.", dica: "O papel de filtro retém o sólido e deixa o líquido passar." },
-                    { pergunta: "Qual método separa dois líquidos com diferentes pontos de ebulição?", opcoes: ["Filtração", "Decantação", "Destilação", "Catação"], resposta: 2, explicacao: "Destilação aquece a mistura e separa os líquidos por seus pontos de ebulição diferentes.", dica: "O líquido que ferve primeiro é o de menor ponto de ebulição." },
-                    { pergunta: "Uma mistura de feijão com impurezas deve ser separada por qual método?", opcoes: ["Centrifugação", "Catação", "Filtração", "Decantação"], resposta: 1, explicacao: "Catação é a separação manual, como catar feijão impuro um por um.", dica: "Este é o processo mais simples: separação com as mãos!" },
-                    { pergunta: "Se você tem uma mistura de agua e areia, o que acontece se deixar em repouso?", opcoes: ["Ambos desaparecem", "A areia decanta no fundo", "A água seca", "Ficam misturados para sempre"], resposta: 1, explicacao: "Decantação usa a densidade: areia (mais densa) vai para o fundo, água fica em cima.", dica: "Densidade diferente = decantação por gravidade." },
-                    { pergunta: "Qual método é mais rápido para separar um sólido denso de um líquido?", opcoes: ["Decantação lenta", "Centrifugação", "Evaporação", "Destilação"], resposta: 1, explicacao: "Centrifugação usa rotação rápida para acelerar a decantação, forçando o sólido para o fundo.", dica: "A força centrífuga simula uma 'gravidade' muito mais forte!" }
-                ],
-                nivel2: [
-                    { pergunta: "Entre forças de London, dipolo-dipolo e ligação de hidrogênio, qual é a mais fraca?", opcoes: ["Ligação de Hidrogênio", "Dipolo-dipolo", "Forças de London", "Todas iguais"], resposta: 2, explicacao: "Forças de London são as mais fracas, ocorrem entre moléculas apolares.", dica: "Londres é uma força muito fraca (London)!" },
-                    { pergunta: "Por que a água ferve a 100°C enquanto gasolina ferve a ~70°C?", opcoes: ["Água tem mais átomos", "Água tem ligações de hidrogênio mais fortes", "Gasolina é mais pesada", "Não há razão"], resposta: 1, explicacao: "Água tem ligações de hidrogênio muito fortes, exigindo mais calor para evaporar.", dica: "Quanto mais forte a intermolecular, maior o ponto de ebulição." },
-                    { pergunta: "Moléculas apolares interagem mainly por qual força?", opcoes: ["Ligação de Hidrogênio", "Dipolo-dipolo", "Forças de London", "Ligação Iônica"], resposta: 2, explicacao: "Moléculas apolares (sem carga distribuída) só podem interagir por forças de London, as mais fracas.", dica: "Apolares = sem dipolos permanentes = só London!" },
-                    { pergunta: "O hidrogênio em uma ligação de hidrogênio está ligado a qual(is) elemento(s)?", opcoes: ["Carbono", "Oxigênio, Nitrogênio ou Flúor", "Qualquer elemento", "Apenas Oxigênio"], resposta: 1, explicacao: "Ligações de hidrogênio ocorrem quando H está ligado a O, N ou F (elementos muito eletronegativos).", dica: "O, N, F = elementos muito eletronegativos!" },
-                    { pergunta: "Aumentar a força intermolecular afeta qual propriedade?", opcoes: ["Densidade somente", "Ponto de ebulição e ponto de fusão", "Cor da substância", "Nenhuma propriedade"], resposta: 1, explicacao: "Quanto mais forte a intermolecular, mais calor é necessário para mudar de estado.", dica: "Força intermolecular controla transições de fase!" }
-                ],
-                nivel3: [
-                    { pergunta: "Uma molécula é apolar quando:", opcoes: ["Tem poucas ligações", "Seus vetores de dipolo se anulam", "É muito grande", "Contém apenas hidrogênio"], resposta: 1, explicacao: "Geometria linear como CO2 faz os vetores se cancelarem, resultando em molécula apolar.", dica: "Geometria simétrica = vetores se anulam = apolar!" },
-                    { pergunta: "A água é polar porque:", opcoes: ["É um líquido", "Tem geometria angular e os dipolos não se anulam", "Tem hidrogênio", "Tem oxigênio"], resposta: 1, explicacao: "H2O tem geometria angular (não linear), então o dipolo O-H não é cancelado.", dica: "Angular = polar, Linear = pode ser apolar!" },
-                    { pergunta: "Por que óleo não se mistura com água?", opcoes: ["Têm densidades diferentes", "Óleo flutua", "Água é polar e óleo é apolar", "Óleo é mais denso"], resposta: 2, explicacao: "Semelhante dissolve semelhante: polar dissolve polar, apolar dissolve apolar. Água e óleo não se misturam.", dica: "'Semelhante dissolve semelhante' é a regra!" },
-                    { pergunta: "Qual propriedade define se uma molécula é polar?", opcoes: ["Sua massa molecular", "Eletronegatividade + Geometria", "O número de átomos", "Sua cor"], resposta: 1, explicacao: "Polaridade depende tanto de diferenças de eletronegatividade quanto da geometria molecular.", dica: "Dois fatores: diferença de carga + forma da molécula!" },
-                    { pergunta: "Uma molécula tetrahédrica com 4 grupos diferentes será:", opcoes: ["Sempre apolar", "Polar", "Nem polar nem apolar", "Depende da temperatura"], resposta: 1, explicacao: "Geometria tetraédrica assimétrica (4 grupos diferentes) gera um dipolo resultante = polar.", dica: "Assimétrica = polar, Simétrica = apolar!" }
-                ],
-                nivel4: [
-                    { pergunta: "Qual tipo de ligação ocorre entre um metal e um não-metal?", opcoes: ["Covalente", "Iônica", "Metálica", "Dativa"], resposta: 1, explicacao: "Metal + Não-metal = Ligação Iônica (transferência de elétrons).", dica: "Metal perde, não-metal ganha = Iônico!" },
-                    { pergunta: "Na ligação covalente, os elétrons são:", opcoes: ["Completamente transferidos", "Compartilhados entre os átomos", "Perdidos", "Destruídos"], resposta: 1, explicacao: "Ligação covalente é o compartilhamento de elétrons entre dois átomos não-metálicos.", dica: "Co-valência = compartilhamento!" },
-                    { pergunta: "Por que metais são bons condutores de eletricidade?", opcoes: ["Têm muitos átomos", "Têm uma 'nuvem' de elétrons livres", "São sólidos", "Têm cor brilhante"], resposta: 1, explicacao: "Metais têm elétrons delocalizados em um 'mar', permitindo fluxo de corrente elétrica.", dica: "Mar de elétrons = movimento livre!" },
-                    { pergunta: "A Regra do Octeto busca que átomos tenham quantos elétrons na valência?", opcoes: ["2", "4", "8", "18"], resposta: 2, explicacao: "Átomos buscam 8 elétrons na camada de valência, como os gases nobres (exceto He com 2).", dica: "8 = Octeto! Gases nobres são o modelo!" },
-                    { pergunta: "NaCl é um composto iônico porque:", opcoes: ["Tem dois elementos", "Na é metal (cede elétron) e Cl é não-metal (recebe)", "É branco", "Tem sódio"], resposta: 1, explicacao: "Sódio (metal) perde 1 elétron para Cloro (não-metal), formando ligação iônica.", dica: "Metal perde elétron = cátion positivo. Não-metal recebe = ânion negativo." }
-                ],
-                nivel5: [
-                    { pergunta: "Qual é a relação entre massa, volume e densidade?", opcoes: ["Densidade = Volume / Massa", "Densidade = Massa / Volume", "Densidade = Massa + Volume", "Sem relação"], resposta: 1, explicacao: "Densidade = Massa ÷ Volume. 1g de ouro e 1g de algodão têm MESMA densidade.", dica: "D = m/v (massa dividido por volume)" },
-                    { pergunta: "Quando um sólido vira gás DIRETAMENTE, sem passar por líquido, chama-se:", opcoes: ["Fusão", "Evaporação", "Sublimação", "Condensação"], resposta: 2, explicacao: "Sublimação: sólido → gás (ex: gelo seco, naftalina). É uma transição de fase direta.", dica: "Sub = embaixo/direto. Liga = mudança. Direto = sublimação!" },
-                    { pergunta: "Ponto de fusão é:", opcoes: ["A temperatura que sólido vira gás", "A temperatura que sólido vira líquido", "A temperatura que líquido vira gás", "Uma propriedade extensiva"], resposta: 1, explicacao: "Ponto de fusão é quando um sólido muda para líquido. Para gelo = 0°C.", dica: "FUSão = Fusão (sólido para líquido)" },
-                    { pergunta: "Densidade é uma propriedade intensiva porque:", opcoes: ["Depende da quantidade", "NÃO depende da quantidade", "Muda com a temperatura", "É sempre a mesma"], resposta: 1, explicacao: "1g ou 100g de ouro têm a MESMA densidade. Propriedades intensivas NÃO dependem da quantidade.", dica: "Intensiva = Independente da quantidade!" },
-                    { pergunta: "Uma reação QUÍMICA altera:", opcoes: ["Apenas a forma", "Apenas a posição", "A natureza da matéria (forma novas substâncias)", "Nada permanente"], resposta: 2, explicacao: "Reações químicas formam novas substâncias (combustão cria CO2 + H2O). Diferentes de mudanças físicas.", dica: "Química = NOVA substância formada!" }
-                ],
-                nivel6: [
-                    { pergunta: "Qual a massa de 1 mol de água (H2O)? (H=1, O=16)", opcoes: ["17g", "18g", "10g", "20g"], resposta: 1, explicacao: "(2x1) + 16 = 18g/mol.", dica: "Some 2 hidrogênios (1+1) + 1 oxigênio (16) = 18" },
-                    { pergunta: "O que indica o coeficiente estequiométrico?", opcoes: ["A cor", "A proporção em mols", "A temperatura", "A velocidade"], resposta: 1, explicacao: "Mostram a proporção molar entre reagentes e produtos.", dica: "Os números na frente da fórmula mostram as proporções." },
-                    { pergunta: "Nas CNTP, o volume de 1 mol de gás é:", opcoes: ["10L", "22,4L", "100L", "5L"], resposta: 1, explicacao: "Valor padrão para gases ideais nas CNTP.", dica: "Número memorável para gases: 22,4" },
-                    { pergunta: "Reagente limitante é aquele que:", opcoes: ["Sobra no final", "Acaba primeiro", "Não reage", "Explode"], resposta: 1, explicacao: "Ele determina quando a reação para pois é consumido totalmente.", dica: "É o primeiro a acabar, limitando a reação." },
-                    { pergunta: "Massa molar do CO2? (C=12, O=16)", opcoes: ["28g", "32g", "44g", "50g"], resposta: 2, explicacao: "12 + (2x16) = 44g/mol.", dica: "1 carbono (12) + 2 oxigênios (2x16=32) = 44" }
-                ],
-                nivel7: [
-                    { pergunta: "Uma solução saturada é aquela que:", opcoes: ["Não tem soluto", "Atingiu o limite de solubilidade", "Está diluída", "É pura"], resposta: 1, explicacao: "Contém o máximo de soluto que o solvente consegue dissolver.", dica: "Já absorveu o máximo possível de soluto." },
-                    { pergunta: "Na diluição, o que acontece?", opcoes: ["Aumenta o soluto", "Diminui o solvente", "Aumenta o solvente", "Aumenta a molaridade"], resposta: 2, explicacao: "Adiciona-se solvente, mantendo a massa do soluto constante.", dica: "Você adiciona mais solvente (água) para diluir." },
-                    { pergunta: "Unidade de Molaridade (M):", opcoes: ["g/L", "mol/L", "kg/m", "L/mol"], resposta: 1, explicacao: "Mols de soluto por litro de solução.", dica: "Mols dividido por Litro" },
-                    { pergunta: "O que define o solvente?", opcoes: ["É o que está em menor quantidade", "É o que dissolve o soluto", "Sempre é a água", "É um sólido"], resposta: 1, explicacao: "Substância que dispersa o soluto (geralmente em maior quantidade).", dica: "É a substância que dissolve a outra." },
-                    { pergunta: "Mistura homogênea de duas substâncias:", opcoes: ["Solução", "Suspensão", "Coloide", "Precipitado"], resposta: 0, explicacao: "Soluções são sempre misturas homogêneas.", dica: "Tem aspecto uniforme em toda a mistura." }
-                ],
-                nivel8: [
-                    { pergunta: "Na pilha, o ânodo é onde ocorre a:", opcoes: ["Redução", "Oxidação", "Fusão", "Combustão"], resposta: 1, explicacao: "Ânodo oxida (perde elétrons), Cátodo reduz (ganha).", dica: "ANODE = Anodo = oxida (perde elétrons)" },
-                    { pergunta: "O fluxo de elétrons na pilha vai do:", opcoes: ["Cátodo para Ânodo", "Ânodo para Cátodo", "Positivo para Negativo", "Norte para Sul"], resposta: 1, explicacao: "Elétrons fluem de quem perde (ânodo) para quem ganha (cátodo).", dica: "Elétrons vão do lado negativo (ânodo) para o positivo (cátodo)." },
-                    { pergunta: "Eletrólise é um processo:", opcoes: ["Espontâneo", "Não espontâneo (precisa de energia)", "Que produz pilhas", "Lento demais"], resposta: 1, explicacao: "Eletrólise consome energia elétrica para forçar uma reação química forçada.", dica: "Eletrólise precisa de uma bateria/fonte externa." },
-                    { pergunta: "A ponte salina serve para:", opcoes: ["Conduzir elétrons", "Manter o equilíbrio de íons nas soluções", "Aumentar a voltagem", "Esquentar a pilha"], resposta: 1, explicacao: "Permite a migração de íons para neutralizar o excesso de cargas.", dica: "Mantém as soluções eletricamente neutras através de íons." },
-                    { pergunta: "O metal que sofre corrosão está:", opcoes: ["Reduzindo", "Oxidando (perdendo elétrons)", "Derretendo", "Ganhando massa"], resposta: 1, explicacao: "Corrosão é a oxidação indesejada do metal exposto.", dica: "Oxidação destrói o metal puro, virando óxido/ferrugem." }
-                ],
-                nivel9: [
-                    { pergunta: "Uma reação exotérmica:", opcoes: ["Absorve calor", "Libera calor (ΔH negativo)", "Não muda temperatura", "Produz gelo"], resposta: 1, explicacao: "Exo = para fora, térmica = calor. Combustão é um exemplo clássico.", dica: "Libera energia/calor para o ambiente." },
-                    { pergunta: "O que é entalpia (H)?", opcoes: ["A velocidade", "A cor", "O conteúdo de energia de uma substância", "A massa de gás"], resposta: 2, explicacao: "Grandeza que mede a energia térmica contida em um sistema.", dica: "H de 'Heat content' (conteúdo de calor)." },
-                    { pergunta: "A energia mínima para uma reação começar chama-se:", opcoes: ["Energia cinética", "Energia de ativação", "Entalpia de formação", "Energia livre"], resposta: 1, explicacao: "É a barreira energética inicial que os reagentes precisam transpor.", dica: "Energia necessária para 'ativar' os reagentes." },
-                    { pergunta: "Em uma reação endotérmica, a temperatura do ambiente ao redor:", opcoes: ["Aumenta", "Diminui (o sistema rouba calor)", "Fica igual", "Ferve"], resposta: 1, explicacao: "Como a reação puxa calor para dentro, o entorno esfria.", dica: "Endo = absorve. Se absorve de fora, fora fica mais frio!" },
-                    { pergunta: "Processo de quebra de ligações químicas é:", opcoes: ["Exotérmico", "Endotérmico (consome energia)", "Espontâneo sempre", "Físico"], resposta: 1, explicacao: "Separar átomos exige investimento de energia (endotérmico).", dica: "Pense: quebrar algo sempre custa esforço/energia!" }
-                ],
-                nivel10: [
-                    { pergunta: "Um catalisador aumenta a velocidade da reação porque:", opcoes: ["Aumenta a temperatura", "Diminui a energia de ativação", "Aumenta a concentração", "Consome os produtos"], resposta: 1, explicacao: "Cria um caminho alternativo mais fácil (menor montanha energética).", dica: "Abaixa a barreira (energia de ativação) para os reagentes passarem rápidos." },
-                    { pergunta: "Triturar um sólido faz a reação com ele ser mais rápida porque:", opcoes: ["Aumenta a temperatura", "Aumenta a superfície de contato", "Diminui a massa", "Muda a cor"], resposta: 1, explicacao: "Mais área exposta significa mais colisões simultâneas.", dica: "Mais pedacinhos = mais contato direto para reagir." },
-                    { pergunta: "Segundo a Teoria das Colisões, o que é necessário para ocorrer reação?", opcoes: ["Apenas contato", "Choque com orientação correta e energia mínima", "Gases quentes", "Muita luz"], resposta: 1, explicacao: "A colisão precisa ser efetiva (geometria certa + energia suficiente).", dica: "Batida certeira + força mínima necessária." },
-                    { pergunta: "Aumentar a concentração dos reagentes acelera a reação porque:", opcoes: ["Diminui a energia", "Aumenta o número de colisões por segundo", "Muda o ΔH", "Cria catalisadores"], resposta: 1, explicacao: "Mais moléculas no mesmo espaço = maior chance de trombarem.", dica: "Mais carros na pista = mais chances de batidas (colisões)." },
-                    { pergunta: "O que acontece com o catalisador no final da reação?", opcoes: ["É totalmente consumido", "É regenerado/permanece inalterado", "Vira um gás", "Explode"], resposta: 1, explicacao: "Ele participa mas não é gasto no processo global.", dica: "Entra e sai intacto, pronto para outra!" }
-                ],
-                nivel11: [
-                    { pergunta: "Qual grupo funcional caracteriza um álcool?", opcoes: ["-COOH", "-CHO", "-OH (Hidroxila)", "-O-"], resposta: 2, explicacao: "Presença de hidroxila (-OH) ligada a carbono saturado.", dica: "Grupo terminal ou interno contendo -OH." },
-                    { pergunta: "Prefixo para uma cadeia orgânica com 3 carbonos:", opcoes: ["Met", "Et", "Prop", "But"], resposta: 2, explicacao: "Met=1, Et=2, Prop=3, But=4.", dica: "Pense em Gás Propano (3 carbonos)." },
-                    { pergunta: "O grupo funcional -COOH pertence a qual função?", opcoes: ["Aldeído", "Ácido Carboxílico", "Cetona", "Éster"], resposta: 1, explicacao: "Carboxila (-COOH) define os ácidos orgânicos (ex: vinagre).", dica: "Ácido carboxílico tem esse grupo forte na ponta." },
-                    { pergunta: "A acetona usada para remover esmaltes pertence a qual função?", opcoes: ["Álcool", "Aldeído", "Cetona", "Éter"], resposta: 2, explicacao: "Possui uma carbonila (C=O) entre dois carbonos.", dica: "Carbonila no MEIO da cadeia." },
-                    { pergunta: "Qual a função orgânica caracterizada por um oxigênio entre dois carbonos (R-O-R)?", opcoes: ["Éster", "Éter", "Cetona", "Álcool"], resposta: 1, explicacao: "Éteres têm oxigênio como heteroátomo central.", dica: "Oxigênio 'gêmeo' no meio de dois radicais (Éter)." }
-                ],
-                nivel12: [
-                    { pergunta: "A reação entre um Ácido Carboxílico e um Álcool produz:", opcoes: ["Sabão e Água", "Éster e Água (Esterificação)", "Polímero", "Petróleo"], resposta: 1, explicacao: "Reação clássica de esterificação, produz aromas de frutas.", dica: "Ácido + Álcool = Éster + Água." },
-                    { pergunta: "Saponificação é a hidrólise alcalina de:", opcoes: ["Plásticos", "Gorduras/Óleos (Triglicerídeos)", "Proteínas", "Açúcar"], resposta: 1, explicacao: "Gordura + Base forte (soda) produz sabão e glicerina.", dica: "Processo milenar para fazer sabão caseiro." },
-                    { pergunta: "Reação de adição ocorre principalmente em moléculas com:", opcoes: ["Ligações simples apenas", "Ligações duplas ou triplas (insaturadas)", "Metais", "Oxigênios terminais"], resposta: 1, explicacao: "A ligação π é quebrada, permitindo a entrada de novos grupos. Ex: eteno + Br2 → 1,2-dibromoetano", dica: "ADição = a DUPLA abre para novos átomos entrarem" },
-                    { pergunta: "Saponificação é a reação de:", opcoes: ["Gordura com água", "Gordura com base em meio aquoso", "Óleo com ácido", "Éster com ácido"], resposta: 1, explicacao: "Gordura/Óleo + NaOH (ou KOH) → Sabão + Glicerol. Produz o sabão que usamos!", dica: "SAPON (sabão) + GORDURA + NaOH = SABÃO + glicerol" },
-                    { pergunta: "Polimerização por adição ocorre quando:", opcoes: ["Monômeros abrem suas duplas ligações para se unirem", "Moléculas eliminam água", "Substâncias queimam", "Metais oxidam"], resposta: 0, explicacao: "Monômeros insaturados (como etileno) ligam-se em cadeia gigante.", dica: "União em massa abrindo ligações duplas para formar plásticos." }
-                ],
-                nivel13: [
-                    { pergunta: "Isômeros são compostos que possuem:", opcoes: ["Mesma estrutura, massas diferentes", "Mesma fórmula molecular, estruturas diferentes", "Propriedades idênticas", "Mesmo nome sempre"], resposta: 1, explicacao: "Mesmos blocos de construção, arranjados de formas distintas.", dica: "Iso = igual, meros = partes. Mesmas partes, formas diferentes!" },
-                    { pergunta: "Para apresentar isomeria óptica, a molécula precisa ter:", opcoes: ["Uma ligação tripla", "Um carbono quiral (4 ligantes diferentes)", "Um oxigênio central", "Geometria linear"], resposta: 1, explicacao: "O carbono assimétrico gera imagens espelhadas não superponíveis.", dica: "Carbono quiral ou assimétrico." },
-                    { pergunta: "A isomeria Cis/Trans é um tipo de:", opcoes: ["Isomeria plana", "Isomeria geométrica (espacial)", "Isomeria óptica", "Tautomeria"], resposta: 1, explicacao: "Depende da disposição espacial em torno de uma dupla ligação rígida.", dica: "Cis = mesmo lado; Trans = lados opostos." },
-                    { pergunta: "Tautomeria é um caso especial de isomeria de:", opcoes: ["Cadeia", "Função (em equilíbrio dinâmico)", "Posição", "Compensação"], resposta: 1, explicacao: "Equilíbrio químico estável entre isômeros de função (como Ceto-Enólico).", dica: "Mudança dinâmica rápida de posição de um H entre funções." },
-                    { pergunta: "Etanol e Metoximetano têm fórmula C2H6O. São isômeros de:", opcoes: ["Cadeia", "Função", "Posição", "Ópticos"], resposta: 1, explicacao: "Um é álcool, o outro é éter. Mesma fórmula, funções diferentes.", dica: "Diferem na classe funcional química." }
-                ],
-                nivel14: [
-                    { pergunta: "Se você misturar areia, sal e água, quais métodos usaria em ordem para recuperar a areia seca e o sal sólido?", opcoes: ["Destilação e Filtração", "Filtração e Destilação (ou Evaporação)", "Decantação e Catação", "Centrifugação apenas"], resposta: 1, explicacao: "Filtração retém a areia. Destilação/Evaporação separa a água do sal.", dica: "Primeiro tire o sólido insolúvel, depois separe o soluto dissolvido." },
-                    { pergunta: "Qual das seguintes substâncias terá o maior ponto de ebulição devido às suas forças intermoleculares?", opcoes: ["CH4 (London)", "H2O (Ligações de Hidrogênio)", "HCl (Dipolo-dipolo)", "H2 (London)"], resposta: 1, explicacao: "A água faz ligações de hidrogênio muito fortes, exigindo muita energia térmica para ferver.", dica: "Ligações de Hidrogênio são as interações intermoleculares mais fortes." },
-                    { pergunta: "O composto CH3-CH2-OH pertence a qual função orgânica?", opcoes: ["Aldeído", "Álcool", "Cetona", "Éter"], resposta: 1, explicacao: "CH3-CH2-OH é etanol, que tem 2 carbonos e grupo -OH = álcool. A porcentagem de álcool (ethanol) em bebidas vem dessa molécula!", dica: "2 carbonos (ET) + OH (ALcool) = ETanol!" },
-                    { pergunta: "Como se chama a molécula CH3-CHO?", opcoes: ["Metanal (aldeído)", "Etanal (aldeído)", "Metanol (álcool)", "Metatona (cetona)"], resposta: 0, explicacao: "CH3-CHO tem 1 carbono na cadeia + CHO = Metanal (formol usado em laboratório).", dica: "MET (1 carbono) + AL (aldeído) = METanal!" },
-                    { pergunta: "Qual grupo funcional está presente em CH3-CO-CH3?", opcoes: ["Álcool (-OH)", "Carboxila (-COOH)", "Cetona (-CO-)", "Aldeído (-CHO)"], resposta: 2, explicacao: "O grupo -CO- no MEIO da cadeia identifica uma cetona. Esta é a acetona usada para remover esmalte!", dica: "-CO- no meio (não na ponta) = CETONA!" },
-                    { pergunta: "Qual molécula tem a fórmula HCOOH?", opcoes: ["Ácido fórmico", "Ácido acético", "Formol", "Etanol"], resposta: 0, explicacao: "HCOOH é ácido fórmico (picada de formiga). Tem 1 carbono + COOH = ácido.", dica: "H-COOH = ácido FÓRMIco!" },
-                    { pergunta: "Em uma célula galvânica (pilha), o polo positivo e o processo que ocorre nele são:", opcoes: ["Ânodo / Oxidação", "Cátodo / Redução", "Ânodo / Redução", "Cátodo / Oxidação"], resposta: 1, explicacao: "O cátodo atrai cátions, recebe elétrons e sofre redução (polo positivo da pilha).", dica: "CRAO: Cátodo Reduz / Ânodo Oxida." },
-                    { pergunta: "Um estudante quer acelerar a reação de um comprimido efervescente em água. Qual ação NÃO ajuda?", opcoes: ["Triturar o comprimido", "Usar água gelada", "Usar água quente", "Agitar a solução"], resposta: 1, explicacao: "Água gelada diminui a energia cinética das moléculas, deixando a reação mais lenta.", dica: "O resfriamento reduz o número de colisões efetivas por segundo." },
-                    { pergunta: "Identifique o tipo de isomeria entre o Cis-but-2-eno e o Trans-but-2-eno:", opcoes: ["Isomeria de Cadeia", "Isomeria Geométrica", "Isomeria Óptica", "Isomeria de Posição"], resposta: 1, explicacao: "Diferem na posição espacial dos ligantes ao redor da dupla ligação rígida.", dica: "Cis e Trans são designações da estereoisomeria geométrica." },
-                    { pergunta: "A molécula de paracetamol possui anel aromático ligado a um grupo hidroxila e a um grupo amida substituído. Ela NÃO possui qual característica?", opcoes: ["Função Fenol", "Função Amida", "Átomo de Carbono Quiral", "Ligações pi conjugadas"], resposta: 2, explicacao: "O paracetamol possui fenol (OH no anel) e amida (C=O + N no anel). Tem 3 ligações pi (anel + dupla ligação da cadeia + C=O da amida). Não possui carbonos quirais em sua estrutura padrão.", dica: "Identifique cada grupo funcional: C=O + N–H = amida; –OH no aromático = fenol; –O– no anel = éter." }
-                ]
-            },
-            export function getQuestionsByPhase(phaseId) {
+export const QUESTIONS = {
+
+  1: [
+    {
+      id: '1_1',
+      question: 'Para separar um sólido de um líquido, qual método você usaria?',
+      options: [
+        'Destilação',
+        'Filtração',
+        'Decantação',
+        'Evaporação'
+      ],
+      answer: 1,
+      explanation:
+        'Filtração é ideal para separar sólidos de líquidos usando um filtro.',
+      hint:
+        'O papel de filtro retém o sólido e deixa o líquido passar.',
+      difficulty: 'easy',
+      points: 20
+    },
+
+    {
+      id: '1_2',
+      question: 'Qual método separa dois líquidos com diferentes pontos de ebulição?',
+      options: [
+        'Filtração',
+        'Decantação',
+        'Destilação',
+        'Catação'
+      ],
+      answer: 2,
+      explanation:
+        'Destilação aquece a mistura e separa os líquidos por seus pontos de ebulição diferentes.',
+      hint:
+        'O líquido que ferve primeiro é o de menor ponto de ebulição.',
+      difficulty: 'easy',
+      points: 20
+    },
+
+    {
+      id: '1_3',
+      question: 'Uma mistura de feijão com impurezas deve ser separada por qual método?',
+      options: [
+        'Centrifugação',
+        'Catação',
+        'Filtração',
+        'Decantação'
+      ],
+      answer: 1,
+      explanation:
+        'Catação é a separação manual, como catar feijão impuro um por um.',
+      hint:
+        'Este é o processo mais simples: separação com as mãos!',
+      difficulty: 'easy',
+      points: 20
+    },
+
+    {
+      id: '1_4',
+      question: 'Se você tem uma mistura de água e areia, o que acontece se deixar em repouso?',
+      options: [
+        'Ambos desaparecem',
+        'A areia decanta no fundo',
+        'A água seca',
+        'Ficam misturados para sempre'
+      ],
+      answer: 1,
+      explanation:
+        'Decantação usa a densidade: areia (mais densa) vai para o fundo, água fica em cima.',
+      hint:
+        'Densidade diferente = decantação por gravidade.',
+      difficulty: 'easy',
+      points: 20
+    },
+
+    {
+      id: '1_5',
+      question: 'Qual método é mais rápido para separar um sólido denso de um líquido?',
+      options: [
+        'Decantação lenta',
+        'Centrifugação',
+        'Evaporação',
+        'Destilação'
+      ],
+      answer: 1,
+      explanation:
+        'Centrifugação usa rotação rápida para acelerar a decantação, forçando o sólido para o fundo.',
+      hint:
+        'A força centrífuga simula uma "gravidade" muito mais forte!',
+      difficulty: 'easy',
+      points: 20
+    }
+  ],
+
+  2: [
+    {
+      id: '2_1',
+      question: 'Entre forças de London, dipolo-dipolo e ligação de hidrogênio, qual é a mais fraca?',
+      options: [
+        'Ligação de Hidrogênio',
+        'Dipolo-dipolo',
+        'Forças de London',
+        'Todas iguais'
+      ],
+      answer: 2,
+      explanation:
+        'Forças de London são as mais fracas, ocorrem entre moléculas apolares.',
+      hint:
+        'Londres é uma força muito fraca (London)!',
+      difficulty: 'medium',
+      points: 25
+    },
+
+    {
+      id: '2_2',
+      question: 'Por que a água ferve a 100°C enquanto gasolina ferve a ~70°C?',
+      options: [
+        'Água tem mais átomos',
+        'Água tem ligações de hidrogênio mais fortes',
+        'Gasolina é mais pesada',
+        'Não há razão'
+      ],
+      answer: 1,
+      explanation:
+        'Água tem ligações de hidrogênio muito fortes, exigindo mais calor para evaporar.',
+      hint:
+        'Quanto mais forte a intermolecular, maior o ponto de ebulição.',
+      difficulty: 'medium',
+      points: 25
+    },
+
+    {
+      id: '2_3',
+      question: 'Moléculas apolares interagem principalmente por qual força?',
+      options: [
+        'Ligação de Hidrogênio',
+        'Dipolo-dipolo',
+        'Forças de London',
+        'Ligação Iônica'
+      ],
+      answer: 2,
+      explanation:
+        'Moléculas apolares (sem carga distribuída) só podem interagir por forças de London, as mais fracas.',
+      hint:
+        'Apolares = sem dipolos permanentes = só London!',
+      difficulty: 'medium',
+      points: 25
+    },
+
+    {
+      id: '2_4',
+      question: 'O hidrogênio em uma ligação de hidrogênio está ligado a qual(is) elemento(s)?',
+      options: [
+        'Carbono',
+        'Oxigênio, Nitrogênio ou Flúor',
+        'Qualquer elemento',
+        'Apenas Oxigênio'
+      ],
+      answer: 1,
+      explanation:
+        'Ligações de hidrogênio ocorrem quando H está ligado a O, N ou F (elementos muito eletronegativos).',
+      hint:
+        'O, N, F = elementos muito eletronegativos!',
+      difficulty: 'medium',
+      points: 25
+    },
+
+    {
+      id: '2_5',
+      question: 'Aumentar a força intermolecular afeta qual propriedade?',
+      options: [
+        'Densidade somente',
+        'Ponto de ebulição e ponto de fusão',
+        'Cor da substância',
+        'Nenhuma propriedade'
+      ],
+      answer: 1,
+      explanation:
+        'Quanto mais forte a intermolecular, mais calor é necessário para mudar de estado.',
+      hint:
+        'Força intermolecular controla transições de fase!',
+      difficulty: 'medium',
+      points: 25
+    }
+  ],
+
+  3: [
+    {
+      id: '3_1',
+      question: 'Uma molécula é apolar quando:',
+      options: [
+        'Tem poucas ligações',
+        'Seus vetores de dipolo se anulam',
+        'É muito grande',
+        'Contém apenas hidrogênio'
+      ],
+      answer: 1,
+      explanation:
+        'Geometria linear como CO2 faz os vetores se cancelarem, resultando em molécula apolar.',
+      hint:
+        'Geometria simétrica = vetores se anulam = apolar!',
+      difficulty: 'medium',
+      points: 25
+    },
+
+    {
+      id: '3_2',
+      question: 'A água é polar porque:',
+      options: [
+        'É um líquido',
+        'Tem geometria angular e os dipolos não se anulam',
+        'Tem hidrogênio',
+        'Tem oxigênio'
+      ],
+      answer: 1,
+      explanation:
+        'H2O tem geometria angular (não linear), então o dipolo O-H não é cancelado.',
+      hint:
+        'Angular = polar, Linear = pode ser apolar!',
+      difficulty: 'medium',
+      points: 25
+    },
+
+    {
+      id: '3_3',
+      question: 'Por que óleo não se mistura com água?',
+      options: [
+        'Têm densidades diferentes',
+        'Óleo flutua',
+        'Água é polar e óleo é apolar',
+        'Óleo é mais denso'
+      ],
+      answer: 2,
+      explanation:
+        'Semelhante dissolve semelhante: polar dissolve polar, apolar dissolve apolar. Água e óleo não se misturam.',
+      hint:
+        '"Semelhante dissolve semelhante" é a regra!',
+      difficulty: 'medium',
+      points: 25
+    },
+
+    {
+      id: '3_4',
+      question: 'Qual propriedade define se uma molécula é polar?',
+      options: [
+        'Sua massa molecular',
+        'Eletronegatividade + Geometria',
+        'O número de átomos',
+        'Sua cor'
+      ],
+      answer: 1,
+      explanation:
+        'Polaridade depende tanto de diferenças de eletronegatividade quanto da geometria molecular.',
+      hint:
+        'Dois fatores: diferença de carga + forma da molécula!',
+      difficulty: 'medium',
+      points: 25
+    },
+
+    {
+      id: '3_5',
+      question: 'Uma molécula tetraédrica com 4 grupos diferentes será:',
+      options: [
+        'Sempre apolar',
+        'Polar',
+        'Nem polar nem apolar',
+        'Depende da temperatura'
+      ],
+      answer: 1,
+      explanation:
+        'Geometria tetraédrica assimétrica (4 grupos diferentes) gera um dipolo resultante = polar.',
+      hint:
+        'Assimétrica = polar, Simétrica = apolar!',
+      difficulty: 'medium',
+      points: 25
+    }
+  ],
+
+  4: [
+    {
+      id: '4_1',
+      question: 'Qual tipo de ligação ocorre entre um metal e um não-metal?',
+      options: [
+        'Covalente',
+        'Iônica',
+        'Metálica',
+        'Dativa'
+      ],
+      answer: 1,
+      explanation:
+        'Metal + Não-metal = Ligação Iônica (transferência de elétrons).',
+      hint:
+        'Metal perde, não-metal ganha = Iônico!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '4_2',
+      question: 'Na ligação covalente, os elétrons são:',
+      options: [
+        'Completamente transferidos',
+        'Compartilhados entre os átomos',
+        'Perdidos',
+        'Destruídos'
+      ],
+      answer: 1,
+      explanation:
+        'Ligação covalente é o compartilhamento de elétrons entre dois átomos não-metálicos.',
+      hint:
+        'Co-valência = compartilhamento!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '4_3',
+      question: 'Por que metais são bons condutores de eletricidade?',
+      options: [
+        'Têm muitos átomos',
+        'Têm uma "nuvem" de elétrons livres',
+        'São sólidos',
+        'Têm cor brilhante'
+      ],
+      answer: 1,
+      explanation:
+        'Metais têm elétrons delocalizados em um "mar", permitindo fluxo de corrente elétrica.',
+      hint:
+        'Mar de elétrons = movimento livre!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '4_4',
+      question: 'A Regra do Octeto busca que átomos tenham quantos elétrons na valência?',
+      options: [
+        '2',
+        '4',
+        '8',
+        '18'
+      ],
+      answer: 2,
+      explanation:
+        'Átomos buscam 8 elétrons na camada de valência, como os gases nobres (exceto He com 2).',
+      hint:
+        '8 = Octeto! Gases nobres são o modelo!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '4_5',
+      question: 'NaCl é um composto iônico porque:',
+      options: [
+        'Tem dois elementos',
+        'Na é metal (cede elétron) e Cl é não-metal (recebe)',
+        'É branco',
+        'Tem sódio'
+      ],
+      answer: 1,
+      explanation:
+        'Sódio (metal) perde 1 elétron para Cloro (não-metal), formando ligação iônica.',
+      hint:
+        'Metal perde elétron = cátion positivo. Não-metal recebe = ânion negativo.',
+      difficulty: 'medium',
+      points: 30
+    }
+  ],
+
+  5: [
+    {
+      id: '5_1',
+      question: 'Qual é a relação entre massa, volume e densidade?',
+      options: [
+        'Densidade = Volume / Massa',
+        'Densidade = Massa / Volume',
+        'Densidade = Massa + Volume',
+        'Sem relação'
+      ],
+      answer: 1,
+      explanation:
+        'Densidade = Massa ÷ Volume. 1g de ouro e 1g de algodão têm MESMA densidade.',
+      hint:
+        'D = m/v (massa dividido por volume)',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '5_2',
+      question: 'Quando um sólido vira gás DIRETAMENTE, sem passar por líquido, chama-se:',
+      options: [
+        'Fusão',
+        'Evaporação',
+        'Sublimação',
+        'Condensação'
+      ],
+      answer: 2,
+      explanation:
+        'Sublimação: sólido → gás (ex: gelo seco, naftalina). É uma transição de fase direta.',
+      hint:
+        'Sub = embaixo/direto. Liga = mudança. Direto = sublimação!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '5_3',
+      question: 'Ponto de fusão é:',
+      options: [
+        'A temperatura que sólido vira gás',
+        'A temperatura que sólido vira líquido',
+        'A temperatura que líquido vira gás',
+        'Uma propriedade extensiva'
+      ],
+      answer: 1,
+      explanation:
+        'Ponto de fusão é quando um sólido muda para líquido. Para gelo = 0°C.',
+      hint:
+        'FUSão = Fusão (sólido para líquido)',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '5_4',
+      question: 'Densidade é uma propriedade intensiva porque:',
+      options: [
+        'Depende da quantidade',
+        'NÃO depende da quantidade',
+        'Muda com a temperatura',
+        'É sempre a mesma'
+      ],
+      answer: 1,
+      explanation:
+        '1g ou 100g de ouro têm a MESMA densidade. Propriedades intensivas NÃO dependem da quantidade.',
+      hint:
+        'Intensiva = Independente da quantidade!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '5_5',
+      question: 'Uma reação QUÍMICA altera:',
+      options: [
+        'Apenas a forma',
+        'Apenas a posição',
+        'A natureza da matéria (forma novas substâncias)',
+        'Nada permanente'
+      ],
+      answer: 2,
+      explanation:
+        'Reações químicas formam novas substâncias (combustão cria CO2 + H2O). Diferentes de mudanças físicas.',
+      hint:
+        'Química = NOVA substância formada!',
+      difficulty: 'medium',
+      points: 30
+    }
+  ],
+
+  6: [
+    {
+      id: '6_1',
+      question: 'Qual a massa de 1 mol de água (H2O)? (H=1, O=16)',
+      options: [
+        '17g',
+        '18g',
+        '10g',
+        '20g'
+      ],
+      answer: 1,
+      explanation:
+        '(2x1) + 16 = 18g/mol.',
+      hint:
+        'Some 2 hidrogênios (1+1) + 1 oxigênio (16) = 18',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '6_2',
+      question: 'O que indica o coeficiente estequiométrico?',
+      options: [
+        'A cor',
+        'A proporção em mols',
+        'A temperatura',
+        'A velocidade'
+      ],
+      answer: 1,
+      explanation:
+        'Mostram a proporção molar entre reagentes e produtos.',
+      hint:
+        'Os números na frente da fórmula mostram as proporções.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '6_3',
+      question: 'Nas CNTP, o volume de 1 mol de gás é:',
+      options: [
+        '10L',
+        '22,4L',
+        '100L',
+        '5L'
+      ],
+      answer: 1,
+      explanation:
+        'Valor padrão para gases ideais nas CNTP.',
+      hint:
+        'Número memorável para gases: 22,4',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '6_4',
+      question: 'Em uma equação balanceada 2H2 + O2 → 2H2O, qual é o reagente limitante se temos 2 mols de H2 e 2 mols de O2?',
+      options: [
+        'H2',
+        'O2',
+        'H2O',
+        'Nenhum, há quantidade igual'
+      ],
+      answer: 1,
+      explanation:
+        'A proporção estequiométrica é 2:1 (H2:O2). Com 2 mols de cada, O2 é limitante (faltariam 2 mols de H2).',
+      hint:
+        'Divida a quantidade pelo coeficiente para encontrar qual acaba primeiro.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '6_5',
+      question: 'Quantos gramas de CO2 são produzidos na combustão de 1 mol de CH4? (C=12, O=16, H=1)',
+      options: [
+        '32g',
+        '44g',
+        '88g',
+        '22g'
+      ],
+      answer: 1,
+      explanation:
+        '1 mol de CH4 produz 1 mol de CO2. Massa molar CO2 = 12 + (2×16) = 44g/mol.',
+      hint:
+        'CH4 + 2O2 → CO2 + 2H2O. Um mol de CH4 rende um mol de CO2.',
+      difficulty: 'medium',
+      points: 30
+    }
+  ],
+
+  7: [
+    {
+      id: '7_1',
+      question: 'O que é molaridade?',
+      options: [
+        'Gramas de soluto por litro',
+        'Mols de soluto por litro de solução',
+        'Quantidade de solvente',
+        'Densidade da solução'
+      ],
+      answer: 1,
+      explanation:
+        'Molaridade (M) = mols de soluto / litro de solução.',
+      hint:
+        'M = n/V (mols dividido por volume em litros)',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '7_2',
+      question: 'Uma solução saturada de açúcar significa:',
+      options: [
+        'O açúcar dissolvido é invisível',
+        'O açúcar é muito doce',
+        'Há o máximo de açúcar dissolvido possível',
+        'Não há mais açúcar'
+      ],
+      answer: 2,
+      explanation:
+        'Saturada = máximo de soluto dissolvido. Se adicionar mais, precipita.',
+      hint:
+        'Saturada = não cabe mais soluto!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '7_3',
+      question: 'A fórmula de diluição é M1V1 = M2V2. Se tenho 500 mL de solução 2M e diluo para 1L, qual é a nova molaridade?',
+      options: [
+        '4M',
+        '2M',
+        '1M',
+        '0,5M'
+      ],
+      answer: 2,
+      explanation:
+        'M1V1 = M2V2 → 2 × 0,5 = M2 × 1 → M2 = 1M.',
+      hint:
+        'Aumentar volume = diminuir molaridade. A quantidade de soluto é a mesma!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '7_4',
+      question: 'Solubilidade é:',
+      options: [
+        'A quantidade de solvente',
+        'A quantidade máxima de soluto que pode ser dissolvida',
+        'A densidade da solução',
+        'A velocidade de dissolução'
+      ],
+      answer: 1,
+      explanation:
+        'Solubilidade é o máximo de soluto que um solvente consegue dissolver em certas condições.',
+      hint:
+        'Solubilidade depende de temperatura e da natureza do soluto/solvente.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '7_5',
+      question: 'Qual substância é considerada o solvente em uma solução água-sal?',
+      options: [
+        'O sal',
+        'A água (a substância em maior quantidade)',
+        'Ambos igualmente',
+        'Nenhum dos dois'
+      ],
+      answer: 1,
+      explanation:
+        'Solvente é a substância em maior quantidade que dissolve o soluto.',
+      hint:
+        'Na maioria dos casos aquosos, a água é o solvente!',
+      difficulty: 'medium',
+      points: 30
+    }
+  ],
+
+  8: [
+    {
+      id: '8_1',
+      question: 'Em uma célula galvânica (pilha), o polo positivo e o processo que ocorre nele são:',
+      options: [
+        'Ânodo / Oxidação',
+        'Cátodo / Redução',
+        'Ânodo / Redução',
+        'Cátodo / Oxidação'
+      ],
+      answer: 1,
+      explanation:
+        'O cátodo atrai cátions, recebe elétrons e sofre redução (polo positivo da pilha).',
+      hint:
+        'CRAO: Cátodo Reduz / Ânodo Oxida.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '8_2',
+      question: 'OIL RIG refere-se a:',
+      options: [
+        'Oxidação = Ganho, Redução = Perda',
+        'Oxidação = Perda, Redução = Ganho',
+        'Óleo e Reação Instantânea Garantida',
+        'Nenhuma das alternativas'
+      ],
+      answer: 1,
+      explanation:
+        'OIL = Oxidation Is Loss (de elétrons). RIG = Reduction Is Gain (de elétrons).',
+      hint:
+        'Mnemonick para lembrar oxidação (perde) e redução (ganha).',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '8_3',
+      question: 'A eletrólise é:',
+      options: [
+        'Uma reação espontânea que gera energia',
+        'Um processo que usa energia elétrica para forçar uma reação não-espontânea',
+        'A queima de eletrodos',
+        'A dissolução de sal'
+      ],
+      answer: 1,
+      explanation:
+        'Eletrólise controla de uma bateria externa para causar uma reação não-espontânea.',
+      hint:
+        'Eletrólise = oposto da pilha (consome energia ao invés de produzir).',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '8_4',
+      question: 'Em uma pilha, o ânodo é:',
+      options: [
+        'O polo positivo',
+        'O polo negativo',
+        'Onde ocorre redução',
+        'Onde os cátions são atraídos'
+      ],
+      answer: 1,
+      explanation:
+        'Ânodo é onde ocorre oxidação (perda de elétrons) = polo negativo da pilha.',
+      hint:
+        'Ânodo = Oxida (perde elétrons) = fornece elétrons = negativo.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '8_5',
+      question: 'A ferrugem é um exemplo de:',
+      options: [
+        'Redução',
+        'Oxidação não desejada',
+        'Reação endotérmica',
+        'Mudança de estado físico'
+      ],
+      answer: 1,
+      explanation:
+        'Ferrugem ocorre quando ferro perde elétrons para oxigênio = oxidação espontânea e indesejável.',
+      hint:
+        'Fe perde elétrons para O2 = oxidação',
+      difficulty: 'medium',
+      points: 30
+    }
+  ],
+
+  9: [
+    {
+      id: '9_1',
+      question: 'Reações exotérmicas têm ΔH:',
+      options: [
+        'Positivo',
+        'Negativo',
+        'Zero',
+        'Indefinido'
+      ],
+      answer: 1,
+      explanation:
+        'Exotérmicas liberam calor = ΔH negativo (energia sai do sistema).',
+      hint:
+        'EXO = saída. Calor sai = energia negativa.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '9_2',
+      question: 'Combustão é uma reação:',
+      options: [
+        'Endotérmica',
+        'Exotérmica',
+        'Sem mudança térmica',
+        'Que absorve luz'
+      ],
+      answer: 1,
+      explanation:
+        'Combustão queima material liberando muita energia (calor e luz) = exotérmica.',
+      hint:
+        'Fogo = calor liberado = exotérmico.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '9_3',
+      question: 'Quebrar ligações químicas é:',
+      options: [
+        'Exotérmico',
+        'Endotérmico',
+        'Neutral',
+        'Não consome energia'
+      ],
+      answer: 1,
+      explanation:
+        'Quebrar ligações SEMPRE consome energia (endotérmico).',
+      hint:
+        'Precisa de energia para separar átomos.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '9_4',
+      question: 'Formar ligações químicas é:',
+      options: [
+        'Endotérmico',
+        'Exotérmico',
+        'Neutral',
+        'Sem liberação de energia'
+      ],
+      answer: 1,
+      explanation:
+        'Formar ligações SEMPRE libera energia (exotérmico).',
+      hint:
+        'Átomos se unem e liberam energia.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '9_5',
+      question: 'A entalpia (H) representa:',
+      options: [
+        'A temperatura',
+        'O conteúdo energético de uma substância',
+        'A velocidade da reação',
+        'A cor da reação'
+      ],
+      answer: 1,
+      explanation:
+        'Entalpia = energia térmica total de um sistema.',
+      hint:
+        'H = conteúdo energético.',
+      difficulty: 'medium',
+      points: 30
+    }
+  ],
+
+  10: [
+    {
+      id: '10_1',
+      question: 'A Teoria das Colisões afirma que para uma reação ocorrer é necessário:',
+      options: [
+        'Apenas juntar os reagentes',
+        'Choques entre moléculas COM orientação correta E energia mínima',
+        'Aquecer infinitamente',
+        'Adicionar um sólido'
+      ],
+      answer: 1,
+      explanation:
+        'Três condições: colisão, orientação correta e energia de ativação mínima.',
+      hint:
+        'COleção + ORientação + Energia = reação!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '10_2',
+      question: 'Um catalisador:',
+      options: [
+        'Aumenta a quantidade de produto',
+        'Diminui a energia de ativação SEM ser consumido',
+        'Para a reação',
+        'Muda a temperatura'
+      ],
+      answer: 1,
+      explanation:
+        'Catalisadores facilitam a reação fazendo um caminho alternativo com menor energia.',
+      hint:
+        'Catalisador entra e sai da reação inalterado.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '10_3',
+      question: 'Aumentar a concentração de reagentes:',
+      options: [
+        'Diminui a velocidade',
+        'Aumenta o número de colisões = acelera a reação',
+        'Não afeta a velocidade',
+        'Congela a reação'
+      ],
+      answer: 1,
+      explanation:
+        'Mais moléculas = mais colisões por unidade de tempo = reação mais rápida.',
+      hint:
+        'Mais moléculas no mesmo espaço = mais possibilidades de colisão.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '10_4',
+      question: 'A energia de ativação é:',
+      options: [
+        'O calor final da reação',
+        'A barreira energética que deve ser superada para a reação começar',
+        'A temperatura da sala',
+        'A quantidade de produto'
+      ],
+      answer: 1,
+      explanation:
+        'Energia mínima necessária para iniciar a reação (conceptualizada como uma "montanha").',
+      hint:
+        'Precisa de energia para "montar" e iniciar a descida.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '10_5',
+      question: 'Enzimas são:',
+      options: [
+        'Catalisadores biológicos que diminuem a energia de ativação',
+        'Vitaminas',
+        'Hormônios',
+        'Proteínas que param reações'
+      ],
+      answer: 0,
+      explanation:
+        'Enzimas são catalisadores naturais que tornam reações biológicas possíveis em temperatura corporal.',
+      hint:
+        'Enzimas fazem possível a química da vida.',
+      difficulty: 'medium',
+      points: 30
+    }
+  ],
+
+  11: [
+    {
+      id: '11_1',
+      question: 'O grupo funcional dos álcoois é:',
+      options: [
+        '-CHO',
+        '-OH',
+        '-COOH',
+        '-CO-'
+      ],
+      answer: 1,
+      explanation:
+        'Álcoois terminam com -OH (hidroxila).',
+      hint:
+        'ALcohol = -OH',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '11_2',
+      question: 'O grupo funcional dos aldeídos é:',
+      options: [
+        '-OH',
+        '-CHO',
+        '-CO-',
+        '-COOH'
+      ],
+      answer: 1,
+      explanation:
+        'Aldeídos têm -CHO (carbonila no final da cadeia).',
+      hint:
+        'ALdeído = -AL (aldoxo) = -CHO no final',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '11_3',
+      question: 'Cetonas têm o grupo -CO- (carbonila):',
+      options: [
+        'No final da cadeia',
+        'No meio da cadeia',
+        'Em qualquer lugar',
+        'Nunca'
+      ],
+      answer: 1,
+      explanation:
+        'Cetonas têm -CO- entre dois carbonos (no MEIO, não na ponta).',
+      hint:
+        'CO no MEIO = Cetona. CO na PONTA = Aldeído.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '11_4',
+      question: 'Ácidos carboxílicos têm o grupo:',
+      options: [
+        '-OH',
+        '-CHO',
+        '-COOH',
+        '-CO-'
+      ],
+      answer: 2,
+      explanation:
+        'Ácidos carboxílicos têm -COOH (carbonila + hidroxila = carboxila).',
+      hint:
+        'CARboxilic = -COOH',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '11_5',
+      question: 'A nomenclatura "Etanol" significa:',
+      options: [
+        '2 carbonos, éter',
+        '2 carbonos, álcool',
+        '1 carbono, álcool',
+        '3 carbonos, aldeído'
+      ],
+      answer: 1,
+      explanation:
+        'ET (2 carbonos) + OL (álcool) = Etanol (CH3-CH2-OH).',
+      hint:
+        'Prefixo (número de C) + sufixo (função)',
+      difficulty: 'medium',
+      points: 30
+    }
+  ],
+
+  12: [
+    {
+      id: '12_1',
+      question: 'Combustão completa de uma molécula orgânica produz:',
+      options: [
+        'Apenas calor',
+        'CO2 + H2O (+ calor)',
+        'Apenas cinzas',
+        'Gases tóxicos'
+      ],
+      answer: 1,
+      explanation:
+        'Combustão completa: CxHy + O2 → CO2 + H2O (+ energia).',
+      hint:
+        'Combustão = queima total = CO2 + H2O.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '12_2',
+      question: 'Esterificação é a reação entre:',
+      options: [
+        'Um álcool e um aldeído',
+        'Um ácido carboxílico e um álcool → um éster',
+        'Duas cetonas',
+        'Um ácido e uma base'
+      ],
+      answer: 1,
+      explanation:
+        'Ácido + Álcool → Éster + Água. Produz óleos e fragrâncias.',
+      hint:
+        'Esterificação = Ester + acidificação.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '12_3',
+      question: 'Saponificação é:',
+      options: [
+        'A destilação de óleos',
+        'A hidrólise de gordura com base → Sabão + Glicerol',
+        'A oxidação de álcoois',
+        'A combustão de ésteres'
+      ],
+      answer: 1,
+      explanation:
+        'Gordura + NaOH (base) → Sabão (sais de ácidos graxos) + Glicerol.',
+      hint:
+        'Saponificação = fabricação de sabão!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '12_4',
+      question: 'Polimerização é:',
+      options: [
+        'A quebra de polímeros',
+        'A reação onde monômeros se unem formando cadeias gigantes (polímeros)',
+        'Uma reação de esterificação',
+        'A separação de molecules'
+      ],
+      answer: 1,
+      explanation:
+        'Muitos monômeros (poli = muitos) + ligação (merização) = Polímeros como plástico.',
+      hint:
+        'Muitos + partes = Polímero!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '12_5',
+      question: 'Uma reação de ADIÇÃO em uma dupla ligação C=C:',
+      options: [
+        'A quebra e forma de novas ligações',
+        'Cria uma nova molécula com átomos adicionados através da dupla quebrada',
+        'Remove hidrogênio',
+        'Não altera a estrutura'
+      ],
+      answer: 1,
+      explanation:
+        'A dupla ligação quebra (C=C → C-C) e novos grupos entram (X-Y adiciona).',
+      hint:
+        'Dupla ligação abre para ADICIONAR átomos.',
+      difficulty: 'medium',
+      points: 30
+    }
+  ],
+
+  13: [
+    {
+      id: '13_1',
+      question: 'Isomeria plana refere-se a:',
+      options: [
+        'Moléculas no mesmo plano',
+        'Diferentes sequências de átomos (mesma fórmula molecular)',
+        'Estrutura 3D diferente',
+        'Diferentes estados da matéria'
+      ],
+      answer: 1,
+      explanation:
+        'Isômeros planos têm mesma fórmula mas átomos em diferentes ordens (ex: Etanol vs Metoximetano).',
+      hint:
+        'MESMA fórmula, DIFERENTES arranjos = propriedades diferentes!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '13_2',
+      question: 'Isomeria geométrica (CIS/TRANS) ocorre:',
+      options: [
+        'Em saturadas',
+        'Em duplas ligações rígidas com grupos diferentes',
+        'Em moléculas pequenas',
+        'Em qualquer molécula'
+      ],
+      answer: 1,
+      explanation:
+        'CIS = grupos no mesmo lado. TRANS = grupos em lados opostos da dupla ligação.',
+      hint:
+        'CIS = mesmo lado (como mãos aplauso). TRANS = lados opostos.',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '13_3',
+      question: 'Isomeria óptica (estereoisomeria) ocorre com:',
+      options: [
+        'Duplas ligações',
+        'Carbonos quirais (4 grupos diferentes ligados)',
+        'Qualquer cadeia longa',
+        'Moléculas apolares'
+      ],
+      answer: 1,
+      explanation:
+        'Carbono quiral = 4 grupos DIFERENTES → duas formas espelhadas (dextro/levo).',
+      hint:
+        'Quiral = quiro (mão). Como mãos direita/esquerda (espelhos).',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '13_4',
+      question: 'Tautomeria é:',
+      options: [
+        'Uma mudança irreversível',
+        'Um equilíbrio dinâmico entre duas formas (ex: ceto-enólica)',
+        'Uma reação de combustão',
+        'Sinônimo de isomeria plana'
+      ],
+      answer: 1,
+      explanation:
+        'Tautômeros estão em equilíbrio rápido - uma forma se converte na outra facilmente.',
+      hint:
+        'Ceto (C=O) ⇌ Enol (C=C + OH) - oscilam entre formas!',
+      difficulty: 'medium',
+      points: 30
+    },
+
+    {
+      id: '13_5',
+      question: 'Etanol (álcool) e Metoximetano (éter) são:',
+      options: [
+        'A mesma molécula',
+        'Isômeros (mesma fórmula C2H6O, propriedades diferentes)',
+        'Alótopos',
+        'Polímeros'
+      ],
+      answer: 1,
+      explanation:
+        'Ambos C2H6O, mas etanol é um álcool (bebida) e metoximetano é um éter (anestésico).',
+      hint:
+        'Mesma fórmula molecular = isômeros = comportamentos completamente diferentes!',
+      difficulty: 'medium',
+      points: 30
+    }
+  ],
+
+  14: [
+    {
+      id: '14_1',
+      question: 'Se você misturar areia, sal e água, quais métodos usaria em ordem para recuperar a areia seca e o sal sólido?',
+      options: [
+        'Destilação e Filtração',
+        'Filtração e Destilação (ou Evaporação)',
+        'Decantação e Catação',
+        'Centrifugação apenas'
+      ],
+      answer: 1,
+      explanation:
+        'Filtração retém a areia. Destilação/Evaporação separa a água do sal.',
+      hint:
+        'Primeiro tire o sólido insolúvel, depois separe o soluto dissolvido.',
+      difficulty: 'hard',
+      points: 50
+    },
+
+    {
+      id: '14_2',
+      question: 'Qual das seguintes substâncias terá o maior ponto de ebulição devido às suas forças intermoleculares?',
+      options: [
+        'CH4 (London)',
+        'H2O (Ligações de Hidrogênio)',
+        'HCl (Dipolo-dipolo)',
+        'H2 (London)'
+      ],
+      answer: 1,
+      explanation:
+        'A água faz ligações de hidrogênio muito fortes, exigindo muita energia térmica para ferver.',
+      hint:
+        'Ligações de Hidrogênio são as interações intermoleculares mais fortes.',
+      difficulty: 'hard',
+      points: 50
+    },
+
+    {
+      id: '14_3',
+      question: 'O composto CH3-CH2-OH pertence a qual função orgânica?',
+      options: [
+        'Aldeído',
+        'Álcool',
+        'Cetona',
+        'Éter'
+      ],
+      answer: 1,
+      explanation:
+        'CH3-CH2-OH é etanol, que tem 2 carbonos e grupo -OH = álcool. A percentagem de álcool (ethanol) em bebidas vem dessa molécula!',
+      hint:
+        '2 carbonos (ET) + OH (ALcool) = ETanol!',
+      difficulty: 'hard',
+      points: 50
+    },
+
+    {
+      id: '14_4',
+      question: 'Como se chama a molécula CH3-CHO?',
+      options: [
+        'Metanal (aldeído)',
+        'Etanal (aldeído)',
+        'Metanol (álcool)',
+        'Metatona (cetona)'
+      ],
+      answer: 0,
+      explanation:
+        'CH3-CHO tem 1 carbono na cadeia + CHO = Metanal (formol usado em laboratório).',
+      hint:
+        'MET (1 carbono) + AL (aldeído) = METanal!',
+      difficulty: 'hard',
+      points: 50
+    },
+
+    {
+      id: '14_5',
+      question: 'Qual grupo funcional está presente em CH3-CO-CH3?',
+      options: [
+        'Álcool (-OH)',
+        'Carboxila (-COOH)',
+        'Cetona (-CO-)',
+        'Aldeído (-CHO)'
+      ],
+      answer: 2,
+      explanation:
+        'O grupo -CO- no MEIO da cadeia identifica uma cetona. Esta é a acetona usada para remover esmalte!',
+      hint:
+        '-CO- no meio (não na ponta) = CETONA!',
+      difficulty: 'hard',
+      points: 50
+    },
+
+    {
+      id: '14_6',
+      question: 'Qual molécula tem a fórmula HCOOH?',
+      options: [
+        'Ácido fórmico',
+        'Ácido acético',
+        'Formol',
+        'Etanol'
+      ],
+      answer: 0,
+      explanation:
+        'HCOOH é ácido fórmico (picada de formiga). Tem 1 carbono + COOH = ácido.',
+      hint:
+        'H-COOH = ácido FÓRMIco!',
+      difficulty: 'hard',
+      points: 50
+    },
+
+    {
+      id: '14_7',
+      question: 'Em uma célula galvânica (pilha), o polo positivo e o processo que ocorre nele são:',
+      options: [
+        'Ânodo / Oxidação',
+        'Cátodo / Redução',
+        'Ânodo / Redução',
+        'Cátodo / Oxidação'
+      ],
+      answer: 1,
+      explanation:
+        'O cátodo atrai cátions, recebe elétrons e sofre redução (polo positivo da pilha).',
+      hint:
+        'CRAO: Cátodo Reduz / Ânodo Oxida.',
+      difficulty: 'hard',
+      points: 50
+    },
+
+    {
+      id: '14_8',
+      question: 'Um estudante quer acelerar a reação de um comprimido efervescente em água. Qual ação NÃO ajuda?',
+      options: [
+        'Triturar o comprimido',
+        'Usar água gelada',
+        'Usar água quente',
+        'Agitar a solução'
+      ],
+      answer: 1,
+      explanation:
+        'Água gelada diminui a energia cinética das moléculas, deixando a reação mais lenta.',
+      hint:
+        'O resfriamento reduz o número de colisões efetivas por segundo.',
+      difficulty: 'hard',
+      points: 50
+    },
+
+    {
+      id: '14_9',
+      question: 'Identifique o tipo de isomeria entre o Cis-but-2-eno e o Trans-but-2-eno:',
+      options: [
+        'Isomeria de Cadeia',
+        'Isomeria Geométrica',
+        'Isomeria Óptica',
+        'Isomeria de Posição'
+      ],
+      answer: 1,
+      explanation:
+        'Diferem na posição espacial dos ligantes ao redor da dupla ligação rígida.',
+      hint:
+        'Cis e Trans são designações da estereoisomeria geométrica.',
+      difficulty: 'hard',
+      points: 50
+    },
+
+    {
+      id: '14_10',
+      question: 'A molécula de paracetamol possui anel aromático ligado a um grupo hidroxila e a um grupo amida substituído. Ela NÃO possui qual característica?',
+      options: [
+        'Função Fenol',
+        'Função Amida',
+        'Átomo de Carbono Quiral',
+        'Ligações pi conjugadas'
+      ],
+      answer: 2,
+      explanation:
+        'O paracetamol possui fenol (OH no anel) e amida (C=O + N no anel). Tem 3 ligações pi (anel + dupla ligação da cadeia + C=O da amida). Não possui carbonos quirais em sua estrutura padrão.',
+      hint:
+        'Identifique cada grupo funcional: C=O + N–H = amida; –OH no aromático = fenol; –O– no anel = éter.',
+      difficulty: 'hard',
+      points: 50
+    }
+  ]
+};
+
+export function getQuestionsByPhase(phaseId) {
   return QUESTIONS[phaseId] || [];
 }
 
@@ -190,4 +1393,64 @@ export function getRandomQuestions(
   return questions
     .sort(() => Math.random() - 0.5)
     .slice(0, amount);
+}
+
+export function getQuestion(
+  phaseId,
+  questionId
+) {
+
+  const questions =
+    QUESTIONS[phaseId] || [];
+
+  return questions.find(
+    q => q.id === questionId
+  );
+}
+
+export function isCorrectAnswer(
+  phaseId,
+  questionId,
+  selectedAnswer
+) {
+
+  const question =
+    getQuestion(
+      phaseId,
+      questionId
+    );
+
+  return (
+    question &&
+    selectedAnswer ===
+      question.answer
+  );
+}
+
+export function getHint(
+  phaseId,
+  questionId
+) {
+
+  const question =
+    getQuestion(
+      phaseId,
+      questionId
+    );
+
+  return question?.hint || null;
+}
+
+export function getPhaseInfo(
+  phaseId
+) {
+
+  const questions =
+    QUESTIONS[phaseId] || [];
+
+  return {
+    phaseId,
+    totalQuestions:
+      questions.length
+  };
 }

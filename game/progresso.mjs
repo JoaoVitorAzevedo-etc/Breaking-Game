@@ -2,7 +2,13 @@ import { calculateScore, applyMultipliers } from './pontuacao.mjs';
 import { loadProfile, saveProfile, updatePoints, setLevel } from '../services/usuarioService.mjs';
 import { recordMatch } from './historico.mjs';
 import { checkUnlockRules, awardBadgeToUser } from '../services/badgeService.mjs';
-import { getPhaseById, isFinalPhase } from './fases.mjs';
+import { getPhaseById, isFinalPhase, passedPhase } from './fases.mjs';
+
+const approved =
+	passedPhase(
+		phaseId,
+		result.final
+	);
 
 async function calculatePhaseResult({ correctCount, totalQuestions, timeTakenSeconds, hintsUsed, multiplier = 1 }) {
   const base = calculateScore(correctCount, totalQuestions, timeTakenSeconds, hintsUsed);
@@ -21,21 +27,49 @@ async function completePhase(uid, phaseId, stats) {
   const newTotal = await updatePoints(uid, result.final);
 
   // registrar histórico
-  await recordMatch(uid, {
-    fase: phaseId,
-    acertos: stats.correctCount,
-    pontos: result.final,
-    dicasUsadas: stats.hintsUsed || 0
-  });
+const percentualAcerto =
+	Math.round(
+		(
+			stats.correctCount /
+			stats.totalQuestions
+		) * 100
+	);
+
+await recordMatch(uid, {
+	fase: phaseId,
+	acertos:
+		stats.correctCount,
+	totalPerguntas:
+		stats.totalQuestions,
+	pontos:
+		result.final,
+	dicasUsadas:
+		stats.hintsUsed || 0,
+	tempo:
+		stats.timeTakenSeconds || 0,
+	percentualAcerto,
+	aprovado:
+		percentualAcerto >= 60
+});
 
   // atualizar nível máximo se necessário (nível = maior fase desbloqueada)
   const user = await loadProfile(uid);
   const currentLevel = user?.nivel || 1;
-  const newLevel = Math.max(currentLevel, phaseId + 1);
+  const newLevel =
+	approved
+		? Math.max(
+				currentLevel,
+				phaseId + 1
+		  )
+		: currentLevel;
   if (newLevel !== currentLevel) await setLevel(uid, newLevel);
 
   // verificar badges a desbloquear
-  const possible = checkUnlockRules(user);
+  const possible =
+	await checkUnlockRules(
+		user,
+		uid
+	);
   const awarded = [];
   for (const b of possible) {
     const got = await awardBadgeToUser(uid, b);
@@ -44,12 +78,25 @@ async function completePhase(uid, phaseId, stats) {
 
   // resultado agregado
   return {
-    phaseId,
-    baseScore: result.base,
-    finalScore: result.final,
-    totalPoints: newTotal,
-    awarded
-  };
+	phaseId,
+
+	baseScore:
+		result.base,
+
+	finalScore:
+		result.final,
+
+	totalPoints:
+		newTotal,
+
+	approved,
+
+	percentualAcerto,
+
+	newLevel,
+
+	awarded
+};
 }
 
 async function canAccessPhase(uid, phaseId) {
