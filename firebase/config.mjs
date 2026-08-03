@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 
 // Apenas configuração e inicialização do Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyCTp-ByKrzLtUv6tQtr7Tla-67t12DMSog",
+  apiKey: ,
   authDomain: "breakinggame-e9f98.firebaseapp.com",
   projectId: "breakinggame-e9f98",
   storageBucket: "breakinggame-e9f98.appspot.com",
