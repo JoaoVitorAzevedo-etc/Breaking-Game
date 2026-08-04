@@ -1,9 +1,86 @@
-import { loadProfile, saveProfile } from './services/usuarioService.mjs';
-import { completePhase } from './game/progresso.mjs';
-import { updateRanking } from './services/rankingService.mjs';
-import { loadDashboard } from './ui/dashboard.mjs';
+import { Bootstrapper } from './core/bootstrap.mjs';
+
+class Application {
+    constructor(target) {
+        this.target = target;
+        this.bootstrapper = new Bootstrapper(target);
+        this.state = this.bootstrapper.state;
+        this.target.state = this.state;
+        this.target.application = this;
+        this.target.app = this.target;
+    }
+
+    init() {
+        return this.bootstrapper.init();
+    }
+
+    bootstrap() {
+        return this.bootstrapper.init();
+    }
+
+    login(username) {
+        this.state.auth.authenticated = true;
+        this.state.auth.user = username;
+        this.state.usuario = username;
+        this.state.ui.currentScreen = 'menu';
+        return true;
+    }
+
+    logout() {
+        this.state.auth.authenticated = false;
+        this.state.auth.user = null;
+        this.state.usuario = null;
+        this.state.ui.currentScreen = 'login';
+        return true;
+    }
+
+    startGame(level = 1) {
+        this.state.game.faseAtual = level;
+        this.state.game.nivelAtual = level;
+        this.state.ui.currentScreen = 'game';
+        return true;
+    }
+
+    finish(result = null) {
+        this.state.game.finalizado = true;
+        this.state.game.resultado = result;
+        this.state.ui.currentScreen = 'results';
+        return true;
+    }
+
+    changeScreen(screenName) {
+        this.state.ui.currentScreen = screenName;
+        return screenName;
+    }
+
+    on(eventName, handler) {
+        window.addEventListener(eventName, handler);
+        return this;
+    }
+
+    off(eventName, handler) {
+        window.removeEventListener(eventName, handler);
+        return this;
+    }
+
+    emit(eventName, detail = {}) {
+        this.state.lastEvent = eventName;
+        window.dispatchEvent(new CustomEvent(eventName, { detail }));
+        return this;
+    }
+}
+
 const app = {
             usuarioAtual: null,
+            state: {
+                currentScreen: 'boot',
+                initialized: false,
+                ready: false,
+                user: null,
+                auth: { authenticated: false },
+                modules: {},
+                lastEvent: null
+            },
             // --- NOVAS PROPRIEDADES ADICIONADAS ---
             usuario: null,
             temaSelecionado: 'light-1',
@@ -25,7 +102,51 @@ const app = {
             tagPendente: null,
             sons: {},
             desempenhoChart: null,
-            
+
+            showScreen(screenId, options = {}) {
+                return this.navigationManager?.showScreen(screenId, options) ?? false;
+            },
+
+            hideScreen(screenId) {
+                return this.navigationManager?.hideScreen(screenId) ?? false;
+            },
+
+            toggleScreen(screenId) {
+                return this.navigationManager?.toggleScreen(screenId) ?? false;
+            },
+
+            showOverlay() {
+                return this.navigationManager?.showOverlay?.() ?? false;
+            },
+
+            hideOverlay() {
+                return this.navigationManager?.hideOverlay?.() ?? false;
+            },
+
+            openModal(modalId, options = {}) {
+                return this.modalManager?.open(modalId, options) ?? false;
+            },
+
+            closeModal(modalId) {
+                return this.modalManager?.close(modalId) ?? false;
+            },
+
+            toggleModal(modalId) {
+                return this.modalManager?.toggle(modalId) ?? false;
+            },
+
+            updateHUD(patch = {}) {
+                return this.hudManager?.update?.(patch) ?? false;
+            },
+
+            setVolume(value) {
+                return this.audioManager?.setVolume?.(value) ?? false;
+            },
+
+            toggleMute() {
+                return this.audioManager?.toggleMute?.() ?? false;
+            },
+
             inicializarSons() {
                 const basePath = 'sounds/';
                 this.sons = {
@@ -38,6 +159,9 @@ const app = {
             },
 
             tocarSom(chave) {
+                if (this.audioManager?.state?.audio?.muted || this.audioManager?.state?.audio?.effectsEnabled === false) {
+                    return;
+                }
                 if (this.sons && this.sons[chave]) {
                     try {
                         this.sons[chave].play();
@@ -51,25 +175,35 @@ const app = {
             // VERIFICAÇÃO DE DISPONIBILIDADE DO LOCALSTORAGE
             // ============================================
             isLocalStorageAvailable() {
-                try {
-                    const test = '__teste__';
-                    localStorage.setItem(test, test);
-                    localStorage.removeItem(test);
-                    return true;
-                } catch (e) {
-                    return false;
-                }
+                return this.storageManager?.available?.() ?? (() => {
+                    try {
+                        const test = '__teste__';
+                        localStorage.setItem(test, test);
+                        localStorage.removeItem(test);
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
+                })();
             },
 
             salvarDados(chave, dados) {
+                if (this.storageManager?.set) {
+                    return this.storageManager.set(chave, dados);
+                }
                 if (this.isLocalStorageAvailable()) {
                     try {
                         localStorage.setItem(chave, JSON.stringify(dados));
+                        return true;
                     } catch (e) {}
                 }
+                return false;
             },
 
             carregarDados(chave, padraoValor = null) {
+                if (this.storageManager?.get) {
+                    return this.storageManager.get(chave, padraoValor);
+                }
                 if (!this.isLocalStorageAvailable()) return padraoValor;
                 try {
                     const dados = localStorage.getItem(chave);
@@ -242,14 +376,14 @@ const app = {
             // FUNÇÕES DE TUTORIAL E UI ADICIONADAS
             // =========================================
             mostrarTutorialIntro: function() {
-                document.getElementById('main-menu').style.display = 'none';
-                document.getElementById('tutorial-intro-screen').style.display = 'block';
+                this.hideScreen('main-menu');
+                this.showScreen('tutorial-intro-screen');
             },
             
             finalizarTutorialIntro: function() {
                 localStorage.setItem('tutorialVisualizado', 'true');
-                document.getElementById('tutorial-intro-screen').style.display = 'none';
-                document.getElementById('main-menu').style.display = 'block';
+                this.hideScreen('tutorial-intro-screen');
+                this.showScreen('main-menu');
                 this.carregarMenuPrincipal();
                 this.atualizarInfosMenu();
             },
@@ -273,20 +407,16 @@ const app = {
             },
             
             fecharTudoComOverlay: function() {
-                const overlay = document.getElementById('modal-overlay');
-                if (overlay && overlay.style.display === 'block') {
-                    overlay.style.display = 'none';
+                if (this.hideOverlay()) {
                     document.querySelectorAll('.modal-animated').forEach(el => {
-                        el.style.display = 'none';
+                        this.hideScreen(el.id);
                     });
-                    const mainMenu = document.getElementById('main-menu');
-                    if (mainMenu) mainMenu.style.display = 'block';
+                    this.showScreen('main-menu');
                 }
             },
 
             fecharOverlay() {
-                const overlay = document.getElementById('modal-overlay');
-                if (overlay) overlay.style.display = 'none';
+                this.hideOverlay();
                 const elementos = [
                     'config-screen',
                     'final-warning-screen',
@@ -301,12 +431,8 @@ const app = {
                     'inventory-screen',
                     'tutorial-intro-screen'
                 ];
-                elementos.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.style.display = 'none';
-                });
-                const mainMenu = document.getElementById('main-menu');
-                if (mainMenu) mainMenu.style.display = 'block';
+                elementos.forEach(id => this.hideScreen(id));
+                this.showScreen('main-menu');
             },
             
             carregarMenuPrincipal() {
@@ -314,7 +440,7 @@ const app = {
                 document.getElementById('username-display').textContent = this.usuarioAtual;
                 document.getElementById('total-points').textContent = perfil.pontuacaoTotal;
                 document.getElementById('max-level').textContent = perfil.nivelMaximo;
-                document.getElementById('main-menu').style.display = 'block';
+                this.showScreen('main-menu');
                 this.aplicarTamanhoFonte(perfil.tamanhoFonte);
                 document.body.setAttribute('data-theme', perfil.temaCurrent);
             },
@@ -531,9 +657,9 @@ const app = {
             },
 
             abrirConfig() {
-                document.getElementById('config-screen').style.display = 'block';
+                this.showScreen('config-screen');
                 this.carregarDashboardFirebase();
-                document.getElementById('modal-overlay').style.display = 'block';
+                this.showOverlay();
                 const atual = document.body.getAttribute('data-theme') || 'light-1';
                 document.querySelectorAll('.theme-swatch').forEach(el => {
                     el.classList.toggle('active', el.getAttribute('data-theme-value') === atual);
@@ -592,29 +718,22 @@ const app = {
 },
 
             fecharConfig() {
-                const configScreen = document.getElementById('config-screen');
-                if (configScreen) configScreen.style.display = 'none';
-                const overlay = document.getElementById('modal-overlay');
-                if (overlay) overlay.style.display = 'none';
-                const mainMenu = document.getElementById('main-menu');
-                if (mainMenu) mainMenu.style.display = 'block';
+                this.hideScreen('config-screen');
+                this.hideOverlay();
+                this.showScreen('main-menu');
             },
 
             abrirInventario() {
-                const inventoryScreen = document.getElementById('inventory-screen');
-                if (!inventoryScreen) return;
-                inventoryScreen.style.display = 'block';
-                document.getElementById('modal-overlay').style.display = 'block';
+                if (!document.getElementById('inventory-screen')) return;
+                this.showScreen('inventory-screen');
+                this.showOverlay();
                 this.renderInventario();
             },
 
             fecharInventario() {
-                const inv = document.getElementById('inventory-screen');
-                if (inv) inv.style.display = 'none';
-                const overlay = document.getElementById('modal-overlay');
-                if (overlay) overlay.style.display = 'none';
-                const mainMenu = document.getElementById('main-menu');
-                if (mainMenu) mainMenu.style.display = 'block';
+                this.hideScreen('inventory-screen');
+                this.hideOverlay();
+                this.showScreen('main-menu');
             },
 
             renderInventario() {
@@ -959,24 +1078,24 @@ const app = {
             },
 
             abrirTabelaPeriodica() {
-                document.getElementById('main-menu').style.display = 'none';
-                document.getElementById('modal-overlay').style.display = 'block';
-                document.getElementById('periodic-table-screen').style.display = 'block';
+                this.hideScreen('main-menu');
+                this.showOverlay();
+                this.showScreen('periodic-table-screen');
                 const primeiroBtn = document.querySelector('.periodic-menu-btn');
                 this.mostrarTabelaPeriodicaView('tabela', primeiroBtn);
             },
 
             abrirLoja() {
-                document.getElementById('main-menu').style.display = 'none';
-                document.getElementById('modal-overlay').style.display = 'block';
-                document.getElementById('shop-screen').style.display = 'flex';
+                this.hideScreen('main-menu');
+                this.showOverlay();
+                this.showScreen('shop-screen');
                 this.renderizarLoja();
             },
 
             fecharLoja() {
-                document.getElementById('shop-screen').style.display = 'none';
-                document.getElementById('modal-overlay').style.display = 'none';
-                document.getElementById('main-menu').style.display = 'block';
+                this.hideScreen('shop-screen');
+                this.hideOverlay();
+                this.showScreen('main-menu');
             },
 
             atualizarPerfil() {
@@ -1076,15 +1195,15 @@ const app = {
             },
 
             abrirPerfil() {
-                document.getElementById('main-menu').style.display = 'none';
-                document.getElementById('modal-overlay').style.display = 'block';
-                document.getElementById('profile-screen').style.display = 'block';
+                this.hideScreen('main-menu');
+                this.showOverlay();
+                this.showScreen('profile-screen');
                 this.atualizarPerfil();
             },
 
             fecharPerfil() {
-                document.getElementById('profile-screen').style.display = 'none';
-                document.getElementById('modal-overlay').style.display = 'none';
+                this.hideScreen('profile-screen');
+                this.hideOverlay();
                 this.carregarMenuPrincipal();
             },
 
@@ -1094,31 +1213,28 @@ const app = {
                 if (botao) botao.classList.add('active');
 
                 // Esconder todas as views
-                document.getElementById('tabela-view').style.display = 'none';
-                document.getElementById('organica-view').style.display = 'none';
-                document.getElementById('misturas-view').style.display = 'none';
-                document.getElementById('eletronegatividade-view').style.display = 'none';
-                document.getElementById('gabaritos-view').style.display = 'none';
-                document.getElementById('element-info').classList.remove('show');
+                ['tabela-view', 'organica-view', 'misturas-view', 'eletronegatividade-view', 'gabaritos-view'].forEach(id => this.hideScreen(id));
+                const info = document.getElementById('element-info');
+                if (info) info.classList.remove('show');
 
                 // Mostrar view selecionada
                 if (view === 'tabela') {
-                    document.getElementById('tabela-view').style.display = 'block';
+                    this.showScreen('tabela-view');
                     document.getElementById('periodic-content-header').textContent = '⚗️ Tabela Periódica Interativa (118 Elementos)';
                     this.renderizarTabelaPeriodica();
                 } else if (view === 'organica') {
-                    document.getElementById('organica-view').style.display = 'block';
+                    this.showScreen('organica-view');
                     document.getElementById('periodic-content-header').textContent = '🔗 Química Orgânica';
                     this.renderizarOrganica();
                 } else if (view === 'misturas') {
-                    document.getElementById('misturas-view').style.display = 'block';
+                    this.showScreen('misturas-view');
                     document.getElementById('periodic-content-header').textContent = '⚗️ Misturas';
                 } else if (view === 'eletronegatividade') {
-                    document.getElementById('eletronegatividade-view').style.display = 'block';
+                    this.showScreen('eletronegatividade-view');
                     document.getElementById('periodic-content-header').textContent = '⚡ Eletronegatividade';
                     this.renderizarEletronegatividade();
                 } else if (view === 'gabaritos') {
-                    document.getElementById('gabaritos-view').style.display = 'block';
+                    this.showScreen('gabaritos-view');
                     document.getElementById('periodic-content-header').textContent = '📝 Gabaritos e Explicações';
                     this.renderizarGabaritos();
                 }
@@ -2129,19 +2245,25 @@ const app = {
         app.carregarConfiguracoesSalvas();
 
 // --- ADIÇÃO PARA CARREGAMENTO E ACESSIBILIDADE VIA TECLADO ---
+const applicationInstance = new Application(app);
+app.application = applicationInstance;
+app.state = applicationInstance.state;
+window.app = app;
+window.Application = Application;
+
 window.addEventListener('DOMContentLoaded', () => {
-    // Carregar configurações salvas (tema, fonte, tamanho)
     if (app.carregarConfiguracoesSalvas) {
         app.carregarConfiguracoesSalvas();
     }
-    
-    // Modal overlay deve fechar ao clicar fora
+
     const overlay = document.getElementById('modal-overlay');
     if (overlay) {
         overlay.addEventListener('click', () => {
             app.fecharTudoComOverlay();
         });
     }
+
+    app.application.init();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -2152,6 +2274,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+app.init = () => applicationInstance.init();
+app.bootstrap = () => applicationInstance.bootstrap();
+app.login = (username) => applicationInstance.login(username);
+app.logout = () => applicationInstance.logout();
+app.startGame = (level) => applicationInstance.startGame(level);
+app.finish = (result) => applicationInstance.finish(result);
+app.changeScreen = (screenName) => applicationInstance.changeScreen(screenName);
+app.on = (eventName, handler) => applicationInstance.on(eventName, handler);
+app.off = (eventName, handler) => applicationInstance.off(eventName, handler);
+app.emit = (eventName, detail) => applicationInstance.emit(eventName, detail);
+app.authManager = applicationInstance.bootstrapper.authManager;
+app.profileManager = applicationInstance.bootstrapper.profileManager;
+app.gameManager = applicationInstance.bootstrapper.gameManager;
+app.questionsManager = applicationInstance.bootstrapper.questionsManager;
+app.scoreManager = applicationInstance.bootstrapper.scoreManager;
+app.progressManager = applicationInstance.bootstrapper.progressManager;
+app.badgeManager = applicationInstance.bootstrapper.badgeManager;
+app.inventoryManager = applicationInstance.bootstrapper.inventoryManager;
+app.shopManager = applicationInstance.bootstrapper.shopManager;
+app.dashboardManager = applicationInstance.bootstrapper.dashboardManager;
+app.rankingManager = applicationInstance.bootstrapper.rankingManager;
+app.historyManager = applicationInstance.bootstrapper.historyManager;
+app.statisticsManager = applicationInstance.bootstrapper.statisticsManager;
+app.hudManager = applicationInstance.bootstrapper.hudManager;
+app.navigationManager = applicationInstance.bootstrapper.navigationManager;
+app.modalManager = applicationInstance.bootstrapper.modalManager;
+app.eventsManager = applicationInstance.bootstrapper.eventsManager;
+app.audioManager = applicationInstance.bootstrapper.audioManager;
+app.configManager = applicationInstance.bootstrapper.configManager;
+app.uiManager = applicationInstance.bootstrapper.uiManager;
+app.firebaseManager = applicationInstance.bootstrapper.firebaseManager;
+app.storageManager = applicationInstance.bootstrapper.storageManager;
+app.cacheManager = applicationInstance.bootstrapper.cacheManager;
+app.syncManager = applicationInstance.bootstrapper.syncManager;
+app.errorManager = applicationInstance.bootstrapper.errorManager;
+app.debugManager = applicationInstance.bootstrapper.debugManager;
 
 document.addEventListener('keydown', (event) => {
     const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])';
@@ -2184,3 +2343,5 @@ document.addEventListener('keydown', (event) => {
         elements[nextIdx]?.focus();
     }
 });
+
+export default app;
