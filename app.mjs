@@ -1297,6 +1297,7 @@ const app = {
                     this.renderizarGabaritos();
                 }
             },
+            //vai logo commit
 
             faseComGabaritoLiberado(faseId) {
                 const perfil = this.contaPadrao;
