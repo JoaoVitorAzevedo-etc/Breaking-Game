@@ -10,8 +10,27 @@ import {
     onAuthStateChanged
 } from 'firebase/auth';
 
+import { createUserDocument } from "../services/usuarioService.mjs";
+
+const credencial = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    senha
+);
+
+await createUserDocument(
+    credencial.user.uid,
+    credencial.user.email
+);
+
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
+
+const usuario = await getUserData(auth.currentUser.uid);
+
+console.log(usuario.nome);
+console.log(usuario.nivel);
+console.log(usuario.pontuacaoTotal);
 
 async function signInWithGoogle() {
     const result = await signInWithPopup(auth, googleProvider);

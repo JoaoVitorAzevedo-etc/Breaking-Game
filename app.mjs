@@ -75,6 +75,54 @@ const app = {
                 }
             },
 
+            obterUsuarioSalvoLocal() {
+                const chavesPrioridade = ['nomeUsuario', 'usuarioAtual', 'usuario', 'ultimoUsuario'];
+                for (const chave of chavesPrioridade) {
+                    const valor = this.carregarDados(chave, null);
+                    if (typeof valor === 'string' && valor.trim()) return valor.trim();
+
+                    if (typeof localStorage !== 'undefined') {
+                        const valorDireto = localStorage.getItem(chave);
+                        if (typeof valorDireto === 'string' && valorDireto.trim()) return valorDireto.trim();
+                    }
+                }
+
+                if (typeof localStorage !== 'undefined') {
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const chave = localStorage.key(i);
+                        if (!chave || !chave.startsWith('usuario_')) continue;
+                        const nome = chave.replace('usuario_', '').trim();
+                        if (!nome) continue;
+                        const dados = this.carregarDados(chave, null);
+                        if (dados && (dados.nome || nome)) return nome;
+                    }
+                }
+
+                return null;
+            },
+
+            restaurarUsuarioLocal() {
+                const nomeSalvo = this.obterUsuarioSalvoLocal();
+                if (!nomeSalvo) return false;
+
+                const dadosSalvos = this.carregarDados(`usuario_${nomeSalvo}`);
+                this.usuarioAtual = nomeSalvo;
+                this.usuario = nomeSalvo;
+                this.salvarDados('nomeUsuario', nomeSalvo);
+                this.salvarDados('usuarioAtual', nomeSalvo);
+
+                if (dadosSalvos) {
+                    this.contaPadrao = Object.assign(this.obterPerfilPadrao(), dadosSalvos);
+                } else {
+                    this.contaPadrao = this.obterPerfilPadrao();
+                    this.contaPadrao.nome = nomeSalvo;
+                }
+
+                const inputUsuario = document.getElementById('username-input');
+                if (inputUsuario) inputUsuario.value = nomeSalvo;
+                return true;
+            },
+
             obterCatalogoBadges() {
                 return [
                     { nome: "Primeiros Passos", icone: "👶", descricao: "Conclua a sua primeira fase com pontuação mínima.", pontos: 10 },
@@ -357,10 +405,13 @@ const app = {
             },
             
             entrarComUsuario() {
-                const name = document.getElementById('username-input').value.trim();
+                const inputUsuario = document.getElementById('username-input');
+                const name = (inputUsuario?.value || '').trim() || this.obterUsuarioSalvoLocal();
                 if (!name) return console.warn("Digite um nome!");
                 this.usuarioAtual = name;
                 this.usuario = name;
+                this.salvarDados('nomeUsuario', name);
+                this.salvarDados('usuarioAtual', name);
                 if (name === 'user0') {
                     const dadosSalvos = this.carregarDados(`usuario_${name}`);
                     const perfilUser0 = this.obterPerfilUser0();
@@ -383,7 +434,8 @@ const app = {
                         this.contaPadrao.nome = name;
                     }
                 }
-                document.getElementById('username-input').value = '';
+                if (inputUsuario) inputUsuario.value = '';
+                this.salvarDados(`usuario_${name}`, this.contaPadrao);
                 document.getElementById('login-screen').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('login-screen').style.display = 'none';
@@ -434,14 +486,17 @@ const app = {
             
             fecharTudoComOverlay: function() {
                 const overlay = document.getElementById('modal-overlay');
-                if (overlay && overlay.style.display === 'block') {
-                    overlay.style.display = 'none';
-                    document.querySelectorAll('.modal-animated').forEach(el => {
-                        el.style.display = 'none';
-                    });
-                    const mainMenu = document.getElementById('main-menu');
-                    if (mainMenu) mainMenu.style.display = 'block';
-                }
+                if (!overlay) return;
+
+                const isOverlayVisible = overlay.style.display === 'block' || overlay.style.display === '' && window.getComputedStyle(overlay).display === 'block';
+                if (!isOverlayVisible) return;
+
+                overlay.style.display = 'none';
+                document.querySelectorAll('.modal-animated').forEach(el => {
+                    el.style.display = 'none';
+                });
+                const mainMenu = document.getElementById('main-menu');
+                if (mainMenu) mainMenu.style.display = 'block';
             },
 
             fecharOverlay() {
@@ -470,13 +525,19 @@ const app = {
             },
             
             carregarMenuPrincipal() {
-                const perfil = this.contaPadrao;
-                document.getElementById('username-display').textContent = this.usuarioAtual;
-                document.getElementById('total-points').textContent = perfil.pontuacaoTotal;
-                document.getElementById('max-level').textContent = perfil.nivelMaximo;
-                document.getElementById('main-menu').style.display = 'block';
-                this.aplicarTamanhoFonte(perfil.tamanhoFonte);
-                document.body.setAttribute('data-theme', perfil.temaCurrent);
+                const perfil = this.contaPadrao || this.obterPerfilPadrao();
+                const usernameDisplay = document.getElementById('username-display');
+                const totalPoints = document.getElementById('total-points');
+                const maxLevel = document.getElementById('max-level');
+                const mainMenu = document.getElementById('main-menu');
+
+                if (usernameDisplay) usernameDisplay.textContent = this.usuarioAtual || this.usuario || 'Usuário';
+                if (totalPoints) totalPoints.textContent = perfil.pontuacaoTotal || 0;
+                if (maxLevel) maxLevel.textContent = perfil.nivelMaximo || 1;
+                if (mainMenu) mainMenu.style.display = 'block';
+
+                if (this.aplicarTamanhoFonte) this.aplicarTamanhoFonte(perfil.tamanhoFonte);
+                if (perfil.temaCurrent) document.body.setAttribute('data-theme', perfil.temaCurrent);
             },
             
             obterTaxaPorFase(perfil) {
@@ -1227,6 +1288,9 @@ const app = {
                     document.getElementById('eletronegatividade-view').style.display = 'block';
                     document.getElementById('periodic-content-header').textContent = '⚡ Eletronegatividade';
                     this.renderizarEletronegatividade();
+                } else if (view === 'eletroquimica') {
+                    document.getElementById('eletroquimica-view').style.display = 'block';
+                    document.getElementById('periodic-content-header').textContent = '🔌 Cátodo e Ânodo';
                 } else if (view === 'gabaritos') {
                     document.getElementById('gabaritos-view').style.display = 'block';
                     document.getElementById('periodic-content-header').textContent = '📝 Gabaritos e Explicações';
@@ -1803,42 +1867,53 @@ const app = {
             },
 
             abrirPanorama() {
-                const perfil = this.contaPadrao;
+                const perfil = this.contaPadrao || this.obterPerfilPadrao();
                 const roadmapContent = document.getElementById('roadmap-content');
-                roadmapContent.innerHTML = '';
-                document.getElementById('main-menu').style.display = 'none';
-                document.getElementById('stats-screen').style.display = 'none';
-                document.getElementById('modal-overlay').style.display = 'none';
+                if (roadmapContent) roadmapContent.innerHTML = '';
+                const mainMenu = document.getElementById('main-menu');
+                if (mainMenu) mainMenu.style.display = 'none';
+                const statsScreen = document.getElementById('stats-screen');
+                if (statsScreen) statsScreen.style.display = 'none';
+                const overlay = document.getElementById('modal-overlay');
+                if (overlay) overlay.style.display = 'none';
 
                 this.curriculo.forEach(cap => {
-                    roadmapContent.innerHTML += `<div class="chapter-header"><h2>${cap.titulo}</h2></div>`;
+                    if (roadmapContent) roadmapContent.innerHTML += `<div class="chapter-header"><h2>${cap.titulo}</h2></div>`;
                     cap.fases.forEach(fase => {
-                        // Nível 14 (desafio final) está sempre desbloqueado
                         const isLocked = fase.id === 14 ? false : (fase.id > perfil.nivelMaximo);
                         const nodeClass = "roadmap-node " + (isLocked ? "locked" : (fase.id === perfil.nivelMaximo ? "unlocked current" : "unlocked completed"));
-                        roadmapContent.innerHTML += `<div class="${nodeClass}"><div class="level-card" onclick="${isLocked ? '' : `app.iniciarNivel(${fase.id}, '${fase.tag}')`}"><div class="level-title">${fase.tag} - ${fase.nome}</div></div></div>`;
+                        if (roadmapContent) {
+                            roadmapContent.innerHTML += `<div class="${nodeClass}"><div class="level-card" role="button" tabindex="0" onclick="${isLocked ? '' : `app.iniciarNivel(${fase.id}, '${fase.tag}')`}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); ${isLocked ? '' : `app.iniciarNivel(${fase.id}, '${fase.tag}')`};}"><div class="level-title">${fase.tag} - ${fase.nome}</div></div></div>`;
+                        }
                     });
                 });
-                document.getElementById('levels-screen').style.display = 'block';
+                const levelsScreen = document.getElementById('levels-screen');
+                if (levelsScreen) levelsScreen.style.display = 'block';
             },
 
             iniciarNivel(id, tag) {
+                if (!id) return console.warn('Erro: nível inválido.');
                 this.nivelPendente = id;
                 this.tagPendente = tag;
                 this.auxiliarSelecionado = null;
                 
-                // Se é o nível final (14), mostrar tela de aviso ao invés de selecionar auxiliar
+                const overlay = document.getElementById('modal-overlay');
+                const finalWarningScreen = document.getElementById('final-warning-screen');
+                const btnIniciarFinal = document.getElementById('btn-iniciar-final');
+                const btnConfirmarAuxiliar = document.getElementById('btn-confirmar-auxiliar');
+                const auxiliarScreen = document.getElementById('auxiliar-screen');
+
                 if (id === 14) {
-                    document.getElementById('modal-overlay').style.display = 'block';
-                    document.getElementById('final-warning-screen').style.display = 'block';
-                    document.getElementById('btn-iniciar-final').onclick = () => this.confirmarFinal();
+                    if (overlay) overlay.style.display = 'block';
+                    if (finalWarningScreen) finalWarningScreen.style.display = 'block';
+                    if (btnIniciarFinal) btnIniciarFinal.onclick = () => this.confirmarFinal();
                     return;
                 }
                 
                 document.querySelectorAll('.auxiliar-card').forEach(c => c.classList.remove('selecionado'));
-                document.getElementById('btn-confirmar-auxiliar').style.display = 'none';
-                document.getElementById('modal-overlay').style.display = 'block';
-                document.getElementById('auxiliar-screen').style.display = 'block';
+                if (btnConfirmarAuxiliar) btnConfirmarAuxiliar.style.display = 'none';
+                if (overlay) overlay.style.display = 'block';
+                if (auxiliarScreen) auxiliarScreen.style.display = 'block';
             },
 
             confirmarFinal() {
@@ -1914,11 +1989,18 @@ const app = {
                 const q = lista[this.perguntaAtualIdx];
                 if (!q) return this.finalizar();
                 
-                document.getElementById('question-title').textContent = `Pergunta ${this.perguntaAtualIdx + 1}/${lista.length}`;
-                document.getElementById('question-text').textContent = q.pergunta;
-                document.getElementById('feedback').style.display = 'none';
-                document.getElementById('btn-proxima').style.display = 'none';
-                document.getElementById('question-box').classList.remove('shake-animation');
+                const questionBox = document.getElementById('question-box');
+                const questionTitle = document.getElementById('question-title');
+                const questionText = document.getElementById('question-text');
+                const feedback = document.getElementById('feedback');
+                const btnProxima = document.getElementById('btn-proxima');
+                const optionsList = document.getElementById('options-list');
+
+                if (questionTitle) questionTitle.textContent = `Pergunta ${this.perguntaAtualIdx + 1}/${lista.length}`;
+                if (questionText) questionText.textContent = q.pergunta;
+                if (feedback) feedback.style.display = 'none';
+                if (btnProxima) btnProxima.style.display = 'none';
+                if (questionBox) questionBox.classList.remove('shake-animation');
                 
                 const dicaDisplay = document.getElementById('dica-display');
                 dicaDisplay.classList.remove('show');
@@ -1937,15 +2019,24 @@ const app = {
                     btnDica.title = '';
                 }
                 
-                document.getElementById('total-points-hud').textContent = this.contaPadrao.pontuacaoTotal;
-                document.getElementById('options-list').innerHTML = q.opcoes.map((o, i) => `<button class="option-btn" onclick="app.checar(${i}, this)">${o}</button>`).join('');
+                if (this.contaPadrao) {
+                    document.getElementById('total-points-hud').textContent = this.contaPadrao.pontuacaoTotal;
+                }
+                if (optionsList) {
+                    optionsList.innerHTML = q.opcoes.map((o, i) => `<button class="option-btn" type="button" onclick="app.checar(${i}, this)">${o}</button>`).join('');
+                }
                 
-                document.getElementById('modal-overlay').style.display = 'block';
-                document.getElementById('question-box').style.display = 'block';
+                const overlay = document.getElementById('modal-overlay');
+                if (overlay) overlay.style.display = 'block';
+                if (questionBox) questionBox.style.display = 'block';
             },
 
             checar(idx, btn) {
-                document.querySelectorAll('.option-btn').forEach(b => b.style.pointerEvents = 'none');
+                if (!btn) return console.warn('Erro: Botão de resposta não encontrado.');
+                document.querySelectorAll('.option-btn').forEach(b => {
+                    b.style.pointerEvents = 'none';
+                    b.disabled = true;
+                });
                 const q = this.questoes['nivel' + this.gameState.nivelAtual][this.perguntaAtualIdx];
                 if (!q) return console.warn('Erro: Pergunta não encontrada.');
                 
@@ -1985,13 +2076,17 @@ const app = {
                 
                 void feedback.offsetWidth;
                 feedback.classList.add('pop-animation');
-                document.getElementById('acertos-atual').textContent = this.gameState.acertos;
-                document.getElementById('pontuacao-atual').textContent = this.gameState.pontuacaoAtual;
-                document.getElementById('btn-proxima').style.display = 'block';
+                const acertosAtual = document.getElementById('acertos-atual');
+                const pontuacaoAtual = document.getElementById('pontuacao-atual');
+                const btnProxima = document.getElementById('btn-proxima');
+                if (acertosAtual) acertosAtual.textContent = this.gameState.acertos;
+                if (pontuacaoAtual) pontuacaoAtual.textContent = this.gameState.pontuacaoAtual;
+                if (btnProxima) btnProxima.style.display = 'block';
             },
 
             proximaPergunta() {
-                document.getElementById('btn-proxima').style.display = 'none';
+                const btnProxima = document.getElementById('btn-proxima');
+                if (btnProxima) btnProxima.style.display = 'none';
                 this.perguntaAtualIdx++;
                 this.mostrarPergunta();
             },
@@ -2234,6 +2329,14 @@ const app = {
             }
         };
 
+        if (typeof window !== 'undefined') {
+            window.app = app;
+            window.App = app;
+        }
+        if (typeof globalThis !== 'undefined') {
+            globalThis.app = app;
+        }
+
         app.inicializarSons();
         app.carregarConfiguracoesSalvas();
 
@@ -2242,6 +2345,10 @@ window.addEventListener('DOMContentLoaded', () => {
     // Carregar configurações salvas (tema, fonte, tamanho)
     if (app.carregarConfiguracoesSalvas) {
         app.carregarConfiguracoesSalvas();
+    }
+
+    if (app.restaurarUsuarioLocal && app.restaurarUsuarioLocal()) {
+        app.entrarComUsuario();
     }
     
     // Modal overlay deve fechar ao clicar fora

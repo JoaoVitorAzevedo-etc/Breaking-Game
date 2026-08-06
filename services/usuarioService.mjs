@@ -40,6 +40,12 @@ uid,
 
 
 }
+const credencial = await createUserWithEmailAndPassword(auth, email, senha);
+
+await createUserDocument(
+    credencial.user.uid,
+    credencial.user.email
+);
 
 async function createProfile(uid, email) {
 

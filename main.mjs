@@ -1,52 +1,192 @@
 import { Bootstrapper } from './core/bootstrap.mjs';
+import { finishPhase } from './game/gameEngine.mjs';
 
 class Application {
     constructor(target) {
         this.target = target;
         this.bootstrapper = new Bootstrapper(target);
+        this.modules = {
+            firebase: {},
+            auth: {},
+            usuario: {},
+            ranking: {},
+            loja: {},
+            badges: {},
+            estatisticas: {},
+            game: {},
+            perguntas: {},
+            fases: {},
+            progresso: {},
+            inventario: {},
+            dashboard: {},
+            ui: {},
+            hud: {},
+            modal: {},
+            notificacoes: {}
+        };
         this.state = this.bootstrapper.state;
+        this.state.modules = this.modules;
         this.target.state = this.state;
+        this.target.modules = this.modules;
         this.target.application = this;
         this.target.app = this.target;
     }
 
-    init() {
-        return this.bootstrapper.init();
+    async init() {
+        await this.bootstrapper.init();
+        await this.registerFirebase();
+        await this.registerServices();
+        await this.registerGame();
+        await this.registerUI();
+        return this;
     }
 
     bootstrap() {
-        return this.bootstrapper.init();
+        return this.init();
     }
 
-    login(username) {
-        this.state.auth.authenticated = true;
-        this.state.auth.user = username;
-        this.state.usuario = username;
-        this.state.ui.currentScreen = 'menu';
+    async registerFirebase() {
+        this.modules.auth = this.bootstrapper.authManager;
+        this.modules.firebase = this.bootstrapper.firebaseManager;
         return true;
     }
 
-    logout() {
+    async registerServices() {
+        this.modules.usuario = this.bootstrapper.profileManager;
+        this.modules.ranking = this.bootstrapper.rankingManager;
+        this.modules.loja = this.bootstrapper.shopManager;
+        this.modules.badges = this.bootstrapper.badgeManager;
+        this.modules.estatisticas = this.bootstrapper.statisticsManager;
+        this.modules.storage = this.bootstrapper.storageManager;
+        this.modules.cache = this.bootstrapper.cacheManager;
+        this.modules.sync = this.bootstrapper.syncManager;
+        this.modules.error = this.bootstrapper.errorManager;
+        this.modules.debug = this.bootstrapper.debugManager;
+        return true;
+    }
+
+    async registerGame() {
+        this.modules.game = this.bootstrapper.gameManager;
+        this.modules.perguntas = this.bootstrapper.questionsManager;
+        this.modules.fases = this.bootstrapper.gameManager;
+        this.modules.progresso = this.bootstrapper.progressManager;
+        this.modules.inventario = this.bootstrapper.inventoryManager;
+        this.modules.score = this.bootstrapper.scoreManager;
+        return true;
+    }
+
+    async registerUI() {
+        this.modules.dashboard = this.bootstrapper.dashboardManager;
+        this.modules.ui = this.bootstrapper.uiManager;
+        this.modules.hud = this.bootstrapper.hudManager;
+        this.modules.modal = this.bootstrapper.modalManager;
+        this.modules.notificacoes = this.bootstrapper.eventsManager;
+        this.modules.navigation = this.bootstrapper.navigationManager;
+        this.modules.audio = this.bootstrapper.audioManager;
+        this.modules.config = this.bootstrapper.configManager;
+        return true;
+    }
+
+    async login(username) {
+        const user = await this.modules.auth.loginAnonimo?.();
+        if (user) {
+            this.state.auth.authenticated = true;
+            this.state.auth.user = user.displayName || username || user.uid;
+            this.state.auth.uid = user.uid;
+            this.state.usuario = user.uid;
+            await this.modules.usuario.carregarPerfil(user.uid);
+            this.modules.ui.showScreen('dashboard');
+            this.modules.hud.update({ nivel: this.state.perfil?.nivel ?? 1, moedas: this.state.perfil?.moedas ?? 0 });
+            await this.modules.ranking.carregarRanking();
+            return user;
+        }
+        return null;
+    }
+
+    async logout() {
+        await this.modules.auth.logout?.();
         this.state.auth.authenticated = false;
         this.state.auth.user = null;
+        this.state.auth.uid = null;
         this.state.usuario = null;
-        this.state.ui.currentScreen = 'login';
+        this.modules.ui.showScreen('login');
         return true;
     }
 
-    startGame(level = 1) {
-        this.state.game.faseAtual = level;
-        this.state.game.nivelAtual = level;
+    async startGame(level = 1) {
+        this.modules.game.novoJogo?.();
+        this.modules.game.escolherFase?.(level);
         this.state.ui.currentScreen = 'game';
+        this.modules.ui.showScreen('game');
+        this.modules.perguntas.selecionarPerguntas?.(level, 5);
+        this.modules.hud.update({ nivel: level, moedas: this.state.perfil?.moedas ?? 0 });
         return true;
     }
 
-    finish(result = null) {
-        this.state.game.finalizado = true;
-        this.state.game.resultado = result;
-        this.state.ui.currentScreen = 'results';
+    async finish(result = null) {
+        const uid = this.state.auth.uid;
+        if (!uid) return false;
+        const phaseId = this.state.game.nivelAtual;
+        const userAnswers = this.state.game.userAnswers || [];
+        const timeTakenSeconds = this.state.game.tempo || 0;
+        const hintsUsed = this.state.game.dicasUsadas || 0;
+
+        const phaseResult = await finishPhase({ uid, phaseId, userAnswers, timeTakenSeconds, hintsUsed });
+        this.modules.score.aplicarPontuacao?.(phaseResult.score);
+        if (phaseResult.approved) {
+            this.modules.score.aplicarXp?.(phaseResult.score);
+            this.modules.score.aplicarMoedas?.(Math.floor(phaseResult.score / 10));
+            this.modules.inventario.atualizarInventario?.();
+            this.modules.badges.desbloquear?.();
+            await this.modules.ranking.atualizarRanking?.({ uid, pontuacao: this.state.perfil?.pontuacaoTotal ?? 0 });
+        }
+
+        await this.sync();
+        this.modules.dashboard.carregarPerfil?.();
+        this.modules.hud.update({ pontuacao: this.state.game.pontuacao, xp: this.state.game.xp, moedas: this.state.game.moedas });
+        this.modules.ui.showScreen('results');
+        return phaseResult;
+    }
+
+    changeScreen(screenName) {
+        this.state.ui.currentScreen = screenName;
+        this.modules.ui.showScreen(screenName);
+        return screenName;
+    }
+
+    async sync() {
+        if (!this.state.auth.uid) return false;
+        const uid = this.state.auth.uid;
+        await this.modules.usuario.carregarPerfil?.(uid);
+        await this.modules.inventario.atualizarInventario?.();
+        await this.modules.ranking.carregarRanking?.();
+        await this.modules.estatisticas.carregarEstatisticas?.();
+        await this.modules.dashboard.carregarHistorico?.();
+        if (this.modules.firebase?.saveDocument) {
+            await this.modules.firebase.saveDocument('sync', {
+                perfil: this.state.perfil,
+                inventario: this.state.inventario,
+                ranking: this.state.ranking,
+                estatisticas: this.state.estatisticas,
+                historico: this.state.historico
+            }, uid);
+        }
         return true;
     }
+
+    async navigate(view) {
+        const mapping = {
+            shop: 'shop-screen',
+            profile: 'profile-screen',
+            dashboard: 'dashboard-screen',
+            tutorial: 'tutorial-intro-screen',
+            game: 'game-screen'
+        };
+        const screenId = mapping[view] || view;
+        this.state.ui.currentScreen = view;
+        return this.modules.ui.showScreen(screenId);
+    }
+
 
     changeScreen(screenName) {
         this.state.ui.currentScreen = screenName;
@@ -2282,35 +2422,13 @@ app.logout = () => applicationInstance.logout();
 app.startGame = (level) => applicationInstance.startGame(level);
 app.finish = (result) => applicationInstance.finish(result);
 app.changeScreen = (screenName) => applicationInstance.changeScreen(screenName);
+app.navigate = (view) => applicationInstance.navigate(view);
+app.sync = () => applicationInstance.sync();
 app.on = (eventName, handler) => applicationInstance.on(eventName, handler);
 app.off = (eventName, handler) => applicationInstance.off(eventName, handler);
 app.emit = (eventName, detail) => applicationInstance.emit(eventName, detail);
-app.authManager = applicationInstance.bootstrapper.authManager;
-app.profileManager = applicationInstance.bootstrapper.profileManager;
-app.gameManager = applicationInstance.bootstrapper.gameManager;
-app.questionsManager = applicationInstance.bootstrapper.questionsManager;
-app.scoreManager = applicationInstance.bootstrapper.scoreManager;
-app.progressManager = applicationInstance.bootstrapper.progressManager;
-app.badgeManager = applicationInstance.bootstrapper.badgeManager;
-app.inventoryManager = applicationInstance.bootstrapper.inventoryManager;
-app.shopManager = applicationInstance.bootstrapper.shopManager;
-app.dashboardManager = applicationInstance.bootstrapper.dashboardManager;
-app.rankingManager = applicationInstance.bootstrapper.rankingManager;
-app.historyManager = applicationInstance.bootstrapper.historyManager;
-app.statisticsManager = applicationInstance.bootstrapper.statisticsManager;
-app.hudManager = applicationInstance.bootstrapper.hudManager;
-app.navigationManager = applicationInstance.bootstrapper.navigationManager;
-app.modalManager = applicationInstance.bootstrapper.modalManager;
-app.eventsManager = applicationInstance.bootstrapper.eventsManager;
-app.audioManager = applicationInstance.bootstrapper.audioManager;
-app.configManager = applicationInstance.bootstrapper.configManager;
-app.uiManager = applicationInstance.bootstrapper.uiManager;
-app.firebaseManager = applicationInstance.bootstrapper.firebaseManager;
-app.storageManager = applicationInstance.bootstrapper.storageManager;
-app.cacheManager = applicationInstance.bootstrapper.cacheManager;
-app.syncManager = applicationInstance.bootstrapper.syncManager;
-app.errorManager = applicationInstance.bootstrapper.errorManager;
-app.debugManager = applicationInstance.bootstrapper.debugManager;
+app.modules = applicationInstance.modules;
+app.ui = applicationInstance.modules.ui;
 
 document.addEventListener('keydown', (event) => {
     const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])';

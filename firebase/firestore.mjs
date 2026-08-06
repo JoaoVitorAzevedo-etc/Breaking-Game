@@ -1,232 +1,63 @@
-import { app } from './config.mjs';
+// ===========================================
+// firebase/firestore.mjs
+// Inicialização do Firebase e Firestore
+// ===========================================
+
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
 import {
-  getFirestore,
-  collection,
-  doc,
-  setDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  addDoc,
-  writeBatch,
-  serverTimestamp,
-  arrayUnion,
-  increment
-} from 'firebase/firestore';
+    getFirestore,
+    enableIndexedDbPersistence
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+// ===========================================
+// CONFIGURAÇÃO DO FIREBASE
+// Substitua pelos dados do seu projeto.
+// ===========================================
+
+const firebaseConfig = {
+    apiKey: "SUA_API_KEY",
+    authDomain: "SEU_PROJETO.firebaseapp.com",
+    projectId: "SEU_PROJECT_ID",
+    storageBucket: "SEU_PROJETO.firebasestorage.app",
+    messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+    appId: "SEU_APP_ID"
+};
+
+
+// ===========================================
+// INICIALIZAÇÃO
+// Evita inicializar duas vezes.
+// ===========================================
+
+const app = getApps().length
+    ? getApps()[0]
+    : initializeApp(firebaseConfig);
+
+
+// ===========================================
+// SERVIÇOS
+// ===========================================
 
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-async function createDocument(collectionName, data, id) {
-	if (id) {
-		const ref = doc(db, collectionName, id);
-		await setDoc(ref, data, { merge: true });
-		return ref;
-	}
-	return await addDoc(collection(db, collectionName), data);
-}
-async function addToArray(
-  collectionName,
-  id,
-  field,
-  value
-) {
 
-  const ref =
-    doc(db, collectionName, id);
+// ===========================================
+// CACHE OFFLINE
+// ===========================================
 
-  await updateDoc(ref, {
-    [field]:
-      arrayUnion(value)
-  });
-}
-async function incrementField(
-  collectionName,
-  id,
-  field,
-  amount
-) {
+enableIndexedDbPersistence(db)
+    .catch(() => {
+        // Ignora erro caso outra aba já utilize o cache.
+    });
 
-  const ref =
-    doc(db, collectionName, id);
 
-  await updateDoc(ref, {
-    [field]:
-      increment(amount)
-  });
-}
+// ===========================================
+// EXPORTAÇÕES
+// ===========================================
 
-async function readDocument(collectionName, id) {
-	const ref = doc(db, collectionName, id);
-	const snap = await getDoc(ref);
-	return snap.exists() ? { id: snap.id, ...snap.data() } : null;
-}
-
-async function updateDocument(collectionName, id, updates) {
-	const ref = doc(db, collectionName, id);
-	await updateDoc(ref, updates);
-	return ref;
-}
-
-async function deleteDocument(collectionName, id) {
-	const ref = doc(db, collectionName, id);
-	await deleteDoc(ref);
-}
-
-async function queryCollection(collectionName, field, op, value) {
-	const q = query(collection(db, collectionName), where(field, op, value));
-	const snap = await getDocs(q);
-	return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-}
-
-async function getCollection(collectionName) {
-	const snap = await getDocs(collection(db, collectionName));
-	return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-}
-async function executeBatch(operations) {
-  const batch = writeBatch(db);
-
-  for (const operation of operations) {
-
-    const ref = doc(
-      db,
-      operation.collection,
-      operation.id
-    );
-
-    switch (operation.type) {
-
-      case 'set':
-        batch.set(ref, operation.data, {
-          merge: true
-        });
-        break;
-
-      case 'update':
-        batch.update(ref, operation.data);
-        break;
-
-      case 'delete':
-        batch.delete(ref);
-        break;
-
-      default:
-        throw new Error(
-          `Operação inválida: ${operation.type}`
-        );
-    }
-  }
-
-  await batch.commit();
-
-  return true;
-}
-async function salvarFimDeFase({
-  uid,
-  xp,
-  moedas,
-  nivel,
-  pontuacao,
-  fase
-}) {
-
-  const batch = writeBatch(db);
-
-  batch.update(
-    doc(db, "usuarios", uid),
-    {
-      xp,
-      nivel
-    }
-  );
-
-  batch.update(
-    doc(db, "inventarios", uid),
-    {
-      moedas
-    }
-  );
-
-  batch.set(
-    doc(db, "ranking", uid),
-    {
-      pontuacaoTotal: pontuacao
-    },
-    { merge: true }
-  );
-
-  batch.set(
-    doc(
-      db,
-      "historico",
-      crypto.randomUUID()
-    ),
-    {
-      uid,
-      fase,
-      pontuacao,
-      criadoEm: serverTimestamp()
-    }
-  );
-
-  await batch.commit();
-}
-async function addToArray(
-	collection,
-	id,
-	field,
-	value
-) {
-
-	const ref =
-		doc(
-			db,
-			collection,
-			id
-		);
-
-	await updateDoc(
-		ref,
-		{
-			[field]:
-				arrayUnion(value)
-		}
-	);
-}
-
-async function incrementField(
-	collection,
-	id,
-	field,
-	value
-) {
-
-	const ref =
-		doc(
-			db,
-			collection,
-			id
-		);
-
-	await updateDoc(
-		ref,
-		{
-			[field]:
-				increment(value)
-		}
-	);
-}
-
-export {
-  db,
-  createDocument,
-  readDocument,
-  updateDocument,
-  deleteDocument,
-  queryCollection,
-  getCollection,
-  executeBatch,
-  salvarFimDeFase
-};
+export { app, db, auth };
