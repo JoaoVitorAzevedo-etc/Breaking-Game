@@ -1288,9 +1288,6 @@ const app = {
                     document.getElementById('eletronegatividade-view').style.display = 'block';
                     document.getElementById('periodic-content-header').textContent = '⚡ Eletronegatividade';
                     this.renderizarEletronegatividade();
-                } else if (view === 'eletroquimica') {
-                    document.getElementById('eletroquimica-view').style.display = 'block';
-                    document.getElementById('periodic-content-header').textContent = '🔌 Cátodo e Ânodo';
                 } else if (view === 'gabaritos') {
                     document.getElementById('gabaritos-view').style.display = 'block';
                     document.getElementById('periodic-content-header').textContent = '📝 Gabaritos e Explicações';

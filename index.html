@@ -576,7 +576,6 @@
                 <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('organica', this)">🔗 Química Orgânica</button>
                 <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('misturas', this)">⚗️ Misturas</button>
                 <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('eletronegatividade', this)">⚡ Eletronegatividade</button>
-                <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('eletroquimica', this)">🔌 Cátodo/Ânodo</button>
                 <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('gabaritos', this)">✅ Gabaritos</button>
                 <button class="periodic-menu-btn conceitos-btn" onclick="app.abrirSeletorConceitos()">📖 Ver Conceitos</button>
             </div>
@@ -617,63 +616,6 @@
                 <div id="organica-view" style="display: none; max-height: 65vh; overflow-y: auto;">
     <div id="grid-organica" class="grid-moleculas"></div>
 </div>
-                <div id="eletroquimica-view" style="display: none; max-height: 65vh; overflow-y: auto;">
-                    <h3 style="color: var(--cor-principal); font-size: 1.6rem; text-align: center; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px;">⚡ Cátodo e Ânodo</h3>
-                    <div style="display: flex; flex-direction: column; gap: 22px;">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start;">
-                            <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 16px; padding: 22px; box-shadow: var(--glass-shadow);">
-                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-                                    <div style="width: 46px; height: 46px; border-radius: 16px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); display: grid; place-items: center; color: white; font-size: 1.4rem;">−</div>
-                                    <div>
-                                        <p style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--cor-principal);">Cátodo</p>
-                                        <p style="margin: 4px 0 0; color: var(--cor-texto-secundario); font-size: 0.95rem;">Ponto de redução em células eletroquímicas</p>
-                                    </div>
-                                </div>
-                                <p style="color: var(--cor-texto); line-height: 1.6; margin-bottom: 16px;">No cátodo, a espécie química recebe elétrons. É o polo onde ocorre a redução, ou seja, a diminuição do número de oxidação do elemento.</p>
-                                <div style="background: rgba(14, 165, 233, 0.08); border: 1px dashed #0ea5e9; border-radius: 12px; padding: 14px;">
-                                    <p style="margin: 0; font-weight: 700; color: #0ea5e9;">Exemplo:</p>
-                                    <p style="margin: 8px 0 0; color: var(--cor-texto);">Cu²⁺ + 2 e⁻ → Cu(s)</p>
-                                </div>
-                            </div>
-
-                            <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 16px; padding: 22px; box-shadow: var(--glass-shadow);">
-                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-                                    <div style="width: 46px; height: 46px; border-radius: 16px; background: linear-gradient(135deg, #f97316 0%, #dc2626 100%); display: grid; place-items: center; color: white; font-size: 1.4rem;">+</div>
-                                    <div>
-                                        <p style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--cor-principal);">Ânodo</p>
-                                        <p style="margin: 4px 0 0; color: var(--cor-texto-secundario); font-size: 0.95rem;">Ponto de oxidação em células eletroquímicas</p>
-                                    </div>
-                                </div>
-                                <p style="color: var(--cor-texto); line-height: 1.6; margin-bottom: 16px;">No ânodo, a espécie química perde elétrons. É o polo onde ocorre a oxidação, ou seja, o aumento do número de oxidação do elemento.</p>
-                                <div style="background: rgba(249, 115, 22, 0.08); border: 1px dashed #f97316; border-radius: 12px; padding: 14px;">
-                                    <p style="margin: 0; font-weight: 700; color: #f97316;">Exemplo:</p>
-                                    <p style="margin: 8px 0 0; color: var(--cor-texto);">Zn(s) → Zn²⁺ + 2 e⁻</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="background: var(--bg-card); border: 2px solid var(--cor-principal); border-radius: 16px; padding: 22px; display: grid; grid-template-columns: 1fr; gap: 14px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px;">
-                                <div>
-                                    <p style="margin: 0; font-size: 1rem; font-weight: 700; color: var(--cor-principal);">Resumo do esquema</p>
-                                    <p style="margin: 8px 0 0; color: var(--cor-texto-secundario); font-size: 0.95rem;">No circuito, elétrons fluem do ânodo para o cátodo pelo condutor externo.</p>
-                                </div>
-                                <span style="background: rgba(16, 185, 129, 0.12); color: #047857; padding: 8px 14px; border-radius: 999px; font-weight: 700; font-size: 0.9rem;">Fluxo de elétrons</span>
-                            </div>
-                            <div style="display: flex; justify-content: center; align-items: center; gap: 18px; flex-wrap: wrap;">
-                                <div style="flex: 1; min-width: 220px; background: rgba(15, 23, 42, 0.04); border-radius: 14px; padding: 18px; text-align: center;">
-                                    <p style="margin: 0 0 8px; font-weight: 700; color: var(--cor-principal);">Ânodo</p>
-                                    <p style="margin: 0; color: var(--cor-texto);">Oxidação<br>Libera e⁻</p>
-                                </div>
-                                <div style="font-size: 1.9rem; color: var(--cor-principal);">➡️</div>
-                                <div style="flex: 1; min-width: 220px; background: rgba(15, 23, 42, 0.04); border-radius: 14px; padding: 18px; text-align: center;">
-                                    <p style="margin: 0 0 8px; font-weight: 700; color: var(--cor-principal);">Cátodo</p>
-                                    <p style="margin: 0; color: var(--cor-texto);">Redução<br>Recebe e⁻</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div id="misturas-view" style="display: none; max-height: 65vh; overflow-y: auto;">
                     <h3 style="color: var(--cor-principal); font-size: 1.6rem; text-align: center; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px;">⚗️ Composição Química e Classificação de Misturas</h3>
 
