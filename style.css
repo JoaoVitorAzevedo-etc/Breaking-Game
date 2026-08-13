@@ -1,50 +1,231 @@
-   /* =========================================
-           BREAKING GAME — UI Modernizada (Glassmorphism)
-           ========================================= */
-        :root {
-            --bg-base: #eef2ff;
+/* =========================================
+BREAKING GAME — UI Modernizada (Glassmorphism)
+========================================= */
+:root {
+    --bg-base: #eef2ff;
             --bg-gradient:
-                radial-gradient(1200px 600px at 10% -10%, #c7d2fe 0%, transparent 60%),
+            radial-gradient(1200px 600px at 10% -10%, #c7d2fe 0%, transparent 60%),
                 radial-gradient(900px 500px at 110% 10%, #fbcfe8 0%, transparent 55%),
                 radial-gradient(700px 700px at 50% 120%, #a7f3d0 0%, transparent 55%),
                 linear-gradient(180deg, #f5f7ff 0%, #eaf0ff 100%);
-
-            --cor-principal: #4f46e5;          /* indigo */
-            --cor-principal-2: #06b6d4;        /* cyan */
-            --cor-acento: #ec4899;             /* pink */
-            --cor-texto: #0f172a;
-            --cor-texto-secundario: #475569;
-
-            --glass-bg: rgba(255, 255, 255, 0.55);
-            --glass-bg-strong: rgba(255, 255, 255, 0.72);
-            --glass-border: rgba(255, 255, 255, 0.7);
-            --glass-shadow: 0 10px 30px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.05);
-            --glass-shadow-lg: 0 25px 60px rgba(15, 23, 42, 0.18), 0 8px 20px rgba(15, 23, 42, 0.08);
-
+                
+                --cor-principal: #4f46e5;          /* indigo */
+                --cor-principal-2: #06b6d4;        /* cyan */
+                --cor-acento: #ec4899;             /* pink */
+                --cor-texto: #0f172a;
+                --cor-texto-secundario: #475569;
+                
+                --glass-bg: rgba(255, 255, 255, 0.55);
+                --glass-bg-strong: rgba(255, 255, 255, 0.72);
+                --glass-border: rgba(255, 255, 255, 0.7);
+                --glass-shadow: 0 10px 30px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.05);
+                --glass-shadow-lg: 0 25px 60px rgba(15, 23, 42, 0.18), 0 8px 20px rgba(15, 23, 42, 0.08);
+                
             --bg-card: var(--glass-bg);
             --bg-card-strong: var(--glass-bg-strong);
             --borda-card: rgba(148, 163, 184, 0.25);
             --bg-input: rgba(255, 255, 255, 0.75);
-
+            
             --cor-glow: rgba(79, 70, 229, 0.35);
             --bg-overlay: rgba(15, 23, 42, 0.45);
             --opacidade-textura: 0;
             --tamanho-fonte: 1;
-
+            
             --radius-xl: 22px;
             --radius-lg: 16px;
             --radius-md: 12px;
             --radius-sm: 8px;
-
+            
             --grad-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
             --grad-accent: linear-gradient(135deg, #06b6d4 0%, #4f46e5 100%);
             --fonte-principal: 'Inter', sans-serif; /* Fonte padrão */
-}
+        }
 
-/* Aplique a variável ao seletor universal que você já tem */
-* {
-    font-family: var(--fonte-principal) !important;
-}
+        /* Aplique a variável ao seletor universal que você já tem */
+        * {
+            font-family: var(--fonte-principal) !important;
+        }
+        /* TEMA CLARO 1 — Areia & Sálvia */
+        [data-theme="light-1"] {
+            --bg-base: #FAF3DD;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, #C8D5B9 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 10%, #FAF3DD 0%, transparent 55%),
+                radial-gradient(700px 700px at 50% 120%, #e8e1cc 0%, transparent 55%),
+                linear-gradient(180deg, #FAF3DD 0%, #efe7c9 100%);
+            --cor-principal: #003366;
+            --cor-principal-2: #0a4a8a;
+            --cor-acento: #C8D5B9;
+            --cor-texto: #2a2a2a;
+            --cor-texto-secundario: #555555;
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-bg-strong: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(0, 51, 102, 0.18);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(0, 51, 102, 0.18);
+            --bg-input: rgba(255, 255, 255, 0.7);
+            --cor-glow: rgba(0, 51, 102, 0.35);
+            --bg-overlay: rgba(35, 28, 7, 0.55);
+            --grad-primary: linear-gradient(135deg, #003366 0%, #0a4a8a 60%, #C8D5B9 100%);
+            --grad-accent: linear-gradient(135deg, #0a4a8a 0%, #C8D5B9 100%);
+        }
+        
+        /* TEMA CLARO 2 — Névoa & Eucalipto */
+        [data-theme="light-2"] {
+            --bg-base: #DEE5E5;
+            --bg-gradient:
+            radial-gradient(1100px 600px at 10% -10%, #9DC5BB 0%, transparent 60%),
+            radial-gradient(900px 500px at 110% 10%, #DEE5E5 0%, transparent 55%),
+            radial-gradient(700px 700px at 50% 120%, #cdd4d4 0%, transparent 55%),
+            linear-gradient(180deg, #DEE5E5 0%, #c6cccc 100%);
+            --cor-principal: #463F3A;
+            --cor-principal-2: #6b6058;
+            --cor-acento: #9DC5BB;
+            --cor-texto: #222222;
+            --cor-texto-secundario: #463F3A;
+            --glass-bg: rgba(255, 255, 255, 0.42);
+            --glass-bg-strong: rgba(255, 255, 255, 0.62);
+            --glass-border: rgba(70, 63, 58, 0.18);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(70, 63, 58, 0.18);
+            --bg-input: rgba(255, 255, 255, 0.7);
+            --cor-glow: rgba(70, 63, 58, 0.35);
+            --bg-overlay: rgba(35, 28, 7, 0.55);
+            --grad-primary: linear-gradient(135deg, #463F3A 0%, #6b6058 50%, #9DC5BB 100%);
+            --grad-accent: linear-gradient(135deg, #6b6058 0%, #9DC5BB 100%);
+        }
+        
+        /* TEMA CLARO 3 — Menta & Terracota */
+        [data-theme="light-3"] {
+            --bg-base: #C5EFCB;
+            --bg-gradient:
+            radial-gradient(1100px 600px at 10% -10%, #AC8887 0%, transparent 60%),
+            radial-gradient(900px 500px at 110% 10%, #C5EFCB 0%, transparent 55%),
+            radial-gradient(700px 700px at 50% 120%, #b3d8b8 0%, transparent 55%),
+            linear-gradient(180deg, #C5EFCB 0%, #a8d4ad 100%);
+            --cor-principal: #231C07;
+            --cor-principal-2: #5a4a2a;
+            --cor-acento: #AC8887;
+            --cor-texto: #111111;
+            --cor-texto-secundario: #231C07;
+            --glass-bg: rgba(255, 255, 255, 0.40);
+            --glass-bg-strong: rgba(255, 255, 255, 0.62);
+            --glass-border: rgba(35, 28, 7, 0.18);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(35, 28, 7, 0.20);
+            --bg-input: rgba(255, 255, 255, 0.7);
+            --cor-glow: rgba(35, 28, 7, 0.35);
+            --bg-overlay: rgba(35, 28, 7, 0.55);
+            --grad-primary: linear-gradient(135deg, #231C07 0%, #AC8887 100%);
+            --grad-accent: linear-gradient(135deg, #5a4a2a 0%, #AC8887 100%);
+        }
+        
+        /* TEMA CLARO 4 — Lima & Floresta */
+        [data-theme="light-4"] {
+            --bg-base: #D6F599;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, #D2FF28 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 10%, #D6F599 0%, transparent 55%),
+                radial-gradient(700px 700px at 50% 120%, #c0e07f 0%, transparent 55%),
+                linear-gradient(180deg, #D6F599 0%, #b9da7a 100%);
+            --cor-principal: #436436;
+            --cor-principal-2: #5a8449;
+            --cor-acento: #D2FF28;
+            --cor-texto: #1a2410;
+            --cor-texto-secundario: #436436;
+            --glass-bg: rgba(255, 255, 255, 0.42);
+            --glass-bg-strong: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(67, 100, 54, 0.20);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(67, 100, 54, 0.22);
+            --bg-input: rgba(255, 255, 255, 0.7);
+            --cor-glow: rgba(67, 100, 54, 0.35);
+            --bg-overlay: rgba(20, 30, 10, 0.55);
+            --grad-primary: linear-gradient(135deg, #436436 0%, #5a8449 60%, #D2FF28 100%);
+            --grad-accent: linear-gradient(135deg, #D2FF28 0%, #436436 100%);
+        }
+        
+        /* TEMA CLARO 5 — Creme & Ameixa */
+        [data-theme="light-5"] {
+            --bg-base: #FAF3DD;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, #8FC0A9 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 10%, #FAF3DD 0%, transparent 55%),
+                radial-gradient(700px 700px at 50% 120%, #efe7c9 0%, transparent 55%),
+                linear-gradient(180deg, #FAF3DD 0%, #e8dfb8 100%);
+            --cor-principal: #60435F;
+            --cor-principal-2: #7d5b7c;
+            --cor-acento: #8FC0A9;
+            --cor-texto: #2a1d2a;
+            --cor-texto-secundario: #60435F;
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-bg-strong: rgba(255, 255, 255, 0.66);
+            --glass-border: rgba(96, 67, 95, 0.20);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(96, 67, 95, 0.22);
+            --bg-input: rgba(255, 255, 255, 0.72);
+            --cor-glow: rgba(143, 192, 169, 0.40);
+            --bg-overlay: rgba(40, 25, 40, 0.55);
+            --grad-primary: linear-gradient(135deg, #60435F 0%, #7d5b7c 60%, #8FC0A9 100%);
+            --grad-accent: linear-gradient(135deg, #8FC0A9 0%, #60435F 100%);
+        }
+        
+        /* TEMA CLARO 6 — Pôr do Sol */
+        [data-theme="light-6"] {
+            --bg-base: #F19953;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, #2660A4 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 10%, #F19953 0%, transparent 55%),
+                radial-gradient(700px 700px at 50% 120%, #EDF7F6 0%, transparent 55%),
+                linear-gradient(180deg, #F19953 0%, #d97f3a 100%);
+            --cor-principal: #f5b682;
+            --cor-principal-2: #ebb079;
+            --cor-acento: #2660A4;
+            --cor-texto: #1a1a1a;
+            --cor-texto-secundario: #2660A4;
+            --glass-bg: rgba(255, 255, 255, 0.40);
+            --glass-bg-strong: rgba(255, 255, 255, 0.62);
+            --glass-border: rgba(38, 96, 164, 0.25);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(38, 96, 164, 0.28);
+            --bg-input: rgba(255, 255, 255, 0.75);
+            --cor-glow: rgba(38, 96, 164, 0.40);
+            --bg-overlay: rgba(20, 30, 50, 0.55);
+            --grad-primary: linear-gradient(135deg, #2660A4 0%, #F19953 100%);
+            --grad-accent: linear-gradient(135deg, #EDF7F6 0%, #2660A4 100%);
+        }
+        
+        /* TEMA CLARO 7 — Limão & Mata */
+        [data-theme="light-7"] {
+            --bg-base: #EDF7B5;
+            --bg-gradient:
+                radial-gradient(1100px 600px at 10% -10%, #53917E 0%, transparent 60%),
+                radial-gradient(900px 500px at 110% 10%, #EDF7B5 0%, transparent 55%),
+                radial-gradient(700px 700px at 50% 120%, #d8e29a 0%, transparent 55%),
+                linear-gradient(180deg, #EDF7B5 0%, #ccd793 100%);
+            --cor-principal: #3d0638;
+            --cor-principal-2: #61235c;
+            --cor-acento: #53917E;
+            --cor-texto: #1a0118;
+            --cor-texto-secundario: #22031F;
+            --glass-bg: rgba(255, 255, 255, 0.42);
+            --glass-bg-strong: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(34, 3, 31, 0.18);
+            --bg-card: var(--glass-bg);
+            --bg-card-strong: var(--glass-bg-strong);
+            --borda-card: rgba(34, 3, 31, 0.20);
+            --bg-input: rgba(255, 255, 255, 0.72);
+            --cor-glow: rgba(34, 3, 31, 0.35);
+            --bg-overlay: rgba(34, 3, 31, 0.60);
+            --grad-primary: linear-gradient(135deg, #22031F 0%, #53917E 100%);
+            --grad-accent: linear-gradient(135deg, #53917E 0%, #22031F 100%);
+        }
 
 /* Definições das novas fontes baseadas no atributo do body */
 body[data-font="inter"] { --fonte-principal: 'Inter', sans-serif; }
@@ -55,9 +236,9 @@ body[data-font="times"] { --fonte-principal: 'Times New Roman', Times, serif; }
 /* Simulando os estilos especiais com variações de serifas */
 body[data-font="double"] { --fonte-principal: 'Courier New', monospace; font-variant: small-caps; }
 body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font-weight: bold; font-style: italic; }
-        
 
-        [data-theme="dark"] {
+
+[data-theme="dark"] {
             --bg-base: #0b1020;
             --bg-gradient:
                 radial-gradient(1100px 600px at 10% -10%, rgba(99, 102, 241, 0.35) 0%, transparent 60%),
@@ -92,83 +273,6 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
            Adaptados ao sistema glassmorphism
            ========================================= */
 
-        /* TEMA CLARO 1 — Areia & Sálvia */
-        [data-theme="light-1"] {
-            --bg-base: #FAF3DD;
-            --bg-gradient:
-                radial-gradient(1100px 600px at 10% -10%, #C8D5B9 0%, transparent 60%),
-                radial-gradient(900px 500px at 110% 10%, #FAF3DD 0%, transparent 55%),
-                radial-gradient(700px 700px at 50% 120%, #e8e1cc 0%, transparent 55%),
-                linear-gradient(180deg, #FAF3DD 0%, #efe7c9 100%);
-            --cor-principal: #003366;
-            --cor-principal-2: #0a4a8a;
-            --cor-acento: #C8D5B9;
-            --cor-texto: #2a2a2a;
-            --cor-texto-secundario: #555555;
-            --glass-bg: rgba(255, 255, 255, 0.45);
-            --glass-bg-strong: rgba(255, 255, 255, 0.65);
-            --glass-border: rgba(0, 51, 102, 0.18);
-            --bg-card: var(--glass-bg);
-            --bg-card-strong: var(--glass-bg-strong);
-            --borda-card: rgba(0, 51, 102, 0.18);
-            --bg-input: rgba(255, 255, 255, 0.7);
-            --cor-glow: rgba(0, 51, 102, 0.35);
-            --bg-overlay: rgba(35, 28, 7, 0.55);
-            --grad-primary: linear-gradient(135deg, #003366 0%, #0a4a8a 60%, #C8D5B9 100%);
-            --grad-accent: linear-gradient(135deg, #0a4a8a 0%, #C8D5B9 100%);
-        }
-
-        /* TEMA CLARO 2 — Névoa & Eucalipto */
-        [data-theme="light-2"] {
-            --bg-base: #DEE5E5;
-            --bg-gradient:
-                radial-gradient(1100px 600px at 10% -10%, #9DC5BB 0%, transparent 60%),
-                radial-gradient(900px 500px at 110% 10%, #DEE5E5 0%, transparent 55%),
-                radial-gradient(700px 700px at 50% 120%, #cdd4d4 0%, transparent 55%),
-                linear-gradient(180deg, #DEE5E5 0%, #c6cccc 100%);
-            --cor-principal: #463F3A;
-            --cor-principal-2: #6b6058;
-            --cor-acento: #9DC5BB;
-            --cor-texto: #222222;
-            --cor-texto-secundario: #463F3A;
-            --glass-bg: rgba(255, 255, 255, 0.42);
-            --glass-bg-strong: rgba(255, 255, 255, 0.62);
-            --glass-border: rgba(70, 63, 58, 0.18);
-            --bg-card: var(--glass-bg);
-            --bg-card-strong: var(--glass-bg-strong);
-            --borda-card: rgba(70, 63, 58, 0.18);
-            --bg-input: rgba(255, 255, 255, 0.7);
-            --cor-glow: rgba(70, 63, 58, 0.35);
-            --bg-overlay: rgba(35, 28, 7, 0.55);
-            --grad-primary: linear-gradient(135deg, #463F3A 0%, #6b6058 50%, #9DC5BB 100%);
-            --grad-accent: linear-gradient(135deg, #6b6058 0%, #9DC5BB 100%);
-        }
-
-        /* TEMA CLARO 3 — Menta & Terracota */
-        [data-theme="light-3"] {
-            --bg-base: #C5EFCB;
-            --bg-gradient:
-                radial-gradient(1100px 600px at 10% -10%, #AC8887 0%, transparent 60%),
-                radial-gradient(900px 500px at 110% 10%, #C5EFCB 0%, transparent 55%),
-                radial-gradient(700px 700px at 50% 120%, #b3d8b8 0%, transparent 55%),
-                linear-gradient(180deg, #C5EFCB 0%, #a8d4ad 100%);
-            --cor-principal: #231C07;
-            --cor-principal-2: #5a4a2a;
-            --cor-acento: #AC8887;
-            --cor-texto: #111111;
-            --cor-texto-secundario: #231C07;
-            --glass-bg: rgba(255, 255, 255, 0.40);
-            --glass-bg-strong: rgba(255, 255, 255, 0.62);
-            --glass-border: rgba(35, 28, 7, 0.18);
-            --bg-card: var(--glass-bg);
-            --bg-card-strong: var(--glass-bg-strong);
-            --borda-card: rgba(35, 28, 7, 0.20);
-            --bg-input: rgba(255, 255, 255, 0.7);
-            --cor-glow: rgba(35, 28, 7, 0.35);
-            --bg-overlay: rgba(35, 28, 7, 0.55);
-            --grad-primary: linear-gradient(135deg, #231C07 0%, #AC8887 100%);
-            --grad-accent: linear-gradient(135deg, #5a4a2a 0%, #AC8887 100%);
-        }
 
         /* TEMA ESCURO 1 — Neon Amarelo */
         [data-theme="dark-1"] {
@@ -178,10 +282,10 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
                 radial-gradient(900px 500px at 110% 0%, rgba(204, 204, 204, 0.10) 0%, transparent 55%),
                 radial-gradient(800px 700px at 50% 120%, rgba(255, 255, 44, 0.10) 0%, transparent 55%),
                 linear-gradient(180deg, #222222 0%, #050505 100%);
-            --cor-principal: #ffff2c;
-            --cor-principal-2: #f5e642;
+            --cor-principal: #a3a320;
+            --cor-principal-2: #bdb133;
             --cor-acento: #cccccc;
-            --cor-texto: #eeeeee;
+            --cor-texto: #ffffff;
             --cor-texto-secundario: #cccccc;
             --glass-bg: rgba(255, 255, 255, 0.06);
             --glass-bg-strong: rgba(255, 255, 255, 0.10);
@@ -204,7 +308,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
                 radial-gradient(900px 500px at 110% 0%, rgba(239, 241, 243, 0.10) 0%, transparent 55%),
                 radial-gradient(800px 700px at 50% 120%, rgba(241, 81, 82, 0.15) 0%, transparent 55%),
                 linear-gradient(180deg, #37392E 0%, #1a1b14 100%);
-            --cor-principal: #EFF1F3;
+            --cor-principal: #1e7bd8;
             --cor-principal-2: #F15152;
             --cor-acento: #F15152;
             --cor-texto: #ffffff;
@@ -218,7 +322,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             --bg-input: rgba(255, 255, 255, 0.06);
             --cor-glow: rgba(239, 241, 243, 0.40);
             --bg-overlay: rgba(0, 0, 0, 0.78);
-            --grad-primary: linear-gradient(135deg, #EFF1F3 0%, #F15152 100%);
+            --grad-primary: linear-gradient(135deg, #4b6066 0%, #F15152 100%);
             --grad-accent: linear-gradient(135deg, #F15152 0%, #EFF1F3 100%);
         }
 
@@ -230,7 +334,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
                 radial-gradient(900px 500px at 110% 0%, rgba(255, 74, 28, 0.22) 0%, transparent 55%),
                 radial-gradient(800px 700px at 50% 120%, rgba(178, 255, 169, 0.10) 0%, transparent 55%),
                 linear-gradient(180deg, #6A041D 0%, #2e0109 100%);
-            --cor-principal: #B2FFA9;
+            --cor-principal: #a3ada2;
             --cor-principal-2: #FF4A1C;
             --cor-acento: #FF4A1C;
             --cor-texto: #ffffff;
@@ -244,113 +348,10 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             --bg-input: rgba(255, 255, 255, 0.06);
             --cor-glow: rgba(178, 255, 169, 0.45);
             --bg-overlay: rgba(0, 0, 0, 0.78);
-            --grad-primary: linear-gradient(135deg, #B2FFA9 0%, #FF4A1C 100%);
+            --grad-primary: linear-gradient(135deg, #8F9FBA 0%, #FF4A1C 100%);
             --grad-accent: linear-gradient(135deg, #FF4A1C 0%, #B2FFA9 100%);
         }
 
-        /* TEMA CLARO 4 — Lima & Floresta */
-        [data-theme="light-4"] {
-            --bg-base: #D6F599;
-            --bg-gradient:
-                radial-gradient(1100px 600px at 10% -10%, #D2FF28 0%, transparent 60%),
-                radial-gradient(900px 500px at 110% 10%, #D6F599 0%, transparent 55%),
-                radial-gradient(700px 700px at 50% 120%, #c0e07f 0%, transparent 55%),
-                linear-gradient(180deg, #D6F599 0%, #b9da7a 100%);
-            --cor-principal: #436436;
-            --cor-principal-2: #5a8449;
-            --cor-acento: #D2FF28;
-            --cor-texto: #1a2410;
-            --cor-texto-secundario: #436436;
-            --glass-bg: rgba(255, 255, 255, 0.42);
-            --glass-bg-strong: rgba(255, 255, 255, 0.65);
-            --glass-border: rgba(67, 100, 54, 0.20);
-            --bg-card: var(--glass-bg);
-            --bg-card-strong: var(--glass-bg-strong);
-            --borda-card: rgba(67, 100, 54, 0.22);
-            --bg-input: rgba(255, 255, 255, 0.7);
-            --cor-glow: rgba(67, 100, 54, 0.35);
-            --bg-overlay: rgba(20, 30, 10, 0.55);
-            --grad-primary: linear-gradient(135deg, #436436 0%, #5a8449 60%, #D2FF28 100%);
-            --grad-accent: linear-gradient(135deg, #D2FF28 0%, #436436 100%);
-        }
-
-        /* TEMA CLARO 5 — Creme & Ameixa */
-        [data-theme="light-5"] {
-            --bg-base: #FAF3DD;
-            --bg-gradient:
-                radial-gradient(1100px 600px at 10% -10%, #8FC0A9 0%, transparent 60%),
-                radial-gradient(900px 500px at 110% 10%, #FAF3DD 0%, transparent 55%),
-                radial-gradient(700px 700px at 50% 120%, #efe7c9 0%, transparent 55%),
-                linear-gradient(180deg, #FAF3DD 0%, #e8dfb8 100%);
-            --cor-principal: #60435F;
-            --cor-principal-2: #7d5b7c;
-            --cor-acento: #8FC0A9;
-            --cor-texto: #2a1d2a;
-            --cor-texto-secundario: #60435F;
-            --glass-bg: rgba(255, 255, 255, 0.45);
-            --glass-bg-strong: rgba(255, 255, 255, 0.66);
-            --glass-border: rgba(96, 67, 95, 0.20);
-            --bg-card: var(--glass-bg);
-            --bg-card-strong: var(--glass-bg-strong);
-            --borda-card: rgba(96, 67, 95, 0.22);
-            --bg-input: rgba(255, 255, 255, 0.72);
-            --cor-glow: rgba(143, 192, 169, 0.40);
-            --bg-overlay: rgba(40, 25, 40, 0.55);
-            --grad-primary: linear-gradient(135deg, #60435F 0%, #7d5b7c 60%, #8FC0A9 100%);
-            --grad-accent: linear-gradient(135deg, #8FC0A9 0%, #60435F 100%);
-        }
-
-        /* TEMA CLARO 6 — Pôr do Sol */
-        [data-theme="light-6"] {
-            --bg-base: #F19953;
-            --bg-gradient:
-                radial-gradient(1100px 600px at 10% -10%, #2660A4 0%, transparent 60%),
-                radial-gradient(900px 500px at 110% 10%, #F19953 0%, transparent 55%),
-                radial-gradient(700px 700px at 50% 120%, #EDF7F6 0%, transparent 55%),
-                linear-gradient(180deg, #F19953 0%, #d97f3a 100%);
-            --cor-principal: #EDF7F6;
-            --cor-principal-2: #ffffff;
-            --cor-acento: #2660A4;
-            --cor-texto: #1a1a1a;
-            --cor-texto-secundario: #2660A4;
-            --glass-bg: rgba(255, 255, 255, 0.40);
-            --glass-bg-strong: rgba(255, 255, 255, 0.62);
-            --glass-border: rgba(38, 96, 164, 0.25);
-            --bg-card: var(--glass-bg);
-            --bg-card-strong: var(--glass-bg-strong);
-            --borda-card: rgba(38, 96, 164, 0.28);
-            --bg-input: rgba(255, 255, 255, 0.75);
-            --cor-glow: rgba(38, 96, 164, 0.40);
-            --bg-overlay: rgba(20, 30, 50, 0.55);
-            --grad-primary: linear-gradient(135deg, #2660A4 0%, #F19953 100%);
-            --grad-accent: linear-gradient(135deg, #EDF7F6 0%, #2660A4 100%);
-        }
-
-        /* TEMA CLARO 7 — Limão & Mata */
-        [data-theme="light-7"] {
-            --bg-base: #EDF7B5;
-            --bg-gradient:
-                radial-gradient(1100px 600px at 10% -10%, #53917E 0%, transparent 60%),
-                radial-gradient(900px 500px at 110% 10%, #EDF7B5 0%, transparent 55%),
-                radial-gradient(700px 700px at 50% 120%, #d8e29a 0%, transparent 55%),
-                linear-gradient(180deg, #EDF7B5 0%, #ccd793 100%);
-            --cor-principal: #22031F;
-            --cor-principal-2: #461a42;
-            --cor-acento: #53917E;
-            --cor-texto: #1a0118;
-            --cor-texto-secundario: #22031F;
-            --glass-bg: rgba(255, 255, 255, 0.42);
-            --glass-bg-strong: rgba(255, 255, 255, 0.65);
-            --glass-border: rgba(34, 3, 31, 0.18);
-            --bg-card: var(--glass-bg);
-            --bg-card-strong: var(--glass-bg-strong);
-            --borda-card: rgba(34, 3, 31, 0.20);
-            --bg-input: rgba(255, 255, 255, 0.72);
-            --cor-glow: rgba(34, 3, 31, 0.35);
-            --bg-overlay: rgba(34, 3, 31, 0.60);
-            --grad-primary: linear-gradient(135deg, #22031F 0%, #53917E 100%);
-            --grad-accent: linear-gradient(135deg, #53917E 0%, #22031F 100%);
-        }
 
         /* TEMA ESCURO 4 — Ameixa & Menta */
         [data-theme="dark-4"] {
@@ -374,7 +375,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             --bg-input: rgba(255, 255, 255, 0.07);
             --cor-glow: rgba(98, 168, 124, 0.45);
             --bg-overlay: rgba(0, 0, 0, 0.78);
-            --grad-primary: linear-gradient(135deg, #62A87C 0%, #A5D8FF 100%);
+            --grad-primary: linear-gradient(135deg, #55946c 0%, #6e93af 100%);
             --grad-accent: linear-gradient(135deg, #A5D8FF 0%, #462255 100%);
         }
 
@@ -412,7 +413,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
                 radial-gradient(900px 500px at 110% 0%, rgba(132, 108, 91, 0.22) 0%, transparent 55%),
                 radial-gradient(800px 700px at 50% 120%, rgba(247, 240, 240, 0.10) 0%, transparent 55%),
                 linear-gradient(180deg, #183A37 0%, #0a1f1d 100%);
-            --cor-principal: #F7F0F0;
+            --cor-principal: #0d3f37;
             --cor-principal-2: #ffffff;
             --cor-acento: #846C5B;
             --cor-texto: #f7f0f0;
@@ -426,7 +427,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             --bg-input: rgba(255, 255, 255, 0.06);
             --cor-glow: rgba(247, 240, 240, 0.30);
             --bg-overlay: rgba(0, 0, 0, 0.78);
-            --grad-primary: linear-gradient(135deg, #F7F0F0 0%, #846C5B 100%);
+            --grad-primary: linear-gradient(135deg, #cf7e7e 0%, #846C5B 100%);
             --grad-accent: linear-gradient(135deg, #846C5B 0%, #183A37 100%);
         }
 
@@ -456,159 +457,6 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             --grad-accent: linear-gradient(135deg, #937458 0%, #C52184 100%);
         }
 
-        /* =========================================
-           TEMAS PARA DALTONISMO / CORES AMIGÁVEIS
-           Cada bloco atende a um tipo específico: generic, deuteranomalia,
-           protanomalia, protanopia, deuteranopia, tritanomalia, tritanopia.
-           Paletas baseadas em esquemas "colorblind-safe" (azul/laranja/teal/yellow)
-           ========================================= */
-
-        /* TEMA: Daltonismo — Genérico (segurança de contraste e cores universais) */
-        [data-theme="daltonismo"] {
-            --bg-base: #f4f7fb;
-            --bg-gradient: linear-gradient(180deg, #f4f7fb 0%, #eef6ff 100%);
-            --cor-principal: #0072b2; /* azul seguro */
-            --cor-principal-2: #56b4e9;
-            --cor-acento: #e69f00; /* laranja */
-            --cor-texto: #0b2030;
-            --cor-texto-secundario: #264653;
-            --glass-bg: rgba(255,255,255,0.78);
-            --glass-bg-strong: rgba(255,255,255,0.9);
-            --glass-border: rgba(0,0,0,0.06);
-            --bg-card: var(--glass-bg);
-            --borda-card: rgba(0,0,0,0.06);
-            --bg-input: rgba(255,255,255,0.95);
-            --cor-glow: rgba(0,114,178,0.18);
-            --bg-overlay: rgba(6,20,30,0.55);
-            --grad-primary: linear-gradient(135deg, #0072b2 0%, #56b4e9 100%);
-            --grad-accent: linear-gradient(135deg, #e69f00 0%, #0072b2 100%);
-        }
-
-        /* TEMA: Deuteranomalia (deficiência verde - use azul/laranja) */
-        [data-theme="deuteranomalia"] {
-            --bg-base: #fbfcfe;
-            --bg-gradient: linear-gradient(180deg, #fbfcfe 0%, #f0f7fb 100%);
-            --cor-principal: #0072b2; /* azul predominante */
-            --cor-principal-2: #56b4e9;
-            --cor-acento: #e69f00; /* laranja forte para contraste */
-            --cor-texto: #0d2230;
-            --cor-texto-secundario: #30536a;
-            --glass-bg: rgba(255,255,255,0.8);
-            --glass-bg-strong: rgba(255,255,255,0.92);
-            --glass-border: rgba(0,114,178,0.08);
-            --bg-card: var(--glass-bg);
-            --borda-card: rgba(0,114,178,0.08);
-            --bg-input: rgba(255,255,255,0.96);
-            --cor-glow: rgba(86,180,233,0.16);
-            --bg-overlay: rgba(5,22,34,0.58);
-            --grad-primary: linear-gradient(135deg, #0072b2 0%, #56b4e9 100%);
-            --grad-accent: linear-gradient(135deg, #e69f00 0%, #0072b2 100%);
-        }
-
-        /* TEMA: Protanomalia (deficiência vermelha reduzida) */
-        [data-theme="protanomalia"] {
-            --bg-base: #fffaf4;
-            --bg-gradient: linear-gradient(180deg, #fffaf4 0%, #f9f6ef 100%);
-            --cor-principal: #0072b2; /* azul para evitar dependência de vermelho */
-            --cor-principal-2: #f0e442; /* amarelo seguro */
-            --cor-acento: #56b4e9;
-            --cor-texto: #0b1f2a;
-            --cor-texto-secundario: #3b4f5f;
-            --glass-bg: rgba(255,255,255,0.82);
-            --glass-bg-strong: rgba(255,255,255,0.94);
-            --glass-border: rgba(0,0,0,0.06);
-            --bg-card: var(--glass-bg);
-            --borda-card: rgba(0,0,0,0.06);
-            --bg-input: rgba(255,255,255,0.96);
-            --cor-glow: rgba(240,228,66,0.14);
-            --bg-overlay: rgba(10,18,22,0.56);
-            --grad-primary: linear-gradient(135deg, #0072b2 0%, #56b4e9 100%);
-            --grad-accent: linear-gradient(135deg, #f0e442 0%, #0072b2 100%);
-        }
-
-        /* TEMA: Protanopia (perda de vermelho) — evitar vermelhos/rosas */
-        [data-theme="protanopia"] {
-            --bg-base: #f6fbff;
-            --bg-gradient: linear-gradient(180deg, #f6fbff 0%, #eef7ff 100%);
-            --cor-principal: #0072b2;
-            --cor-principal-2: #56b4e9;
-            --cor-acento: #e69f00; /* laranja visível */
-            --cor-texto: #08202a;
-            --cor-texto-secundario: #2b4856;
-            --glass-bg: rgba(255,255,255,0.82);
-            --glass-bg-strong: rgba(255,255,255,0.94);
-            --glass-border: rgba(0,114,178,0.08);
-            --bg-card: var(--glass-bg);
-            --borda-card: rgba(0,114,178,0.08);
-            --bg-input: rgba(255,255,255,0.97);
-            --cor-glow: rgba(0,114,178,0.16);
-            --bg-overlay: rgba(8,18,28,0.6);
-            --grad-primary: linear-gradient(135deg, #0072b2 0%, #56b4e9 100%);
-            --grad-accent: linear-gradient(135deg, #e69f00 0%, #0072b2 100%);
-        }
-
-        /* TEMA: Deuteranopia (perda de verde) — evitar verdes/vermelhos dependentes */
-        [data-theme="deuteranopia"] {
-            --bg-base: #fbfcff;
-            --bg-gradient: linear-gradient(180deg, #fbfcff 0%, #f1f8ff 100%);
-            --cor-principal: #0072b2;
-            --cor-principal-2: #e69f00;
-            --cor-acento: #56b4e9;
-            --cor-texto: #071820;
-            --cor-texto-secundario: #2d4856;
-            --glass-bg: rgba(255,255,255,0.82);
-            --glass-bg-strong: rgba(255,255,255,0.94);
-            --glass-border: rgba(0,0,0,0.06);
-            --bg-card: var(--glass-bg);
-            --borda-card: rgba(0,0,0,0.06);
-            --bg-input: rgba(255,255,255,0.97);
-            --cor-glow: rgba(86,180,233,0.16);
-            --bg-overlay: rgba(7,18,26,0.58);
-            --grad-primary: linear-gradient(135deg, #0072b2 0%, #56b4e9 100%);
-            --grad-accent: linear-gradient(135deg, #e69f00 0%, #0072b2 100%);
-        }
-
-        /* TEMA: Tritanomalia (anomalia azul) — reduzir dependência do azul */
-        [data-theme="tritanomalia"] {
-            --bg-base: #fff9f3;
-            --bg-gradient: linear-gradient(180deg, #fff9f3 0%, #fff3e8 100%);
-            --cor-principal: #d55e00; /* vermelho/laranja para substituir azul */
-            --cor-principal-2: #009e73; /* teal seguro */
-            --cor-acento: #f0e442; /* amarelo visível */
-            --cor-texto: #201612;
-            --cor-texto-secundario: #4a2f21;
-            --glass-bg: rgba(255,255,255,0.86);
-            --glass-bg-strong: rgba(255,255,255,0.96);
-            --glass-border: rgba(0,0,0,0.06);
-            --bg-card: var(--glass-bg);
-            --borda-card: rgba(0,0,0,0.06);
-            --bg-input: rgba(255,255,255,0.98);
-            --cor-glow: rgba(213,94,0,0.14);
-            --bg-overlay: rgba(18,12,10,0.56);
-            --grad-primary: linear-gradient(135deg, #d55e00 0%, #009e73 100%);
-            --grad-accent: linear-gradient(135deg, #f0e442 0%, #d55e00 100%);
-        }
-
-        /* TEMA: Tritanopia (perda de azul) — paleta sem depender do azul) */
-        [data-theme="tritanopia"] {
-            --bg-base: #fffaf6;
-            --bg-gradient: linear-gradient(180deg, #fffaf6 0%, #fff1ea 100%);
-            --cor-principal: #d55e00;
-            --cor-principal-2: #009e73;
-            --cor-acento: #f0e442;
-            --cor-texto: #211613;
-            --cor-texto-secundario: #4b3326;
-            --glass-bg: rgba(255,255,255,0.86);
-            --glass-bg-strong: rgba(255,255,255,0.96);
-            --glass-border: rgba(0,0,0,0.06);
-            --bg-card: var(--glass-bg);
-            --borda-card: rgba(0,0,0,0.06);
-            --bg-input: rgba(255,255,255,0.98);
-            --cor-glow: rgba(213,94,0,0.14);
-            --bg-overlay: rgba(18,12,10,0.56);
-            --grad-primary: linear-gradient(135deg, #d55e00 0%, #009e73 100%);
-            --grad-accent: linear-gradient(135deg, #f0e442 0%, #d55e00 100%);
-        }
 
         /* =========================================
            SELETOR DE TEMAS (na config)
