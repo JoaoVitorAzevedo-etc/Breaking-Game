@@ -406,7 +406,7 @@ const app = {
             
             entrarComUsuario() {
                 const inputUsuario = document.getElementById('username-input');
-                const name = (inputUsuario?.value || '').trim() || this.obterUsuarioSalvoLocal();
+                const name = (inputUsuario?.value || '').trim();
                 if (!name) return console.warn("Digite um nome!");
                 this.usuarioAtual = name;
                 this.usuario = name;
@@ -2344,10 +2344,6 @@ window.addEventListener('DOMContentLoaded', () => {
         app.carregarConfiguracoesSalvas();
     }
 
-    if (app.restaurarUsuarioLocal && app.restaurarUsuarioLocal()) {
-        app.entrarComUsuario();
-    }
-    
     // Modal overlay deve fechar ao clicar fora
     const overlay = document.getElementById('modal-overlay');
     if (overlay) {
