@@ -768,7 +768,6 @@ const app = {
                 const overlay = document.getElementById('modal-overlay');
                 if (overlay) overlay.style.display = 'none';
                 const mainMenu = document.getElementById('main-menu');
-                if (mainMenu) mainMenu.style.display = 'block';
             },
 
             abrirInventario() {
