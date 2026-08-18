@@ -5,6 +5,7 @@ const app = {
             temaSelecionado: 'light-1',
             fonteSelecionada: 'inter',
             tamanhoFonte: 'medio',
+            categoriaLojaSelecionada: 'todos',
             // --------------------------------------
             perguntaAtualIdx: 0,
             gameState: { 
@@ -1140,7 +1141,49 @@ const app = {
                 document.getElementById('main-menu').style.display = 'none';
                 document.getElementById('modal-overlay').style.display = 'block';
                 document.getElementById('shop-screen').style.display = 'flex';
+                this.categoriaLojaSelecionada = 'todos';
+                const busca = document.getElementById('shop-search-input');
+                if (busca) busca.value = '';
+                document.querySelectorAll('.shop-cat-btn').forEach(botao => {
+                    botao.classList.toggle('active', botao.dataset.cat === 'todos');
+                });
+                this.filtrarLoja();
                 this.renderizarLoja();
+            },
+
+            selecionarCategoriaLoja(categoria, botao) {
+                this.categoriaLojaSelecionada = categoria || 'todos';
+                document.querySelectorAll('.shop-cat-btn').forEach(item => {
+                    item.classList.toggle('active', item === botao || item.dataset.cat === this.categoriaLojaSelecionada);
+                });
+                this.filtrarLoja();
+            },
+
+            filtrarLoja() {
+                const busca = document.getElementById('shop-search-input');
+                const termo = (busca?.value || '').trim().toLocaleLowerCase();
+                const categoria = this.categoriaLojaSelecionada || 'todos';
+                let encontrados = 0;
+
+                document.querySelectorAll('#shop-screen .shop-section').forEach(secao => {
+                    let cardsVisiveisNaSecao = 0;
+                    secao.querySelectorAll('.shop-card').forEach(card => {
+                        const tags = (card.dataset.tags || '').toLocaleLowerCase().split(/\s+/);
+                        const conteudo = card.textContent.toLocaleLowerCase();
+                        const correspondeCategoria = categoria === 'todos' || tags.includes(categoria);
+                        const correspondeBusca = !termo || conteudo.includes(termo);
+                        const visivel = correspondeCategoria && correspondeBusca;
+
+                        card.style.display = visivel ? '' : 'none';
+                        if (visivel) cardsVisiveisNaSecao++;
+                    });
+                    secao.classList.toggle('is-empty', cardsVisiveisNaSecao === 0);
+                    encontrados += cardsVisiveisNaSecao;
+                });
+
+                const mensagemVazia = document.getElementById('shop-empty-msg');
+                if (mensagemVazia) mensagemVazia.style.display = encontrados ? 'none' : 'block';
+                return encontrados;
             },
 
             fecharLoja() {
