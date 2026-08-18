@@ -1147,8 +1147,8 @@ const app = {
                 document.querySelectorAll('.shop-cat-btn').forEach(botao => {
                     botao.classList.toggle('active', botao.dataset.cat === 'todos');
                 });
-                this.filtrarLoja();
                 this.renderizarLoja();
+                this.filtrarLoja();
             },
 
             selecionarCategoriaLoja(categoria, botao) {
