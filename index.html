@@ -83,6 +83,7 @@
             <button class="btn-option" onclick="app.abrirPanorama()"> Jogar</button>
             <button class="btn-option" onclick="app.abrirTabelaPeriodica()">Materiais de Estudo</button>
             <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
+            <button class="btn-option" onclick="app.abrirRanking()">Ranking</button>
             <button class="btn-option" onclick="app.abrirPerfil()">Desempenho</button>
             <button class="btn-option" onclick="app.mostrarTutorialIntro()"> Rever Tutorial</button>
             <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
@@ -565,6 +566,38 @@
     </div> </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="ranking-screen modal-animated" id="ranking-screen" style="display: none;">
+
+    <div class="ranking-header">
+        <div>
+            <h2>🏆 Ranking</h2>
+            <p>Os melhores jogadores do Breaking Game</p>
+        </div>
+
+        <button
+            class="ranking-close"
+            onclick="app.fecharRanking()"
+            aria-label="Fechar ranking">
+            ✕
+        </button>
+    </div>
+
+    <div class="ranking-user">
+        <span>Seu desempenho</span>
+
+        <div class="ranking-user-info">
+            <strong id="ranking-current-user">-</strong>
+            <span>
+                <b id="ranking-current-points">0</b> pts
+            </span>
+        </div>
+    </div>
+
+    <div class="ranking-list" id="ranking-list">
+        <!-- preenchido pelo app.mjs -->
     </div>
 </div>
 
