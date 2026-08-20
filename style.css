@@ -1340,6 +1340,8 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
 .ranking-screen {
     position: fixed;
     inset: 0;
+
+
     left: 40%;
     top: 50%;
 
