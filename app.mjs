@@ -186,6 +186,39 @@ const app = {
             inicializarConta() {
                 this.contaPadrao = this.obterPerfilPadrao();
             },
+            podeAcessarDesafioFinal() {
+    const historico = this.contaPadrao?.historico || [];
+    const desafioFinalBloqueado =
+    fase.id === 14 && !this.podeAcessarDesafioFinal();
+
+const bloqueada =
+    desafioFinalBloqueado ||
+    fase.id > this.contaPadrao.nivelMaximo;
+
+    const resultadoFase13 = historico
+        .filter(resultado => Number(resultado.fase) === 13)
+        .sort((a, b) => {
+            const dataA = new Date(a.data);
+            const dataB = new Date(b.data);
+            return dataB - dataA;
+        })[0];
+
+    if (!resultadoFase13) {
+        return false;
+    }
+
+    // A fase possui 5 perguntas.
+    // 60% = 3 acertos.
+    const acertos = Number(resultadoFase13.acertos) || 0;
+
+    return acertos >= 3;
+    if (bloqueada) {
+    // mantém o comportamento visual de fase bloqueada
+} else {
+    // fase disponível
+}
+},
+
 
             contaPadrao: null,
 
@@ -2494,6 +2527,26 @@ escaparHTML(texto) {
                 
                 // Chama a função que recarrega/exibe o menu principal
                 this.carregarMenuPrincipal(); 
+                // Fecha a tela de resultados
+    const resultsScreen = document.getElementById('stats-screen');
+
+    if (resultsScreen) {
+        resultsScreen.style.display = 'none';
+    }
+
+    // Fecha outras telas que possam estar abertas
+    const rankingScreen = document.getElementById('ranking-screen');
+
+    if (rankingScreen) {
+        rankingScreen.style.display = 'none';
+    }
+
+    // Abre o menu principal
+    const mainMenu = document.getElementById('main-menu');
+
+    if (mainMenu) {
+        mainMenu.style.display = 'block';
+    }
             },
 
             trocarUsuario() { 
