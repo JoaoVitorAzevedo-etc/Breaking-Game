@@ -2429,3 +2429,34 @@ button:focus {
 .shop-section.is-empty {
     display: none;
 }
+
+@media (max-width: 900px) {
+    .shop-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .shop-panel {
+        width: min(96vw, 560px);
+        max-height: 94vh;
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    .shop-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .shop-categories {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .shop-cat-btn {
+        min-width: 0;
+        padding: 9px 8px;
+        white-space: normal;
+    }
+}
