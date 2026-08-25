@@ -2331,6 +2331,11 @@ escaparHTML(texto) {
             usarDica() {
                 const perfil = this.contaPadrao;
                 const dicaDisplay = document.getElementById('dica-display');
+                if (dicasUsadas >= 3) {
+                    span(dicaDisplay).innerHTML = `<strong style="color: #cc0040;">⚠️ Limite de dicas</strong> Você já usou 3 dicas nesta fase.`;
+                    dicaDisplay.classList.add('show');
+                    return;
+                }
                 
                 if (perfil.pontuacaoTotal < this.gameState.CUSTO_DICA) {
                     dicaDisplay.innerHTML = `<strong style="color: #cc0040;">⚠️ Pontos insuficientes</strong> Você precisa de ${this.gameState.CUSTO_DICA} pontos. Você tem ${perfil.pontuacaoTotal}.`;
