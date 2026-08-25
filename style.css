@@ -811,7 +811,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         .stats-screen { max-width: 520px; width: 92%; }
         .config-screen { max-width: 520px; width: 92%; }
         .stats-panel { max-width: 520px; width: 92%; }
-        #inventory-screen { max-width: 780px; width: 96%; max-height: 88vh; overflow: hidden; }
+        #inventory-screen { max-width: 780px; width: 96%; max-height: 88vh; overflow-y: auto; overflow-x: hidden; box-sizing: border-box; }
         #inventory-screen .inventory-card { min-height: 360px; padding: 22px; }
         #inventory-screen .inventory-item-grid { max-height: 56vh; overflow-y: auto; padding-right: 8px; }
         #inventory-screen .inventory-item-grid::-webkit-scrollbar { width: 8px; }

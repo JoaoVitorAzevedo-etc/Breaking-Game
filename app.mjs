@@ -2557,6 +2557,17 @@ escaparHTML(texto) {
                 this.abrirPanorama();
             },
 
+            fecharDesafioFinalVoltarPanorama() {
+                const finalWarningScreen = document.getElementById('final-warning-screen');
+                const overlay = document.getElementById('modal-overlay');
+                if (finalWarningScreen) finalWarningScreen.style.display = 'none';
+                if (overlay) overlay.style.display = 'none';
+                this.auxiliarSelecionado = null;
+                this.nivelPendente = null;
+                this.tagPendente = null;
+                this.abrirPanorama();
+            },
+
             confirmarVoltarMapa() {
                 if (confirm('Deseja sair da fase? Seu progresso nesta rodada será perdido.')) {
                     document.getElementById('question-box').style.display = 'none';
