@@ -1342,6 +1342,272 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         .card-molecula h4 { margin: 0 0 5px 0; font-size: 1.25rem; font-weight: 700; }
         .card-molecula p.formula { margin: 0; font-size: 1rem; color: var(--cor-texto-secundario); font-family: 'JetBrains Mono', monospace; }
 
+ /* =========================================
+   RANKING
+   ========================================= */
+
+.ranking-screen {
+    position: fixed;
+    inset: 0;
+
+
+    left: 40%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 760px;
+
+    width: min(760px, 92vw);
+    max-height: 85vh;
+
+    margin: auto;
+    padding: 28px;
+
+    overflow-y: auto;
+
+    background: var(--bg-card);
+    color: var(--cor-texto);
+
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    border-radius: 16px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.35),
+        0 0 30px rgba(6, 182, 212, 0.10);
+
+    z-index: 1000;
+}
+
+/* Cabeçalho */
+
+.ranking-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 24px;
+}
+
+.ranking-header h2 {
+    margin: 0;
+
+    color: #06b6d4;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+}
+
+.ranking-header p {
+    margin: 6px 0 0;
+
+    color: var(--cor-texto-secundario);
+    font-size: 0.9rem;
+}
+
+.ranking-close {
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid var(--borda-card);
+    border-radius: 10px;
+
+    background: transparent;
+    color: var(--cor-texto);
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.ranking-close:hover {
+    color: #06b6d4;
+    border-color: #06b6d4;
+    background: rgba(6, 182, 212, 0.08);
+}
+
+/* Jogador atual */
+
+.ranking-user {
+    margin-bottom: 20px;
+    padding: 16px;
+
+    background: rgba(6, 182, 212, 0.07);
+
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    border-radius: 12px;
+}
+
+.ranking-user > span {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--cor-texto-secundario);
+    font-size: 0.8rem;
+}
+
+.ranking-user-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ranking-user-info strong {
+    color: var(--cor-texto);
+    font-size: 1.1rem;
+}
+
+.ranking-user-info span {
+    color: #06b6d4;
+    font-weight: 700;
+}
+
+/* Lista */
+
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Jogador */
+
+.ranking-item {
+    display: grid;
+    grid-template-columns: 55px 1fr auto;
+
+    align-items: center;
+
+    min-height: 68px;
+    padding: 10px 16px;
+
+    background: var(--bg-input);
+
+    border: 1px solid var(--borda-card);
+    border-radius: 12px;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.ranking-item:hover {
+    transform: translateX(4px);
+
+    border-color: rgba(6, 182, 212, 0.4);
+    background: rgba(6, 182, 212, 0.05);
+}
+
+.ranking-position {
+    color: #06b6d4;
+
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.ranking-player {
+    min-width: 0;
+}
+
+.ranking-player-name {
+    display: block;
+
+    overflow: hidden;
+
+    color: var(--cor-texto);
+
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ranking-player-level {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--cor-texto-secundario);
+    font-size: 0.8rem;
+}
+
+.ranking-points {
+    color: #06b6d4;
+
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+/* Destaques do pódio */
+
+.ranking-item:nth-child(1) {
+    border-color: rgba(6, 182, 212, 0.55);
+
+    background: rgba(6, 182, 212, 0.09);
+
+    box-shadow: 0 0 18px rgba(6, 182, 212, 0.08);
+}
+
+.ranking-item:nth-child(1) .ranking-position {
+    font-size: 1.35rem;
+}
+
+.ranking-item:nth-child(2),
+.ranking-item:nth-child(3) {
+    background: rgba(255, 255, 255, 0.025);
+}
+
+/* Usuário atual */
+
+.ranking-item.current-user {
+    border-color: #06b6d4;
+
+    box-shadow:
+        0 0 0 1px rgba(6, 182, 212, 0.12),
+        0 0 18px rgba(6, 182, 212, 0.08);
+}
+
+/* Mensagem sem jogadores */
+
+.ranking-empty {
+    padding: 35px 20px;
+
+    color: var(--cor-texto-secundario);
+
+    text-align: center;
+}
+
+/* Botão */
+
+.ranking-back {
+    width: 100%;
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+
+    .ranking-screen {
+        width: 30vw;
+        padding: 20px;
+    }
+
+    .ranking-header h2 {
+        font-size: 1.6rem;
+    }
+
+    .ranking-item {
+        grid-template-columns: 42px 1fr auto;
+        padding: 10px 12px;
+    }
+
+    .ranking-points {
+        font-size: 0.8rem;
+    }
+}
         /* =========================================
            LOJA
            ========================================= */

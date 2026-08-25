@@ -199,6 +199,39 @@ const app = {
             inicializarConta() {
                 this.contaPadrao = this.obterPerfilPadrao();
             },
+            podeAcessarDesafioFinal() {
+    const historico = this.contaPadrao?.historico || [];
+    const desafioFinalBloqueado =
+    fase.id === 14 && !this.podeAcessarDesafioFinal();
+
+const bloqueada =
+    desafioFinalBloqueado ||
+    fase.id > this.contaPadrao.nivelMaximo;
+
+    const resultadoFase13 = historico
+        .filter(resultado => Number(resultado.fase) === 13)
+        .sort((a, b) => {
+            const dataA = new Date(a.data);
+            const dataB = new Date(b.data);
+            return dataB - dataA;
+        })[0];
+
+    if (!resultadoFase13) {
+        return false;
+    }
+
+    // A fase possui 5 perguntas.
+    // 60% = 3 acertos.
+    const acertos = Number(resultadoFase13.acertos) || 0;
+
+    return acertos >= 3;
+    if (bloqueada) {
+    // mantém o comportamento visual de fase bloqueada
+} else {
+    // fase disponível
+}
+},
+
 
             contaPadrao: null,
 
@@ -794,6 +827,169 @@ const app = {
                 return this.contaPadrao.itensComprados.includes(itemId);
             },
 
+            abrirRanking() {
+    const rankingScreen = document.getElementById('ranking-screen');
+
+    if (!rankingScreen) return;
+
+    // Fecha outras telas antes de abrir o ranking
+    const telas = [
+        'main-menu',
+        'levels-screen',
+        'config-screen',
+        'stats-screen',
+        'stats-panel'
+    ];
+
+    telas.forEach(id => {
+        const elemento = document.getElementById(id);
+
+        if (elemento) {
+            elemento.style.display = 'none';
+        }
+    });
+
+    rankingScreen.style.display = 'block';
+
+    this.renderizarRanking();
+},
+
+fecharRanking() {
+    const rankingScreen = document.getElementById('ranking-screen');
+
+    if (rankingScreen) {
+        rankingScreen.style.display = 'none';
+    }
+
+    const mainMenu = document.getElementById('main-menu');
+
+    if (mainMenu) {
+        mainMenu.style.display = 'block';
+    }
+},
+obterRanking() {
+    const jogadores = [];
+
+    if (!this.isLocalStorageAvailable()) {
+        return jogadores;
+    }
+
+    for (let i = 0; i < localStorage.length; i++) {
+
+        const chave = localStorage.key(i);
+
+        if (!chave || !chave.startsWith('usuario_')) {
+            continue;
+        }
+
+        const nome = chave.replace('usuario_', '').trim();
+
+        if (!nome) {
+            continue;
+        }
+
+        const perfil = this.carregarDados(chave, null);
+
+        if (!perfil) {
+            continue;
+        }
+
+        jogadores.push({
+            nome: perfil.nome || nome,
+            pontuacaoTotal: Number(perfil.pontuacaoTotal) || 0,
+            nivelMaximo: Number(perfil.nivelMaximo) || 1
+        });
+    }
+
+    return jogadores.sort(
+        (a, b) => b.pontuacaoTotal - a.pontuacaoTotal
+    );
+},
+renderizarRanking() {
+    const lista = document.getElementById('ranking-list');
+
+    if (!lista) return;
+
+    const ranking = this.obterRanking();
+
+    const usuarioAtual =
+        this.usuarioAtual ||
+        this.usuario ||
+        this.contaPadrao?.nome ||
+        null;
+
+    const usuario = ranking.find(
+        jogador => jogador.nome === usuarioAtual
+    );
+
+    const nomeAtual = document.getElementById('ranking-current-user');
+    const pontosAtual = document.getElementById('ranking-current-points');
+
+    if (nomeAtual) {
+        nomeAtual.textContent = usuario?.nome || usuarioAtual || '-';
+    }
+
+    if (pontosAtual) {
+        pontosAtual.textContent =
+            (usuario?.pontuacaoTotal || 0).toLocaleString('pt-BR');
+    }
+
+    if (!ranking.length) {
+        lista.innerHTML = `
+            <div class="ranking-empty">
+                Nenhum jogador encontrado.
+            </div>
+        `;
+
+        return;
+    }
+
+    lista.innerHTML = ranking
+        .map((jogador, index) => {
+
+            const posicao = index + 1;
+
+            const isCurrentUser =
+                jogador.nome === usuarioAtual;
+
+            let medalha = `${posicao}º`;
+
+            if (posicao === 1) medalha = '🥇';
+            if (posicao === 2) medalha = '🥈';
+            if (posicao === 3) medalha = '🥉';
+
+            return `
+                <div class="ranking-item ${isCurrentUser ? 'current-user' : ''}">
+
+                    <div class="ranking-position">
+                        ${medalha}
+                    </div>
+
+                    <div class="ranking-player">
+                        <span class="ranking-player-name">
+                            ${this.escaparHTML(jogador.nome)}
+                        </span>
+
+                        <span class="ranking-player-level">
+                            Fase ${jogador.nivelMaximo}
+                        </span>
+                    </div>
+
+                    <div class="ranking-points">
+                        ${jogador.pontuacaoTotal.toLocaleString('pt-BR')} pts
+                    </div>
+
+                </div>
+            `;
+        })
+        .join('');
+},
+escaparHTML(texto) {
+    const div = document.createElement('div');
+    div.textContent = texto ?? '';
+    return div.innerHTML;
+},
+
             abrirConfig() {
                 this.atualizarAvatares();
                 const avatarInput = document.getElementById('avatar-url-input');
@@ -1242,6 +1438,7 @@ const app = {
                 document.getElementById('modal-overlay').style.display = 'none';
                 document.getElementById('main-menu').style.display = 'block';
             },
+            
 
             atualizarPerfil() {
                 const perfil = this.contaPadrao || this.obterPerfilPadrao();
@@ -2185,6 +2382,11 @@ const app = {
             usarDica() {
                 const perfil = this.contaPadrao;
                 const dicaDisplay = document.getElementById('dica-display');
+                if (dicasUsadas >= 3) {
+                    span(dicaDisplay).innerHTML = `<strong style="color: #cc0040;">⚠️ Limite de dicas</strong> Você já usou 3 dicas nesta fase.`;
+                    dicaDisplay.classList.add('show');
+                    return;
+                }
                 
                 if (perfil.pontuacaoTotal < this.gameState.CUSTO_DICA) {
                     dicaDisplay.innerHTML = `<strong style="color: #cc0040;">⚠️ Pontos insuficientes</strong> Você precisa de ${this.gameState.CUSTO_DICA} pontos. Você tem ${perfil.pontuacaoTotal}.`;
@@ -2381,6 +2583,26 @@ const app = {
                 
                 // Chama a função que recarrega/exibe o menu principal
                 this.carregarMenuPrincipal(); 
+                // Fecha a tela de resultados
+    const resultsScreen = document.getElementById('stats-screen');
+
+    if (resultsScreen) {
+        resultsScreen.style.display = 'none';
+    }
+
+    // Fecha outras telas que possam estar abertas
+    const rankingScreen = document.getElementById('ranking-screen');
+
+    if (rankingScreen) {
+        rankingScreen.style.display = 'none';
+    }
+
+    // Abre o menu principal
+    const mainMenu = document.getElementById('main-menu');
+
+    if (mainMenu) {
+        mainMenu.style.display = 'block';
+    }
             },
 
             trocarUsuario() { 

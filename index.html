@@ -87,6 +87,7 @@
             <button class="btn-option" onclick="app.abrirPanorama()"> Jogar</button>
             <button class="btn-option" onclick="app.abrirTabelaPeriodica()">Materiais de Estudo</button>
             <button class="btn-option" onclick="app.abrirLoja()"> Loja</button>
+            <button class="btn-option" onclick="app.abrirRanking()">Ranking</button>
             <button class="btn-option" onclick="app.abrirPerfil()">Desempenho</button>
             <button class="btn-option" onclick="app.mostrarTutorialIntro()"> Rever Tutorial</button>
             <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
@@ -100,9 +101,7 @@
                 <button class="btn-option" style="font-size: 1rem; margin-bottom: 20px;" onclick="app.voltarAoMenu()">← Voltar</button>
                 <div id="roadmap-content" class="roadmap-container"></div>
             </div>
-            <div class="right-panel">
-                <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=600" alt="Química" class="theme-image">
-            </div>
+            
         </div>
     </div>
 
@@ -140,14 +139,14 @@
     </div>
 
     <div class="stats-screen modal-animated" id="stats-screen">
-        <h2 id="result-title" style="color: var(--cor-principal); margin-bottom: 15px; font-size: 2rem;">🏆 Fase Concluída!</h2>
+        <h2 id="result-title" style="color: var(--cor-principal); margin-bottom: 15px; font-size: 2rem;"> Fase Concluída!</h2>
         <div style="margin: 20px 0; text-align: left; border: 1px solid var(--borda-card); padding: 20px; background: var(--bg-input); border-radius: 8px;">
             <p style="font-size: 1.3rem; margin-bottom: 10px;">Pontos Ganhos: <span id="final-score" class="highlight-text">0</span></p>
             <p style="font-size: 1.3rem;">Taxa de Acerto: <span id="acerto-pct" class="highlight-text">0</span>%</p>
             <p id="badge-alert" class="pop-animation" style="color: #00c850; font-weight: bold; margin-top: 15px; display: none; text-align: center; background: rgba(0, 200, 80, 0.1); padding: 10px; border-radius: 5px;">🎉 Nova Badge Desbloqueada! Verifique seu perfil.</p>
         </div>
         <div style="display: flex; gap: 12px; justify-content: center; margin-top: 10px;">
-            <button class="btn-option" style="font-size: 1rem; background: #888888; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;" onclick="app.voltarAoMenu()">🏠 Menu Principal</button>
+            <button class="btn-option" style="font-size: 1rem; background: #888888; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;" onclick="app.voltarAoMenu()"> Menu Principal</button>
             <button class="btn-option" style="font-size: 1.2rem;" onclick="app.abrirPanorama()">Continuar Jornada →</button>
         </div>
     </div>
@@ -156,9 +155,14 @@
     <h2 class="config-header">Dashboard do Usuário</h2>
 
     <div class="user-dashboard-card" style="display: flex; align-items: center; gap: 16px; padding: 18px; border-radius: 16px; background: var(--bg-card-strong, var(--bg-card)); border: 1px solid var(--borda-card); margin-bottom: 20px;">
+<<<<<<< HEAD
         <div class="dashboard-avatar-frame">
             <img id="dash-avatar-image" class="avatar-image" alt="Avatar do usuário">
             <span id="dash-avatar" class="avatar-fallback">U</span>
+=======
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--grad-primary, var(--cor-principal)); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800; flex-shrink: 0;">
+            <span id="dash-avatar">-+</span>
+>>>>>>> b87ab363d9b4e2a1e2b33975a6bbac225981d3aa
         </div>
         <div style="flex: 1; min-width: 0;">
             <div style="font-size: 1.15rem; font-weight: 700; color: var(--cor-texto); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -286,7 +290,7 @@
         <button class="auxiliar-confirmar" id="btn-iniciar-final" style="display: inline-block; background: var(--cor-principal); color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; margin-right: 15px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;">
             ⚡ Começar Desafio →
         </button>
-        <button class="auxiliar-confirmar" onclick="document.getElementById('final-warning-screen').style.display='none'; document.getElementById('modal-overlay').style.display='none';" style="display: inline-block; background: #888888; color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;">
+        <button class="auxiliar-confirmar" onclick="app.fecharConceitoVoltarMapa().style.display='none'; document.getElementById('modal-overlay').style.display='none';" style="display: inline-block; background: #888888; color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;">
             ← Voltar ao Panorama
         </button>
     </div>
@@ -576,6 +580,38 @@
     </div> </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="ranking-screen modal-animated" id="ranking-screen" style="display: none;">
+
+    <div class="ranking-header">
+        <div>
+            <h2>🏆 Ranking</h2>
+            <p>Os melhores jogadores do Breaking Game</p>
+        </div>
+
+        <button
+            class="ranking-close"
+            onclick="app.fecharRanking()"
+            aria-label="Fechar ranking">
+            ✕
+        </button>
+    </div>
+
+    <div class="ranking-user">
+        <span>Seu desempenho</span>
+
+        <div class="ranking-user-info">
+            <strong id="ranking-current-user">-</strong>
+            <span>
+                <b id="ranking-current-points">0</b> pts
+            </span>
+        </div>
+    </div>
+
+    <div class="ranking-list" id="ranking-list">
+        <!-- preenchido pelo app.mjs -->
     </div>
 </div>
 
