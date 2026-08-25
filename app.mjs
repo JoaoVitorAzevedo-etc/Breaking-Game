@@ -22,6 +22,18 @@ const app = {
             tagPendente: null,
             sons: {},
             desempenhoChart: null,
+
+            observarVisibilidadeMenu() {
+                const mainMenu = document.getElementById('main-menu');
+                const controles = document.querySelector('.top-controls');
+                if (!mainMenu || !controles) return;
+
+                const atualizar = () => {
+                    controles.style.display = mainMenu.style.display === 'block' ? 'flex' : 'none';
+                };
+                atualizar();
+                new MutationObserver(atualizar).observe(mainMenu, { attributes: true, attributeFilter: ['style'] });
+            },
             
             inicializarSons() {
                 const basePath = 'sounds/';
@@ -158,6 +170,7 @@ const app = {
                     historico: [],
                     temaCurrent: "light-1",
                     tamanhoFonte: "medio",
+                    avatarUrl: "",
                     itensComprados: ["light-1", "inter"]
                 };
             },
@@ -473,7 +486,35 @@ const app = {
                     document.getElementById('username-display').textContent = this.usuarioAtual;
                     document.getElementById('total-points').textContent = perfil.pontuacaoTotal || 0;
                     document.getElementById('max-level').textContent = perfil.nivelMaximo || 1;
+                    this.atualizarAvatares();
                 }
+            },
+
+            atualizarAvatares() {
+                const perfil = this.contaPadrao || this.obterPerfilPadrao();
+                const nome = this.usuarioAtual || perfil.nome || 'Usuário';
+                const url = typeof perfil.avatarUrl === 'string' ? perfil.avatarUrl.trim() : '';
+                const inicial = nome.charAt(0).toUpperCase() || 'U';
+                const pares = [
+                    ['dash-avatar-image', 'dash-avatar'],
+                    ['main-menu-avatar', 'main-menu-avatar-fallback'],
+                    ['menu-avatar', 'menu-avatar-fallback']
+                ];
+
+                pares.forEach(([imageId, fallbackId]) => {
+                    const image = document.getElementById(imageId);
+                    const fallback = document.getElementById(fallbackId);
+                    if (!image || !fallback) return;
+                    fallback.textContent = inicial;
+                    fallback.style.display = url ? 'none' : 'flex';
+                    image.style.display = url ? 'block' : 'none';
+                    image.onerror = () => {
+                        image.style.display = 'none';
+                        fallback.style.display = 'flex';
+                    };
+                    if (url) image.src = url;
+                    else image.removeAttribute('src');
+                });
             },
             
             carregarConfiguracoesSalvas: function() {
@@ -535,6 +576,7 @@ const app = {
                 if (usernameDisplay) usernameDisplay.textContent = this.usuarioAtual || this.usuario || 'Usuário';
                 if (totalPoints) totalPoints.textContent = perfil.pontuacaoTotal || 0;
                 if (maxLevel) maxLevel.textContent = perfil.nivelMaximo || 1;
+                this.atualizarAvatares();
                 if (mainMenu) mainMenu.style.display = 'block';
 
                 if (this.aplicarTamanhoFonte) this.aplicarTamanhoFonte(perfil.tamanhoFonte);
@@ -753,6 +795,9 @@ const app = {
             },
 
             abrirConfig() {
+                this.atualizarAvatares();
+                const avatarInput = document.getElementById('avatar-url-input');
+                if (avatarInput) avatarInput.value = this.contaPadrao?.avatarUrl || '';
                 document.getElementById('config-screen').style.display = 'block';
                 document.getElementById('modal-overlay').style.display = 'block';
                 const atual = document.body.getAttribute('data-theme') || 'light-1';
@@ -764,6 +809,12 @@ const app = {
             },
 
             fecharConfig() {
+                const avatarInput = document.getElementById('avatar-url-input');
+                if (avatarInput && this.contaPadrao && this.usuarioAtual) {
+                    this.contaPadrao.avatarUrl = avatarInput.value.trim();
+                    this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
+                    this.atualizarAvatares();
+                }
                 const configScreen = document.getElementById('config-screen');
                 if (configScreen) configScreen.style.display = 'none';
                 const overlay = document.getElementById('modal-overlay');
@@ -2382,6 +2433,7 @@ const app = {
 
 // --- ADIÇÃO PARA CARREGAMENTO E ACESSIBILIDADE VIA TECLADO ---
 window.addEventListener('DOMContentLoaded', () => {
+    app.observarVisibilidadeMenu();
     // Carregar configurações salvas (tema, fonte, tamanho)
     if (app.carregarConfiguracoesSalvas) {
         app.carregarConfiguracoesSalvas();
