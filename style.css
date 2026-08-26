@@ -584,7 +584,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         /* =========================================
            CONTROLES TOPO
            ========================================= */
-        .top-controls { position: fixed; top: 18px; right: 18px; z-index: 1000; display: flex; gap: 10px; }
+        .top-controls { position: fixed; top: 18px; right: 18px; z-index: 1000; display: none; gap: 10px; }
 
         .control-btn {
             background: var(--glass-bg-strong);
@@ -604,6 +604,15 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         }
         .control-btn:hover { transform: translateY(-2px); box-shadow: var(--glass-shadow-lg); border-color: var(--cor-principal); color: var(--cor-principal); }
         .control-btn:active { transform: scale(0.96); }
+        .control-btn-avatar { width: 56px; height: 56px; padding: 0; border-radius: 50%; justify-content: center; overflow: hidden; }
+        .avatar-image, .avatar-fallback { width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0; }
+        .avatar-image { object-fit: cover; }
+        .avatar-fallback { align-items: center; justify-content: center; background: var(--grad-primary, var(--cor-principal)); color: white; font-size: 1.6rem; font-weight: 800; }
+        .main-menu-user { display: flex; align-items: center; gap: 10px; }
+        .main-menu-user .avatar-image, .main-menu-user .avatar-fallback { width: 40px; height: 40px; font-size: 1.1rem; }
+        .dashboard-avatar-frame { width: 56px; height: 56px; border-radius: 50%; overflow: hidden; background: var(--grad-primary, var(--cor-principal)); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .config-help { margin-top: 7px; color: var(--cor-texto-secundario); }
+        #avatar-url-input { width: 100%; box-sizing: border-box; }
 
         /* =========================================
            CONTAINER & LAYOUT
@@ -802,7 +811,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         .stats-screen { max-width: 520px; width: 92%; }
         .config-screen { max-width: 520px; width: 92%; }
         .stats-panel { max-width: 520px; width: 92%; }
-        #inventory-screen { max-width: 780px; width: 96%; max-height: 88vh; overflow: hidden; }
+        #inventory-screen { max-width: 780px; width: 96%; max-height: 88vh; overflow-y: auto; overflow-x: hidden; box-sizing: border-box; }
         #inventory-screen .inventory-card { min-height: 360px; padding: 22px; }
         #inventory-screen .inventory-item-grid { max-height: 56vh; overflow-y: auto; padding-right: 8px; }
         #inventory-screen .inventory-item-grid::-webkit-scrollbar { width: 8px; }

@@ -17,9 +17,9 @@
             <span style="font-size: 1.1rem;">🎒</span>
             <span>Inventário</span>
         </button>
-        <button class="control-btn" id="btn-usuario" onclick="app.abrirConfig()">
-            <span style="font-size: 1.1rem;">👤</span>
-            <span>Usuário</span>
+        <button class="control-btn control-btn-avatar" id="btn-usuario" onclick="app.abrirConfig()" aria-label="Abrir dashboard do usuário" title="Abrir dashboard do usuário">
+            <img id="menu-avatar" class="avatar-image" alt="Avatar do usuário">
+            <span id="menu-avatar-fallback" class="avatar-fallback">U</span>
         </button>
     </div>
 
@@ -76,7 +76,11 @@
 
     <div id="main-menu" class="container fade-in" style="display: none;">
         <h1 class="game-title">Breaking Game</h1>
-        <p class="info-text"> Usuário: <span id="username-display" class="highlight-text">-</span></p>
+        <p class="info-text main-menu-user">
+            <img id="main-menu-avatar" class="avatar-image" alt="Avatar do usuário">
+            <span id="main-menu-avatar-fallback" class="avatar-fallback">U</span>
+            <span id="username-display" class="highlight-text">-</span>
+        </p>
         <p class="info-text"> Pontos: <span id="total-points" class="highlight-text">0</span> |  Progresso: Fase <span id="max-level" class="highlight-text">1</span></p>
         
         <div class="menu-options" style="margin-top: 50px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
@@ -151,8 +155,14 @@
     <h2 class="config-header">Dashboard do Usuário</h2>
 
     <div class="user-dashboard-card" style="display: flex; align-items: center; gap: 16px; padding: 18px; border-radius: 16px; background: var(--bg-card-strong, var(--bg-card)); border: 1px solid var(--borda-card); margin-bottom: 20px;">
+<<<<<<< HEAD
+        <div class="dashboard-avatar-frame">
+            <img id="dash-avatar-image" class="avatar-image" alt="Avatar do usuário">
+            <span id="dash-avatar" class="avatar-fallback">U</span>
+=======
         <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--grad-primary, var(--cor-principal)); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800; flex-shrink: 0;">
             <span id="dash-avatar">-+</span>
+>>>>>>> b87ab363d9b4e2a1e2b33975a6bbac225981d3aa
         </div>
         <div style="flex: 1; min-width: 0;">
             <div style="font-size: 1.15rem; font-weight: 700; color: var(--cor-texto); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -178,6 +188,12 @@
         <div class="config-option" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
             <span class="config-label" style="font-weight: 600;">Música (Em breve)</span>
             <input type="checkbox" checked style="transform: scale(1.5); accent-color: var(--cor-principal);">
+        </div>
+
+        <div class="config-option avatar-url-option" style="flex-direction: column; align-items: flex-start; margin-top: 20px;">
+            <label class="config-label" for="avatar-url-input" style="margin-bottom: 10px; font-weight: 600;">URL da imagem do avatar</label>
+            <input type="url" id="avatar-url-input" placeholder="https://exemplo.com/minha-imagem.jpg" autocomplete="url">
+            <small class="config-help">Cole uma URL pública de uma imagem para usar como avatar.</small>
         </div>
     </div>
 
@@ -274,7 +290,7 @@
         <button class="auxiliar-confirmar" id="btn-iniciar-final" style="display: inline-block; background: var(--cor-principal); color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; margin-right: 15px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;">
             ⚡ Começar Desafio →
         </button>
-        <button class="auxiliar-confirmar" onclick="app.fecharConceitoVoltarMapa().style.display='none'; document.getElementById('modal-overlay').style.display='none';" style="display: inline-block; background: #888888; color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;">
+        <button class="auxiliar-confirmar" onclick="app.fecharDesafioFinalVoltarPanorama()" style="display: inline-block; background: #888888; color: var(--bg-input); border: none; padding: 12px 32px; border-radius: 50px; cursor: pointer; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;">
             ← Voltar ao Panorama
         </button>
     </div>
