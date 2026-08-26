@@ -1050,13 +1050,22 @@ escaparHTML(texto) {
             },
 
             fecharInventario() {
-                const inv = document.getElementById('inventory-screen');
-                if (inv) inv.style.display = 'none';
-                const overlay = document.getElementById('modal-overlay');
-                if (overlay) overlay.style.display = 'none';
-                const mainMenu = document.getElementById('main-menu');
-    
-            },
+    const inventario = document.getElementById('inventory-screen');
+    const overlay = document.getElementById('modal-overlay');
+    const menu = document.getElementById('main-menu');
+
+    if (inventario) {
+        inventario.style.display = 'none';
+    }
+
+    if (overlay) {
+        overlay.style.display = 'none';
+    }
+
+    if (menu) {
+        menu.style.display = 'block';
+    }
+},
 
             renderInventario() {
                 const perfil = this.contaPadrao || this.obterPerfilPadrao();
