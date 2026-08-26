@@ -1,3 +1,4 @@
+//não sei onde estava o erro mas se resolveu sozinho
 const app = {
             usuarioAtual: null,
             // --- NOVAS PROPRIEDADES ADICIONADAS ---
