@@ -1771,17 +1771,17 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             .badge-item { padding: 7px 12px; font-size: 0.8rem; }
         }
         /* Adicione ao seu style.css */
+<<<<<<< HEAD
+button:focus-visible {
+    outline: 2px solid var(--cor-principal);
+=======
 button:focus {
     outline: 3px solid var(--cor-principal);
+>>>>>>> f7501542c797413c48740187179b68fcf4e2718d
     outline-offset: 2px;
-    box-shadow: 0 0 10px var(--cor-glow);
-}
-/* Efeito de destaque para navegação via teclado */
-button:focus {
-    outline: none; /* Remove o contorno padrão feio */
     border: 2px solid var(--cor-principal-2);
     box-shadow: 0 0 15px var(--cor-principal-2);
-    transform: scale(1.05); /* Aumenta ligeiramente o botão focado */
+    transform: scale(1.02);
     transition: all 0.2s ease;
 }
 /* Container para organizar os botões de fonte no Modal */
