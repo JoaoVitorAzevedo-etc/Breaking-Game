@@ -499,7 +499,6 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             padding: 0;
             box-sizing: border-box;
             font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
         }
 
         html { font-size: calc(16px * var(--tamanho-fonte)); scroll-behavior: smooth; }
@@ -1772,7 +1771,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             .badge-item { padding: 7px 12px; font-size: 0.8rem; }
         }
         /* Adicione ao seu style.css */
-button:focus, input:focus {
+button:focus {
     outline: 3px solid var(--cor-principal);
     outline-offset: 2px;
     box-shadow: 0 0 10px var(--cor-glow);
