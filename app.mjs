@@ -1,3 +1,4 @@
+//não sei onde estava o erro mas se resolveu sozinho
 const app = {
             usuarioAtual: null,
             // --- NOVAS PROPRIEDADES ADICIONADAS ---
@@ -34,6 +35,38 @@ const app = {
                 atualizar();
                 new MutationObserver(atualizar).observe(mainMenu, { attributes: true, attributeFilter: ['style'] });
             },
+            ocultarTodasAsTelas() {
+    const telas = [
+        'main-menu',
+        'levels-screen',
+        'conceito-box',
+        'question-box',
+        'stats-screen',
+        'config-screen',
+        'stats-panel',
+        'inventory-screen',
+        'final-warning-screen',
+        'auxiliar-screen',
+        'profile-screen',
+        'shop-screen',
+        'ranking-screen',
+        'periodic-table-screen'
+    ];
+
+    telas.forEach(id => {
+        const tela = document.getElementById(id);
+
+        if (tela) {
+            tela.style.display = 'none';
+        }
+    });
+
+    const overlay = document.getElementById('modal-overlay');
+
+    if (overlay) {
+        overlay.style.display = 'none';
+    }
+},
             
             inicializarSons() {
                 const basePath = 'sounds/';
@@ -201,35 +234,18 @@ const app = {
             },
             podeAcessarDesafioFinal() {
     const historico = this.contaPadrao?.historico || [];
-    const desafioFinalBloqueado =
-    fase.id === 14 && !this.podeAcessarDesafioFinal();
-
-const bloqueada =
-    desafioFinalBloqueado ||
-    fase.id > this.contaPadrao.nivelMaximo;
 
     const resultadoFase13 = historico
         .filter(resultado => Number(resultado.fase) === 13)
-        .sort((a, b) => {
-            const dataA = new Date(a.data);
-            const dataB = new Date(b.data);
-            return dataB - dataA;
-        })[0];
+        .sort((a, b) => new Date(b.data) - new Date(a.data))[0];
 
     if (!resultadoFase13) {
         return false;
     }
 
-    // A fase possui 5 perguntas.
-    // 60% = 3 acertos.
     const acertos = Number(resultadoFase13.acertos) || 0;
 
     return acertos >= 3;
-    if (bloqueada) {
-    // mantém o comportamento visual de fase bloqueada
-} else {
-    // fase disponível
-}
 },
 
 
@@ -1019,6 +1035,13 @@ escaparHTML(texto) {
             },
 
             abrirInventario() {
+                this.ocultarTodasAsTelas();
+
+    const inventario = document.getElementById('inventory-screen');
+
+    if (inventario) {
+        inventario.style.display = 'block';
+    }
                 const inventoryScreen = document.getElementById('inventory-screen');
                 if (!inventoryScreen) return;
                 inventoryScreen.style.display = 'block';
@@ -1027,13 +1050,22 @@ escaparHTML(texto) {
             },
 
             fecharInventario() {
-                const inv = document.getElementById('inventory-screen');
-                if (inv) inv.style.display = 'none';
-                const overlay = document.getElementById('modal-overlay');
-                if (overlay) overlay.style.display = 'none';
-                const mainMenu = document.getElementById('main-menu');
-    
-            },
+    const inventario = document.getElementById('inventory-screen');
+    const overlay = document.getElementById('modal-overlay');
+    const menu = document.getElementById('main-menu');
+
+    if (inventario) {
+        inventario.style.display = 'none';
+    }
+
+    if (overlay) {
+        overlay.style.display = 'none';
+    }
+
+    if (menu) {
+        menu.style.display = 'block';
+    }
+},
 
             renderInventario() {
                 const perfil = this.contaPadrao || this.obterPerfilPadrao();
@@ -1385,6 +1417,13 @@ escaparHTML(texto) {
             },
 
             abrirLoja() {
+                 this.ocultarTodasAsTelas();
+
+    const loja = document.getElementById('shop-screen');
+
+    if (loja) {
+        loja.style.display = 'block';
+    }
                 document.getElementById('main-menu').style.display = 'none';
                 document.getElementById('modal-overlay').style.display = 'block';
                 document.getElementById('shop-screen').style.display = 'flex';
@@ -2155,6 +2194,13 @@ escaparHTML(texto) {
             },
 
             abrirPanorama() {
+                this.ocultarTodasAsTelas();
+
+    const panorama = document.getElementById('levels-screen');
+
+    if (panorama) {
+        panorama.style.display = 'block';
+    }
                 const perfil = this.contaPadrao || this.obterPerfilPadrao();
                 const roadmapContent = document.getElementById('roadmap-content');
                 if (roadmapContent) roadmapContent.innerHTML = '';
@@ -2582,6 +2628,13 @@ escaparHTML(texto) {
             },
 
             voltarAoMenu() { 
+                this.ocultarTodasAsTelas();
+
+    const menu = document.getElementById('main-menu');
+
+    if (menu) {
+        menu.style.display = 'block';
+    }
                 // Esconde as diversas telas de sobreposição e janelas específicas
                 document.getElementById('levels-screen').style.display = 'none';
                 document.getElementById('modal-overlay').style.display = 'none';
@@ -2703,6 +2756,11 @@ document.addEventListener('keydown', (event) => {
         elements[0]?.focus();
         return;
     }
+    const overlay = document.getElementById('modal-overlay');
+
+if (overlay) {
+    overlay.style.display = 'block';
+}
 
     switch (event.key) {
         case 'ArrowDown':
