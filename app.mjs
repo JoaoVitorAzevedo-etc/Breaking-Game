@@ -539,7 +539,7 @@ const app = {
                 }
             },
 
-            atualizarAvatares() {
+                        atualizarAvatares() {
                 const perfil = this.contaPadrao || this.obterPerfilPadrao();
                 const nome = this.usuarioAtual || perfil.nome || 'Usuário';
                 const url = typeof perfil.avatarUrl === 'string' ? perfil.avatarUrl.trim() : '';
