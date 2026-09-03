@@ -923,6 +923,15 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             display: flex; align-items: center; justify-content: center;
             font-size: 2.2rem; backdrop-filter: blur(10px);
         }
+        #card-prof .auxiliar-sprite {
+            background: url('assets/prof.quimico.jpg') center / cover no-repeat;
+        }
+        #card-lab .auxiliar-sprite {
+            background: url('assets/asistente.lab.jpg') center / cover no-repeat;
+        }
+        #card-atom .auxiliar-sprite {
+            background: url('assets/cons.atomico.jpg') center / cover no-repeat;
+        }
         .auxiliar-nome { color: var(--cor-texto); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
         .auxiliar-descricao { color: var(--cor-texto-secundario); font-size: 0.82rem; line-height: 1.4; text-align: center; }
 
