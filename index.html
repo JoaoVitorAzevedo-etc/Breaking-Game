@@ -112,6 +112,23 @@
     </div>
 
     <div class="modal-overlay" id="modal-overlay"></div>
+
+    <aside class="music-player" id="music-player" aria-label="Player de música">
+        <div class="music-player-info">
+            <strong id="playlist-track-title">Nenhuma música selecionada</strong>
+            <span id="playlist-track-artist">Escolha uma playlist no dashboard</span>
+        </div>
+        <div class="music-player-progress">
+            <span id="playlist-current-time">0:00</span>
+            <input id="playlist-progress" type="range" min="0" max="100" value="0" step="0.1" aria-label="Progresso da música">
+            <span id="playlist-duration">0:00</span>
+        </div>
+        <div class="music-player-controls">
+            <button type="button" onclick="app.faixaAnterior()" aria-label="Faixa anterior" title="Faixa anterior">|&lt;&lt;</button>
+            <button type="button" id="playlist-play-pause" onclick="app.alternarPausaPlaylist()" aria-label="Reproduzir música" title="Reproduzir música">&#9654;</button>
+            <button type="button" onclick="app.proximaFaixa()" aria-label="Próxima faixa" title="Próxima faixa">&gt;&gt;|</button>
+        </div>
+    </aside>
     
     <div class="conceito-box modal-animated" id="conceito-box" style="display: none;">
         <h3 class="conceito-header">Conceito da Fase</h3>
@@ -187,13 +204,6 @@
                 <option value="rock">Rock</option>
                 <option value="pop">Pop</option>
             </select>
-        </div>
-
-        <div class="playlist-controls" aria-label="Controles da playlist">
-            <button type="button" onclick="app.faixaAnterior()" aria-label="Faixa anterior" title="Faixa anterior">|&lt;&lt;</button>
-            <button type="button" id="playlist-play-pause" onclick="app.alternarPausaPlaylist()" aria-label="Pausar música" title="Pausar música">Pausar</button>
-            <button type="button" onclick="app.proximaFaixa()" aria-label="Próxima faixa" title="Próxima faixa">&gt;&gt;|</button>
-            <span id="playlist-track-name" class="playlist-track-name">Nenhuma faixa selecionada</span>
         </div>
 
         <div class="config-option avatar-url-option" style="flex-direction: column; align-items: flex-start; margin-top: 20px;">

@@ -1248,6 +1248,7 @@ escaparHTML(texto) {
             },
             faixaPlaylistAtual: 0,
             musicaPlaylist: null,
+            intervaloPlayer: null,
 
             escolherPlaylistDashboard(playlist) {
                 const playlistsDisponiveis = ['lofi', 'rock', 'pop'];
@@ -1269,9 +1270,13 @@ escaparHTML(texto) {
                 this.musicaPlaylist = new Howl({
                     src: [`sounds/${this.playlistSelecionada}/${faixas[this.faixaPlaylistAtual]}`],
                     volume: 0.45,
+                    onload: () => this.atualizarControlesPlaylist(),
                     onend: () => this.proximaFaixa()
                 });
                 this.musicaPlaylist.play();
+                if (!this.intervaloPlayer) {
+                    this.intervaloPlayer = setInterval(() => this.atualizarControlesPlaylist(), 250);
+                }
                 this.atualizarControlesPlaylist();
             },
 
@@ -1308,18 +1313,70 @@ escaparHTML(texto) {
 
             atualizarControlesPlaylist() {
                 const faixas = this.playlistFaixas[this.playlistSelecionada];
-                const trackName = document.getElementById('playlist-track-name');
+                const faixaAtual = faixas?.[this.faixaPlaylistAtual]; // No change
+                const trackTitle = document.getElementById('playlist-track-title');
+                const trackArtist = document.getElementById('playlist-track-artist');
                 const playPause = document.getElementById('playlist-play-pause');
+                const progress = document.getElementById('playlist-progress');
+                const currentTime = document.getElementById('playlist-current-time');
+                const duration = document.getElementById('playlist-duration');
 
-                if (trackName) {
-                    trackName.textContent = faixas?.[this.faixaPlaylistAtual] || 'Nenhuma faixa selecionada';
+                if (trackTitle) {
+                    trackTitle.textContent = faixaAtual ? this.obterTituloFaixa(faixaAtual) : 'Nenhuma música selecionada';
+                }
+                if (trackArtist) {
+                    trackArtist.textContent = faixaAtual ? this.obterAutorFaixa(faixaAtual) : 'Escolha uma playlist no dashboard';
                 }
                 if (playPause) {
                     const tocando = this.musicaPlaylist?.playing();
-                    playPause.textContent = tocando ? 'Pausar' : 'Reproduzir';
+                    playPause.innerHTML = tocando ? '&#10074;&#10074;' : '&#9654;';
                     playPause.setAttribute('aria-label', tocando ? 'Pausar música' : 'Reproduzir música');
                     playPause.setAttribute('title', tocando ? 'Pausar música' : 'Reproduzir música');
                 }
+                if (this.musicaPlaylist) {
+                    const faixaDuracao = this.musicaPlaylist.duration() || 0;
+                    const posicao = this.musicaPlaylist.seek() || 0;
+                    if (progress && faixaDuracao) progress.value = (posicao / faixaDuracao) * 100;
+                    if (currentTime) currentTime.textContent = this.formatarTempo(posicao);
+                    if (duration) duration.textContent = this.formatarTempo(faixaDuracao);
+                }
+            },
+
+            obterTituloFaixa(arquivo) {
+                const partes = arquivo.replace(/\.mp3$/i, '').split('-');
+                const inicioTitulo = partes[0] === 'alex' && partes[1] === 'morgan' ? 2 : 1;
+                return partes.slice(inicioTitulo).join(' ').replace(/_/g, ' ');
+            },
+
+            obterAutorFaixa(arquivo) {
+                const partes = arquivo.replace(/\.mp3$/i, '').split('-');
+                const autor = (partes[0] === 'alex' && partes[1] === 'morgan'
+                    ? partes.slice(0, 2)
+                    : partes.slice(0, 1)).join(' ').replace(/_/g, ' ');
+                return autor.replace(/\b\w/g, letra => letra.toUpperCase());
+            },
+
+            formatarTempo(segundos) {
+                const total = Math.max(0, Math.floor(Number(segundos) || 0));
+                return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
+            },
+
+            ajustarProgressoPlaylist(valor) {
+                const duracao = this.musicaPlaylist?.duration() || 0;
+                if (duracao) this.musicaPlaylist.seek((Number(valor) / 100) * duracao);
+            },
+            obterTituloFaixa(arquivo) {
+                return arquivo.replace(/\.mp3$/i, '').replace(/^[^-]+-/, '').replace(/[-_]+/g, ' ');
+            },
+
+            obterAutorFaixa(arquivo) {
+                const autor = arquivo.replace(/\.mp3$/i, '').split('-')[0].replace(/[_]+/g, ' ');
+                return autor.replace(/\b\w/g, letra => letra.toUpperCase());
+            },
+
+            formatarTempo(segundos) {
+                const total = Math.max(0, Math.floor(Number(segundos) || 0));
+                return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
             },
 
             selecionarPlaylist(playlist, element) {
@@ -2858,6 +2915,8 @@ window.addEventListener('DOMContentLoaded', () => {
             app.fecharTudoComOverlay();
         });
     }
+    const progress = document.getElementById('playlist-progress');
+    if (progress) progress.addEventListener('input', event => app.ajustarProgressoPlaylist(event.target.value));
 });
 
 document.addEventListener('DOMContentLoaded', () => {
