@@ -1055,6 +1055,36 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             color: var(--cor-texto-secundario);
             font-weight: 500;
         }
+        .playlist-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+            margin-top: -4px;
+        }
+        .playlist-controls button {
+            background: var(--glass-bg-strong);
+            border: 1px solid var(--glass-border);
+            color: var(--cor-texto);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .playlist-controls button:hover {
+            background: var(--cor-principal);
+            color: white;
+        }
+        .playlist-track-name {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--cor-texto-secundario);
+            font-size: 0.8rem;
+            flex: 1;
+        }
 
         /* =========================================
            DICAS
@@ -1987,6 +2017,7 @@ button:focus-visible {
     background: var(--grad-primary);
 
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 

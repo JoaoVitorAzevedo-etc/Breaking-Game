@@ -180,9 +180,20 @@
             </div>
         </div>
 
-        <div class="config-option" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <span class="config-label" style="font-weight: 600;">Música (Em breve)</span>
-            <input type="checkbox" checked style="transform: scale(1.5); accent-color: var(--cor-principal);">
+        <div class="config-option" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+            <label class="config-label" for="playlist-select" style="font-weight: 600;">Playlist</label>
+            <select id="playlist-select" onchange="app.escolherPlaylistDashboard(this.value)" style="flex: 1; max-width: 220px;">
+                <option value="lofi">Lofi</option>
+                <option value="rock">Rock</option>
+                <option value="pop">Pop</option>
+            </select>
+        </div>
+
+        <div class="playlist-controls" aria-label="Controles da playlist">
+            <button type="button" onclick="app.faixaAnterior()" aria-label="Faixa anterior" title="Faixa anterior">|&lt;&lt;</button>
+            <button type="button" id="playlist-play-pause" onclick="app.alternarPausaPlaylist()" aria-label="Pausar música" title="Pausar música">Pausar</button>
+            <button type="button" onclick="app.proximaFaixa()" aria-label="Próxima faixa" title="Próxima faixa">&gt;&gt;|</button>
+            <span id="playlist-track-name" class="playlist-track-name">Nenhuma faixa selecionada</span>
         </div>
 
         <div class="config-option avatar-url-option" style="flex-direction: column; align-items: flex-start; margin-top: 20px;">
@@ -201,10 +212,10 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
             
-            <!-- Música Clássica -->
-            <div class="playlist-card" data-playlist="classica" onclick="app.selecionarPlaylist('classica', this)">
+            <!-- Lofi -->
+            <div class="playlist-card" data-playlist="lofi" onclick="app.selecionarPlaylist('lofi', this)">
                 <div class="playlist-icon"></div>
-                <div class="playlist-title">Música Clássica</div>
+                <div class="playlist-title">Lofi</div>
                 <div class="playlist-desc">Concentração e Elegância</div>
             </div>
 
@@ -213,13 +224,6 @@
                 <div class="playlist-icon"></div>
                 <div class="playlist-title">Rock</div>
                 <div class="playlist-desc">Energia e Ritmo</div>
-            </div>
-
-            <!-- Jazz -->
-            <div class="playlist-card" data-playlist="jazz" onclick="app.selecionarPlaylist('jazz', this)">
-                <div class="playlist-icon"></div>
-                <div class="playlist-title">Jazz</div>
-                <div class="playlist-desc">Suave e Sofisticado</div>
             </div>
 
             <!-- Pop -->

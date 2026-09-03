@@ -1020,6 +1020,12 @@ escaparHTML(texto) {
                 if (dashboardLevel) {
                     dashboardLevel.textContent = this.contaPadrao?.nivelMaximo || 1;
                 }
+                const playlistSelect = document.getElementById('playlist-select');
+                if (playlistSelect) {
+                    this.playlistSelecionada = localStorage.getItem('playlistSelecionada') || 'lofi';
+                    playlistSelect.value = this.playlistSelecionada;
+                }
+                this.atualizarControlesPlaylist();
                 const avatarInput = document.getElementById('avatar-url-input');
                 if (avatarInput) avatarInput.value = this.contaPadrao?.avatarUrl || '';
                 document.getElementById('config-screen').style.display = 'block';
@@ -1207,6 +1213,114 @@ escaparHTML(texto) {
             },
 
             playlistSelecionada: null,
+            playlistFaixas: {
+                lofi: [
+                    'alex-morgan-chillhop-jazz-coffee-shop-552792.mp3',
+                    'alex-morgan-lofi-chill-vlog-beats-573883.mp3',
+                    'alex-morgan-lofi-hip-hop-funky-midnight-club-560062.mp3',
+                    'alex-morgan-lofi-midnight-club-568164.mp3',
+                    'alex-morgan-lofi-sunny-cafe-568156.mp3',
+                    'apalonbeats-lofi-lofi-music-2-566602.mp3',
+                    'kulakovka-lofi-relax-570489.mp3',
+                    'sub_clair-lofi-background-586104.mp3',
+                    'the_mountain-lofi-beats-567433.mp3'
+                ],
+                rock: [
+                    'alex-morgan-rock-pop-background-music-energy-583243.mp3',
+                    'alex-morgan-surf-rock-591326.mp3',
+                    'alexgrohl-motivation-epic-rock-111444.mp3',
+                    'bombinsound-action-rock-rock-music-514148.mp3',
+                    'jonasblakewood-rock-energetic-583373.mp3',
+                    'monume-rock-576976.mp3',
+                    'monume-rock-rock-music-576973.mp3',
+                    'the_mountain-rock-rock-music-576586.mp3'
+                ],
+                pop: [
+                    'easy_eva-pop-friends-like-us-564013.mp3',
+                    'gr0za-pop-pop-music-573373.mp3',
+                    'gr0za-pop-pop-music-577843.mp3',
+                    'jonasblakewood-pop-retro-583368.mp3',
+                    'kulakovka-pop-278471.mp3',
+                    'the_mountain-pop-pop-music-576583.mp3',
+                    'the_mountain-pop-upbeat-upbeat-pop-576584.mp3',
+                    'vibemode-pop-barcelona-545899.mp3'
+                ]
+            },
+            faixaPlaylistAtual: 0,
+            musicaPlaylist: null,
+
+            escolherPlaylistDashboard(playlist) {
+                const playlistsDisponiveis = ['lofi', 'rock', 'pop'];
+                if (!playlistsDisponiveis.includes(playlist)) return;
+
+                this.playlistSelecionada = playlist;
+                this.faixaPlaylistAtual = 0;
+                localStorage.setItem('playlistSelecionada', playlist);
+                this.tocarFaixaPlaylist();
+                this.atualizarControlesPlaylist();
+            },
+
+            tocarFaixaPlaylist() {
+                const faixas = this.playlistFaixas[this.playlistSelecionada];
+                if (!faixas?.length || typeof Howl === 'undefined') return;
+
+                if (this.musicaPlaylist) this.musicaPlaylist.unload();
+
+                this.musicaPlaylist = new Howl({
+                    src: [`sounds/${this.playlistSelecionada}/${faixas[this.faixaPlaylistAtual]}`],
+                    volume: 0.45,
+                    onend: () => this.proximaFaixa()
+                });
+                this.musicaPlaylist.play();
+                this.atualizarControlesPlaylist();
+            },
+
+            alternarPausaPlaylist() {
+                if (!this.musicaPlaylist) {
+                    this.playlistSelecionada = localStorage.getItem('playlistSelecionada') || 'lofi';
+                    this.tocarFaixaPlaylist();
+                    return;
+                }
+
+                if (this.musicaPlaylist.playing()) {
+                    this.musicaPlaylist.pause();
+                } else {
+                    this.musicaPlaylist.play();
+                }
+                this.atualizarControlesPlaylist();
+            },
+
+            faixaAnterior() {
+                const faixas = this.playlistFaixas[this.playlistSelecionada];
+                if (!faixas?.length) return;
+
+                this.faixaPlaylistAtual = (this.faixaPlaylistAtual - 1 + faixas.length) % faixas.length;
+                this.tocarFaixaPlaylist();
+            },
+
+            proximaFaixa() {
+                const faixas = this.playlistFaixas[this.playlistSelecionada];
+                if (!faixas?.length) return;
+
+                this.faixaPlaylistAtual = (this.faixaPlaylistAtual + 1) % faixas.length;
+                this.tocarFaixaPlaylist();
+            },
+
+            atualizarControlesPlaylist() {
+                const faixas = this.playlistFaixas[this.playlistSelecionada];
+                const trackName = document.getElementById('playlist-track-name');
+                const playPause = document.getElementById('playlist-play-pause');
+
+                if (trackName) {
+                    trackName.textContent = faixas?.[this.faixaPlaylistAtual] || 'Nenhuma faixa selecionada';
+                }
+                if (playPause) {
+                    const tocando = this.musicaPlaylist?.playing();
+                    playPause.textContent = tocando ? 'Pausar' : 'Reproduzir';
+                    playPause.setAttribute('aria-label', tocando ? 'Pausar música' : 'Reproduzir música');
+                    playPause.setAttribute('title', tocando ? 'Pausar música' : 'Reproduzir música');
+                }
+            },
 
             selecionarPlaylist(playlist, element) {
                 // Remover seleção anterior
