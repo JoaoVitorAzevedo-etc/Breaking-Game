@@ -1008,6 +1008,18 @@ escaparHTML(texto) {
 
             abrirConfig() {
                 this.atualizarAvatares();
+                const dashboardUsername = document.getElementById('dash-username');
+                if (dashboardUsername) {
+                    dashboardUsername.textContent = this.usuarioAtual || this.usuario || 'Usuário';
+                }
+                const dashboardPoints = document.getElementById('dash-points');
+                if (dashboardPoints) {
+                    dashboardPoints.textContent = this.contaPadrao?.pontuacaoTotal || 0;
+                }
+                const dashboardLevel = document.getElementById('dash-level');
+                if (dashboardLevel) {
+                    dashboardLevel.textContent = this.contaPadrao?.nivelMaximo || 1;
+                }
                 const avatarInput = document.getElementById('avatar-url-input');
                 if (avatarInput) avatarInput.value = this.contaPadrao?.avatarUrl || '';
                 document.getElementById('config-screen').style.display = 'block';
@@ -2756,12 +2768,6 @@ document.addEventListener('keydown', (event) => {
         elements[0]?.focus();
         return;
     }
-    const overlay = document.getElementById('modal-overlay');
-
-if (overlay) {
-    overlay.style.display = 'block';
-}
-
     switch (event.key) {
         case 'ArrowDown':
         case 'ArrowRight':

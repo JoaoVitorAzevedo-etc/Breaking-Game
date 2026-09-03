@@ -766,9 +766,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             box-shadow: var(--glass-shadow);
         }
         input[type="text"]::placeholder { color: var(--cor-texto-secundario); }
-        input[type="text"]:focus {
-    box-shadow: none;
-}
+        
 
         .hud {
             position: fixed; top: 78px; right: 18px;
@@ -1771,13 +1769,8 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             .badge-item { padding: 7px 12px; font-size: 0.8rem; }
         }
         /* Adicione ao seu style.css */
-<<<<<<< HEAD
 button:focus-visible {
     outline: 2px solid var(--cor-principal);
-=======
-button:focus {
-    outline: 3px solid var(--cor-principal);
->>>>>>> f7501542c797413c48740187179b68fcf4e2718d
     outline-offset: 2px;
     border: 2px solid var(--cor-principal-2);
     box-shadow: 0 0 15px var(--cor-principal-2);
