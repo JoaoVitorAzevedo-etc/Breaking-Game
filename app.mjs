@@ -28,6 +28,7 @@ const app = {
             graficosMinigameChart: null,
             memoryMatch: { dificuldade: 'facil', cartas: [], abertas: [], pares: 0, erros: 0, pontuacao: 0, inicio: 0, timer: null, bloqueado: false },
             periodicGraph: { dificuldade: 'facil', propriedade: null, elementos: [], colocados: 0, tentativas: 0, pontuacao: 0, finalizado: false },
+            equationBalance: { dificuldade: 'facil', equacao: null, coeficientes: [], inicio: 0, tentativas: 0, pontuacao: 0, finalizado: false, timer: null },
 
             observarVisibilidadeMenu() {
                 const mainMenu = document.getElementById('main-menu');
@@ -39,6 +40,37 @@ const app = {
                 };
                 atualizar();
                 new MutationObserver(atualizar).observe(mainMenu, { attributes: true, attributeFilter: ['style'] });
+            },
+            observarVisibilidadePlayer() {
+                const player = document.getElementById('music-player');
+                if (!player) return;
+
+                const telasSemPlayer = [
+                    'login-screen',
+                    'tutorial-intro-screen',
+                    'levels-screen',
+                    'conceito-box',
+                    'question-box',
+                    'stats-screen',
+                    'final-warning-screen',
+                    'auxiliar-screen',
+                    'minigame-screen'
+                ];
+
+                const atualizar = () => {
+                    const playerDeveFicarOculto = telasSemPlayer.some(id => {
+                        const tela = document.getElementById(id);
+                        return tela && tela.style.display !== 'none';
+                    });
+                    player.classList.toggle('music-player-hidden', playerDeveFicarOculto);
+                    player.setAttribute('aria-hidden', String(playerDeveFicarOculto));
+                };
+
+                atualizar();
+                telasSemPlayer.forEach(id => {
+                    const tela = document.getElementById(id);
+                    if (tela) new MutationObserver(atualizar).observe(tela, { attributes: true, attributeFilter: ['style'] });
+                });
             },
             ocultarTodasAsTelas() {
     const telas = [
@@ -193,7 +225,9 @@ const app = {
                     { nome: "Jornada Épica", icone: "🚀", descricao: "Complete 10 fases com desempenho consistente!", pontos: 150 },
                     { nome: "Mestre Supremo", icone: "👨‍🎓", descricao: "Gabarite a prova final - você é um verdadeiro Doutor em Química!", pontos: 1000 },
                     { nome: "Campeão do Breaking Game", icone: "🎮", descricao: "Complete o desafio final com 60% ou mais de acerto!", pontos: 150 },
-                    { nome: "Padrão Periódico", icone: "📈", descricao: "Complete uma rodada do gráfico de propriedades periódicas.", pontos: 150 }
+                    { nome: "Padrão Periódico", icone: "📈", descricao: "Complete uma rodada do gráfico de propriedades periódicas.", pontos: 150 },
+                    { nome: "Memória Atômica", icone: "🧠", descricao: "Complete o Memory Match sem erros.", pontos: 150 },
+                    { nome: "Mestre do Balanceamento", icone: "🎯", descricao: "Balanceie uma equação química corretamente.", pontos: 150 }
                 ];
             },
 
@@ -1612,11 +1646,31 @@ escaparHTML(texto) {
                 document.getElementById('periodic-table-screen').style.display = 'none';
                 document.getElementById('minigame-screen').style.display = 'block';
                 document.getElementById('modal-overlay').style.display = 'block';
-                this.iniciarGraficoPeriodico('facil');
+                this.voltarSeletorMinigames();
+            },
+
+            selecionarMinigame(tipo) {
+                document.getElementById('minigame-selector').style.display = 'none';
+                document.getElementById('memory-game-view').style.display = tipo === 'memory' ? 'block' : 'none';
+                document.getElementById('periodic-game-view').style.display = tipo === 'periodic' ? 'block' : 'none';
+                document.getElementById('balance-game-view').style.display = tipo === 'balance' ? 'block' : 'none';
+                if (tipo === 'memory') this.iniciarMemoryMatch(this.memoryMatch.dificuldade);
+                if (tipo === 'periodic') this.iniciarGraficoPeriodico(this.periodicGraph.dificuldade);
+                if (tipo === 'balance') this.iniciarBalanceador(this.equationBalance.dificuldade);
+            },
+
+            voltarSeletorMinigames() {
+                this.pararTimerMemoryMatch();
+                this.pararTimerBalanceador();
+                document.getElementById('minigame-selector').style.display = 'block';
+                document.getElementById('memory-game-view').style.display = 'none';
+                document.getElementById('periodic-game-view').style.display = 'none';
+                document.getElementById('balance-game-view').style.display = 'none';
             },
 
             fecharMinigames() {
                 this.pararTimerMemoryMatch();
+                this.pararTimerBalanceador();
                 document.getElementById('minigame-screen').style.display = 'none';
                 document.getElementById('modal-overlay').style.display = 'none';
                 document.getElementById('periodic-table-screen').style.display = 'block';
@@ -1634,7 +1688,7 @@ escaparHTML(texto) {
 
                 this.pararTimerMemoryMatch();
                 this.memoryMatch = { dificuldade, cartas, abertas: [], pares: 0, erros: 0, pontuacao: 0, inicio: Date.now(), timer: null, bloqueado: false };
-                document.querySelectorAll('.minigame-level-btn').forEach(item => item.classList.toggle('active', item.dataset.difficulty === dificuldade));
+                document.querySelectorAll('[data-memory-difficulty]').forEach(item => item.classList.toggle('active', item.dataset.memoryDifficulty === dificuldade));
                 if (botao) botao.classList.add('active');
                 document.getElementById('memory-pairs').textContent = `0/${quantidade}`;
                 document.getElementById('memory-score').textContent = '0';
@@ -1646,6 +1700,150 @@ escaparHTML(texto) {
                     const segundos = Math.floor((Date.now() - this.memoryMatch.inicio) / 1000);
                     document.getElementById('memory-timer').textContent = `${String(Math.floor(segundos / 60)).padStart(2, '0')}:${String(segundos % 60).padStart(2, '0')}`;
                 }, 1000);
+            },
+
+            obterEquacoesBalanceador() {
+                return {
+                    facil: [
+                        { reagentes: ['H2', 'O2'], produtos: ['H2O'], solucao: [2, 1, 2] },
+                        { reagentes: ['N2', 'H2'], produtos: ['NH3'], solucao: [1, 3, 2] }
+                    ],
+                    medio: [
+                        { reagentes: ['Fe', 'O2'], produtos: ['Fe2O3'], solucao: [4, 3, 2] },
+                        { reagentes: ['NaOH', 'HCl'], produtos: ['NaCl', 'H2O'], solucao: [1, 1, 1, 1] }
+                    ],
+                    dificil: [
+                        { reagentes: ['C3H8', 'O2'], produtos: ['CO2', 'H2O'], solucao: [1, 5, 3, 4] },
+                        { reagentes: ['Al', 'HCl'], produtos: ['AlCl3', 'H2'], solucao: [2, 6, 2, 3] }
+                    ]
+                };
+            },
+
+            iniciarBalanceador(dificuldade = 'facil', botao = null) {
+                const perfil = this.contaPadrao || this.obterPerfilPadrao();
+                const desbloqueios = Array.isArray(perfil.balanceadorDesbloqueios) ? perfil.balanceadorDesbloqueios : ['facil'];
+                if (!desbloqueios.includes(dificuldade)) {
+                    const feedback = document.getElementById('balance-feedback');
+                    if (feedback) feedback.textContent = 'Conclua a dificuldade anterior para desbloquear este nível.';
+                    return;
+                }
+
+                const opcoes = this.obterEquacoesBalanceador()[dificuldade];
+                const equacao = opcoes[Math.floor(Math.random() * opcoes.length)];
+                this.pararTimerBalanceador();
+                this.equationBalance = { dificuldade, equacao, coeficientes: equacao.solucao.map(() => 1), inicio: Date.now(), tentativas: 0, pontuacao: 0, finalizado: false, timer: null };
+                document.querySelectorAll('[data-balance-difficulty]').forEach(item => {
+                    const desbloqueado = desbloqueios.includes(item.dataset.balanceDifficulty);
+                    item.disabled = !desbloqueado;
+                    item.classList.toggle('active', item.dataset.balanceDifficulty === dificuldade);
+                    item.querySelector('.equation-unlock')?.remove();
+                    if (!desbloqueado) {
+                        const aviso = document.createElement('small');
+                        aviso.className = 'equation-unlock';
+                        aviso.textContent = '🔒 bloqueado';
+                        item.appendChild(aviso);
+                    }
+                });
+                if (botao) botao.classList.add('active');
+                document.getElementById('balance-score').textContent = '0';
+                document.getElementById('balance-attempts').textContent = '0';
+                document.getElementById('balance-timer').textContent = '00:00';
+                document.getElementById('balance-feedback').className = 'memory-feedback';
+                document.getElementById('balance-feedback').textContent = 'Ajuste os coeficientes para começar.';
+                this.renderizarBalanceador();
+                this.equationBalance.timer = setInterval(() => {
+                    const segundos = Math.floor((Date.now() - this.equationBalance.inicio) / 1000);
+                    document.getElementById('balance-timer').textContent = `${String(Math.floor(segundos / 60)).padStart(2, '0')}:${String(segundos % 60).padStart(2, '0')}`;
+                }, 1000);
+            },
+
+            renderizarBalanceador() {
+                const jogo = this.equationBalance;
+                const renderizarTermos = (formulas, offset = 0) => formulas.map((formula, index) => `<span class="equation-term"><span class="equation-stepper"><button type="button" onclick="app.alterarCoeficiente(${index + offset}, 1)" aria-label="Aumentar coeficiente">+</button><input class="equation-coefficient" data-coefficient-index="${index + offset}" type="number" min="1" max="99" value="${jogo.coeficientes[index + offset]}" oninput="app.atualizarBalanceamento()" aria-label="Coeficiente de ${formula}"><button type="button" onclick="app.alterarCoeficiente(${index + offset}, -1)" aria-label="Diminuir coeficiente">−</button></span><span>${formula}</span></span>`).join('<span class="equation-operator">+</span>');
+                document.getElementById('equation-builder').innerHTML = `${renderizarTermos(jogo.equacao.reagentes)}<span class="equation-operator">→</span>${renderizarTermos(jogo.equacao.produtos, jogo.equacao.reagentes.length)}`;
+            },
+
+            alterarCoeficiente(index, delta) {
+                const input = document.querySelector(`[data-coefficient-index="${index}"]`);
+                if (!input || this.equationBalance.finalizado) return;
+                input.value = Math.max(1, Math.min(99, Number(input.value || 1) + delta));
+                this.atualizarBalanceamento();
+            },
+
+            contarAtomos(formula) {
+                const atomos = {};
+                const partes = formula.match(/[A-Z][a-z]?\d*/g) || [];
+                partes.forEach(parte => {
+                    const elemento = parte.match(/^[A-Z][a-z]?/)[0];
+                    const quantidade = Number(parte.slice(elemento.length)) || 1;
+                    atomos[elemento] = (atomos[elemento] || 0) + quantidade;
+                });
+                return atomos;
+            },
+
+            atualizarBalanceamento() {
+                const jogo = this.equationBalance;
+                if (!jogo.equacao || jogo.finalizado) return;
+                jogo.coeficientes = Array.from(document.querySelectorAll('[data-coefficient-index]')).map(input => Math.max(1, Number(input.value) || 1));
+                const reagentes = jogo.equacao.reagentes;
+                const produtos = jogo.equacao.produtos;
+                const totaisReagentes = {};
+                const totaisProdutos = {};
+                const acumular = (destino, formula, coeficiente) => Object.entries(this.contarAtomos(formula)).forEach(([elemento, quantidade]) => {
+                    destino[elemento] = (destino[elemento] || 0) + quantidade * coeficiente;
+                });
+                reagentes.forEach((formula, index) => acumular(totaisReagentes, formula, jogo.coeficientes[index]));
+                produtos.forEach((formula, index) => acumular(totaisProdutos, formula, jogo.coeficientes[index + reagentes.length]));
+                const elementos = new Set([...Object.keys(totaisReagentes), ...Object.keys(totaisProdutos)]);
+                const correto = [...elementos].every(elemento => totaisReagentes[elemento] === totaisProdutos[elemento]);
+                document.querySelectorAll('[data-coefficient-index]').forEach((input, index) => {
+                    input.classList.toggle('equation-coefficient-correct', correto && Number(input.value) === jogo.equacao.solucao[index]);
+                    input.classList.toggle('equation-coefficient-wrong', !correto || Number(input.value) !== jogo.equacao.solucao[index]);
+                });
+                jogo.tentativas++;
+                document.getElementById('balance-attempts').textContent = jogo.tentativas;
+                const feedback = document.getElementById('balance-feedback');
+                if (correto) {
+                    feedback.className = 'memory-feedback feedback-good';
+                    feedback.textContent = 'Equação balanceada corretamente!';
+                    this.finalizarBalanceador();
+                } else {
+                    feedback.className = 'memory-feedback feedback-bad';
+                    feedback.textContent = 'Ainda não está equilibrada. Confira os átomos em vermelho.';
+                }
+            },
+
+            finalizarBalanceador() {
+                const jogo = this.equationBalance;
+                if (jogo.finalizado) return;
+                jogo.finalizado = true;
+                this.pararTimerBalanceador();
+                const perfil = this.contaPadrao || this.obterPerfilPadrao();
+                const segundos = Math.floor((Date.now() - jogo.inicio) / 1000);
+                const bonusPrimeiraTentativa = jogo.tentativas === 1 ? 120 : 0;
+                const total = Math.max(100, 220 + bonusPrimeiraTentativa - segundos * 3 - Math.max(0, jogo.tentativas - 1) * 10);
+                jogo.pontuacao = total;
+                perfil.pontuacaoTotal = (perfil.pontuacaoTotal || 0) + total;
+                perfil.balanceadorDesbloqueios = Array.isArray(perfil.balanceadorDesbloqueios) ? perfil.balanceadorDesbloqueios : ['facil'];
+                const proximo = jogo.dificuldade === 'facil' ? 'medio' : jogo.dificuldade === 'medio' ? 'dificil' : null;
+                if (proximo && !perfil.balanceadorDesbloqueios.includes(proximo)) perfil.balanceadorDesbloqueios.push(proximo);
+                perfil.badges = Array.isArray(perfil.badges) ? perfil.badges : [];
+                let badgeNova = false;
+                if (!perfil.badges.some(badge => badge.nome === 'Mestre do Balanceamento')) {
+                    perfil.badges.push({ nome: 'Mestre do Balanceamento', icone: '🎯', descricao: 'Balanceie uma equação química corretamente.', pontos: 150 });
+                    perfil.pontuacaoTotal += 150;
+                    badgeNova = true;
+                }
+                if (this.usuarioAtual) this.salvarDados(`usuario_${this.usuarioAtual}`, perfil);
+                document.getElementById('balance-score').textContent = total;
+                document.getElementById('total-points').textContent = perfil.pontuacaoTotal;
+                document.querySelectorAll('#equation-builder input, #equation-builder button').forEach(controle => { controle.disabled = true; });
+                document.getElementById('balance-feedback').innerHTML = `🏆 Correto! +${total} pts${bonusPrimeiraTentativa ? ' (bônus de primeira tentativa)' : ''}. ${badgeNova ? 'Badge Mestre do Balanceamento desbloqueada!' : 'Próxima dificuldade desbloqueada.'}`;
+            },
+
+            pararTimerBalanceador() {
+                if (this.equationBalance?.timer) clearInterval(this.equationBalance.timer);
+                if (this.equationBalance) this.equationBalance.timer = null;
             },
 
             obterDesafiosPeriodicos() {
@@ -1702,7 +1900,7 @@ escaparHTML(texto) {
                 const desafio = desafios[Math.floor(Math.random() * desafios.length)];
                 const elementos = desafio.elementos.slice(0, quantidade).sort(() => Math.random() - 0.5);
                 this.periodicGraph = { dificuldade, propriedade: desafio.nome, elementos, colocados: 0, tentativas: 0, pontuacao: 0, finalizado: false };
-                document.querySelectorAll('.minigame-level-btn').forEach(item => item.classList.toggle('active', item.dataset.difficulty === dificuldade));
+                document.querySelectorAll('[data-difficulty]').forEach(item => item.classList.toggle('active', item.dataset.difficulty === dificuldade));
                 if (botao) botao.classList.add('active');
                 document.getElementById('periodic-property-title').textContent = desafio.nome;
                 document.getElementById('periodic-property-description').textContent = desafio.descricao;
@@ -3213,6 +3411,7 @@ escaparHTML(texto) {
 // --- ADIÇÃO PARA CARREGAMENTO E ACESSIBILIDADE VIA TECLADO ---
 window.addEventListener('DOMContentLoaded', () => {
     app.observarVisibilidadeMenu();
+    app.observarVisibilidadePlayer();
     // Carregar configurações salvas (tema, fonte, tamanho)
     if (app.carregarConfiguracoesSalvas) {
         app.carregarConfiguracoesSalvas();

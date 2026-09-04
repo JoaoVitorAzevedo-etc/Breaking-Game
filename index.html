@@ -888,13 +888,77 @@
     </div>
 
     <div class="minigame-screen modal-animated" id="minigame-screen" style="display: none;">
+        <div id="minigame-selector">
+            <div class="minigame-header-row">
+                <div>
+                    <p class="minigame-kicker">Desafios de química</p>
+                    <h2 class="minigame-header">🎮 Escolha seu minigame</h2>
+                    <p class="minigame-subtitle">Escolha uma atividade para testar seus conhecimentos e conquistar pontos.</p>
+                </div>
+                <button class="minigame-icon-btn" onclick="app.fecharMinigames()" aria-label="Fechar minigames" title="Fechar">✕</button>
+            </div>
+            <div class="minigame-choice-grid">
+                <button class="minigame-choice-card" onclick="app.selecionarMinigame('memory')">
+                    <span class="minigame-choice-icon">⚛️</span>
+                    <span class="minigame-choice-title">Tabela Periódica</span>
+                    <span class="minigame-choice-name">Memory Match</span>
+                    <span class="minigame-choice-description">Encontre os pares entre símbolos e nomes dos elementos.</span>
+                    <span class="minigame-choice-reward">🏆 Badge Memória Atômica</span>
+                </button>
+                <button class="minigame-choice-card" onclick="app.selecionarMinigame('periodic')">
+                    <span class="minigame-choice-icon">📈</span>
+                    <span class="minigame-choice-title">Padrão Periódico</span>
+                    <span class="minigame-choice-name">Gráfico de tendências</span>
+                    <span class="minigame-choice-description">Arraste cada elemento para a posição correta no gráfico.</span>
+                    <span class="minigame-choice-reward">📊 Badge Padrão Periódico</span>
+                </button>
+                <button class="minigame-choice-card" onclick="app.selecionarMinigame('balance')">
+                    <span class="minigame-choice-icon">🎯</span>
+                    <span class="minigame-choice-title">Estequiometria</span>
+                    <span class="minigame-choice-name">Balanceador de Equações</span>
+                    <span class="minigame-choice-description">Ajuste os coeficientes e iguale a quantidade de átomos dos dois lados.</span>
+                    <span class="minigame-choice-reward">🏅 Badge Mestre do Balanceamento</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="memory-game-view" style="display: none;">
+        <div class="minigame-header-row">
+            <div>
+                <p class="minigame-kicker">Tabela Periódica</p>
+                <h2 class="minigame-header">⚛️ Memory Match</h2>
+                <p class="minigame-subtitle">Encontre os pares símbolo ↔ nome dos elementos.</p>
+            </div>
+            <button class="minigame-icon-btn" onclick="app.voltarSeletorMinigames()" aria-label="Escolher outro minigame" title="Escolher outro minigame">✕</button>
+        </div>
+        <div class="minigame-toolbar">
+            <div class="minigame-difficulties" role="group" aria-label="Escolha a dificuldade">
+                <button class="minigame-level-btn active" data-memory-difficulty="facil" onclick="app.iniciarMemoryMatch('facil', this)">Fácil <span>8 pares</span></button>
+                <button class="minigame-level-btn" data-memory-difficulty="medio" onclick="app.iniciarMemoryMatch('medio', this)">Médio <span>12 pares</span></button>
+                <button class="minigame-level-btn" data-memory-difficulty="dificil" onclick="app.iniciarMemoryMatch('dificil', this)">Difícil <span>20 pares</span></button>
+            </div>
+            <div class="minigame-stats" aria-live="polite">
+                <span>⭐ <strong id="memory-score">0</strong> pts</span>
+                <span>⏱️ <strong id="memory-timer">00:00</strong></span>
+                <span>🧪 <strong id="memory-pairs">0/8</strong></span>
+            </div>
+        </div>
+        <div class="memory-board" id="memory-board" aria-label="Cartas do jogo da memória"></div>
+        <div class="memory-feedback" id="memory-feedback" aria-live="polite">Encontre os pares símbolo ↔ nome.</div>
+        <div class="minigame-actions">
+            <button class="periodic-close-btn secondary" onclick="app.voltarSeletorMinigames()">Escolher outro</button>
+            <button class="periodic-close-btn" onclick="app.iniciarMemoryMatch(app.memoryMatch.dificuldade)">↻ Reiniciar</button>
+        </div>
+        </div>
+
+        <div id="periodic-game-view" style="display: none;">
         <div class="minigame-header-row">
             <div>
                 <p class="minigame-kicker">Associação de conceitos</p>
                 <h2 class="minigame-header">📈 Padrão Periódico</h2>
                 <p class="minigame-subtitle">Arraste cada elemento para a posição que combina com a tendência indicada.</p>
             </div>
-            <button class="minigame-icon-btn" onclick="app.fecharMinigames()" aria-label="Fechar minigames" title="Fechar">✕</button>
+            <button class="minigame-icon-btn" onclick="app.voltarSeletorMinigames()" aria-label="Escolher outro minigame" title="Escolher outro minigame">✕</button>
         </div>
         <div class="minigame-toolbar">
             <div class="minigame-difficulties" role="group" aria-label="Escolha a dificuldade">
@@ -928,6 +992,39 @@
         <div class="minigame-actions">
             <button class="periodic-close-btn secondary" onclick="app.fecharMinigames()">Voltar à tabela</button>
             <button class="periodic-close-btn" onclick="app.iniciarGraficoPeriodico(app.periodicGraph.dificuldade)">↻ Reiniciar</button>
+        </div>
+        </div>
+
+        <div id="balance-game-view" style="display: none;">
+        <div class="minigame-header-row">
+            <div>
+                <p class="minigame-kicker">Puzzle estequiométrico</p>
+                <h2 class="minigame-header">🎯 Balanceador de Equações</h2>
+                <p class="minigame-subtitle">Ajuste os coeficientes até que todos os átomos estejam equilibrados.</p>
+            </div>
+            <button class="minigame-icon-btn" onclick="app.voltarSeletorMinigames()" aria-label="Escolher outro minigame" title="Escolher outro minigame">✕</button>
+        </div>
+        <div class="minigame-toolbar">
+            <div class="minigame-difficulties" role="group" aria-label="Escolha a dificuldade">
+                <button class="minigame-level-btn active" data-balance-difficulty="facil" onclick="app.iniciarBalanceador('facil', this)">Fácil <span>Reações simples</span></button>
+                <button class="minigame-level-btn" data-balance-difficulty="medio" onclick="app.iniciarBalanceador('medio', this)">Médio <span>Reações compostas</span></button>
+                <button class="minigame-level-btn" data-balance-difficulty="dificil" onclick="app.iniciarBalanceador('dificil', this)">Difícil <span>Reações complexas</span></button>
+            </div>
+            <div class="minigame-stats" aria-live="polite">
+                <span>⭐ <strong id="balance-score">0</strong> pts</span>
+                <span>⚡ <strong id="balance-attempts">0</strong> tentativas</span>
+                <span>⏱️ <strong id="balance-timer">00:00</strong></span>
+            </div>
+        </div>
+        <div class="equation-challenge-card">
+            <span class="periodic-property-label">Equação em jogo</span>
+            <div class="equation-builder" id="equation-builder" aria-label="Coeficientes da equação química"></div>
+        </div>
+        <div class="memory-feedback" id="balance-feedback" aria-live="polite">Ajuste os coeficientes para começar.</div>
+        <div class="minigame-actions">
+            <button class="periodic-close-btn secondary" onclick="app.voltarSeletorMinigames()">Escolher outro</button>
+            <button class="periodic-close-btn" onclick="app.iniciarBalanceador(app.equationBalance.dificuldade)">↻ Reiniciar</button>
+        </div>
         </div>
     </div>
 
