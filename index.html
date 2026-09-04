@@ -346,6 +346,13 @@
             </div>
         </div>
 
+        <div class="profile-section-title" style="margin-top: 30px;"> Padrões Periódicos</div>
+        <div class="chart-section" style="background: var(--bg-card); border: 2px solid var(--borda-card); border-radius: 16px; padding: 18px;">
+            <div style="position: relative; height: 280px; width: 100%;">
+                <canvas id="graficos-minigame-chart"></canvas>
+            </div>
+        </div>
+
         <div class="profile-section-title" style="margin-top: 30px;"> Histórico de Desempenho</div>
         <table class="history-table">
             <thead>
@@ -633,6 +640,7 @@
                 <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('eletronegatividade', this)">⚡ Eletronegatividade</button>
                 <button class="periodic-menu-btn" onclick="app.mostrarTabelaPeriodicaView('gabaritos', this)">✅ Gabaritos</button>
                 <button class="periodic-menu-btn conceitos-btn" onclick="app.abrirSeletorConceitos()">📖 Ver Conceitos</button>
+                <button class="periodic-menu-btn minigame-btn" onclick="app.abrirMinigames()">🎮 Minigames</button>
             </div>
             <div class="periodic-content">
                 <h2 class="periodic-header" id="periodic-content-header">⚗️ Tabela Periódica Interativa (118 Elementos)</h2>
@@ -876,6 +884,50 @@
                     <button class="periodic-close-btn" onclick="app.fecharTabelaPeriodica()">Fechar</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="minigame-screen modal-animated" id="minigame-screen" style="display: none;">
+        <div class="minigame-header-row">
+            <div>
+                <p class="minigame-kicker">Associação de conceitos</p>
+                <h2 class="minigame-header">📈 Padrão Periódico</h2>
+                <p class="minigame-subtitle">Arraste cada elemento para a posição que combina com a tendência indicada.</p>
+            </div>
+            <button class="minigame-icon-btn" onclick="app.fecharMinigames()" aria-label="Fechar minigames" title="Fechar">✕</button>
+        </div>
+        <div class="minigame-toolbar">
+            <div class="minigame-difficulties" role="group" aria-label="Escolha a dificuldade">
+                <button class="minigame-level-btn active" data-difficulty="facil" onclick="app.iniciarGraficoPeriodico('facil', this)">Fácil <span>4 elementos</span></button>
+                <button class="minigame-level-btn" data-difficulty="medio" onclick="app.iniciarGraficoPeriodico('medio', this)">Médio <span>6 elementos</span></button>
+                <button class="minigame-level-btn" data-difficulty="dificil" onclick="app.iniciarGraficoPeriodico('dificil', this)">Difícil <span>8 elementos</span></button>
+            </div>
+            <div class="minigame-stats" aria-live="polite">
+                <span>⭐ <strong id="periodic-score">0</strong> pts</span>
+                <span>🎯 <strong id="periodic-accuracy">0%</strong></span>
+                <span>🧪 <strong id="periodic-progress">0/4</strong></span>
+            </div>
+        </div>
+        <div class="periodic-challenge-card">
+            <div class="periodic-challenge-copy">
+                <span class="periodic-property-label">Propriedade em jogo</span>
+                <h3 id="periodic-property-title">Eletronegatividade</h3>
+                <p id="periodic-property-description">A tendência aumenta para a direita e para cima na tabela.</p>
+            </div>
+            <div class="periodic-legend-inline"><span class="trend-dot low"></span> menor <span class="trend-dot high"></span> maior</div>
+        </div>
+        <div class="periodic-graph" id="periodic-graph" aria-label="Gráfico interativo da propriedade periódica">
+            <div class="periodic-axis-y"><span>maior</span><span>menor</span></div>
+            <div class="periodic-plot-wrap">
+                <div class="periodic-plot" id="periodic-plot"></div>
+                <div class="periodic-axis-x"><span>esquerda</span><span>direita</span></div>
+            </div>
+        </div>
+        <div class="periodic-elements" id="periodic-elements" aria-label="Elementos para arrastar"></div>
+        <div class="memory-feedback" id="periodic-feedback" aria-live="polite">Arraste um elemento para o gráfico para começar.</div>
+        <div class="minigame-actions">
+            <button class="periodic-close-btn secondary" onclick="app.fecharMinigames()">Voltar à tabela</button>
+            <button class="periodic-close-btn" onclick="app.iniciarGraficoPeriodico(app.periodicGraph.dificuldade)">↻ Reiniciar</button>
         </div>
     </div>
 

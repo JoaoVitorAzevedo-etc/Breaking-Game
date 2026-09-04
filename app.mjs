@@ -1,3 +1,5 @@
+import { registrarDesempenhoGrafico, resumirDesempenhoGrafico } from './graficos.mjs';
+
 //não sei onde estava o erro mas se resolveu sozinho
 const app = {
             usuarioAtual: null,
@@ -23,6 +25,9 @@ const app = {
             tagPendente: null,
             sons: {},
             desempenhoChart: null,
+            graficosMinigameChart: null,
+            memoryMatch: { dificuldade: 'facil', cartas: [], abertas: [], pares: 0, erros: 0, pontuacao: 0, inicio: 0, timer: null, bloqueado: false },
+            periodicGraph: { dificuldade: 'facil', propriedade: null, elementos: [], colocados: 0, tentativas: 0, pontuacao: 0, finalizado: false },
 
             observarVisibilidadeMenu() {
                 const mainMenu = document.getElementById('main-menu');
@@ -50,7 +55,8 @@ const app = {
         'profile-screen',
         'shop-screen',
         'ranking-screen',
-        'periodic-table-screen'
+                'periodic-table-screen',
+                'minigame-screen'
     ];
 
     telas.forEach(id => {
@@ -186,7 +192,8 @@ const app = {
                     { nome: "Lenda Viva", icone: "👑", descricao: "Acumule um total de 1000 pontos em sua jornada!", pontos: 100 },
                     { nome: "Jornada Épica", icone: "🚀", descricao: "Complete 10 fases com desempenho consistente!", pontos: 150 },
                     { nome: "Mestre Supremo", icone: "👨‍🎓", descricao: "Gabarite a prova final - você é um verdadeiro Doutor em Química!", pontos: 1000 },
-                    { nome: "Campeão do Breaking Game", icone: "🎮", descricao: "Complete o desafio final com 60% ou mais de acerto!", pontos: 150 }
+                    { nome: "Campeão do Breaking Game", icone: "🎮", descricao: "Complete o desafio final com 60% ou mais de acerto!", pontos: 150 },
+                    { nome: "Padrão Periódico", icone: "📈", descricao: "Complete uma rodada do gráfico de propriedades periódicas.", pontos: 150 }
                 ];
             },
 
@@ -204,7 +211,8 @@ const app = {
                     temaCurrent: "light-1",
                     tamanhoFonte: "medio",
                     avatarUrl: "",
-                    itensComprados: ["light-1", "inter"]
+                    itensComprados: ["light-1", "inter"],
+                    elementosDesbloqueados: []
                 };
             },
 
@@ -599,6 +607,7 @@ const app = {
                     'auxiliar-screen',
                     'profile-screen',
                     'periodic-table-screen',
+                    'minigame-screen',
                     'seletor-conceitos-screen',
                     'conceito-box',
                     'conceito-livre-box',
@@ -1215,15 +1224,15 @@ escaparHTML(texto) {
             playlistSelecionada: null,
             playlistFaixas: {
                 lofi: [
-                    'alex-morgan-chillhop-jazz-coffee-shop-552792.mp3',
-                    'alex-morgan-lofi-chill-vlog-beats-573883.mp3',
-                    'alex-morgan-lofi-hip-hop-funky-midnight-club-560062.mp3',
-                    'alex-morgan-lofi-midnight-club-568164.mp3',
-                    'alex-morgan-lofi-sunny-cafe-568156.mp3',
-                    'apalonbeats-lofi-lofi-music-2-566602.mp3',
-                    'kulakovka-lofi-relax-570489.mp3',
-                    'sub_clair-lofi-background-586104.mp3',
-                    'the_mountain-lofi-beats-567433.mp3'
+                    'alex-morgan-chillhop-jazz-coffee-shop.mp3',
+                    'alex-morgan-lofi-chill-vlog-beats.mp3',
+                    'alex-morgan-lofi-hip-hop-funky-midnight-club.mp3',
+                    'alex-morgan-lofi-midnight-club.mp3',
+                    'alex-morgan-lofi-sunny-cafe.mp3',
+                    'apalonbeats.mp3',
+                    'kulakovka-lofi-relax.mp3',
+                    'sub_clair-lofi-background.mp3',
+                    'the_mountain-lofi-beats.mp3'
                 ],
                 rock: [
                     'alex-morgan-rock-pop-background-music-energy-583243.mp3',
@@ -1599,6 +1608,282 @@ escaparHTML(texto) {
                 this.mostrarTabelaPeriodicaView('tabela', primeiroBtn);
             },
 
+            abrirMinigames() {
+                document.getElementById('periodic-table-screen').style.display = 'none';
+                document.getElementById('minigame-screen').style.display = 'block';
+                document.getElementById('modal-overlay').style.display = 'block';
+                this.iniciarGraficoPeriodico('facil');
+            },
+
+            fecharMinigames() {
+                this.pararTimerMemoryMatch();
+                document.getElementById('minigame-screen').style.display = 'none';
+                document.getElementById('modal-overlay').style.display = 'none';
+                document.getElementById('periodic-table-screen').style.display = 'block';
+            },
+
+            iniciarMemoryMatch(dificuldade = 'facil', botao = null) {
+                const quantidades = { facil: 8, medio: 12, dificil: 20 };
+                const quantidade = quantidades[dificuldade] || quantidades.facil;
+                const elementos = this.elementosQuimicos.filter(elemento => !elemento.serieEspecial).slice(0, 40);
+                const selecionados = elementos.sort(() => Math.random() - 0.5).slice(0, quantidade);
+                const cartas = selecionados.flatMap(elemento => [
+                    { id: `${elemento.numero}-simbolo`, par: elemento.numero, tipo: 'simbolo', valor: elemento.simbolo },
+                    { id: `${elemento.numero}-nome`, par: elemento.numero, tipo: 'nome', valor: elemento.nome }
+                ]).sort(() => Math.random() - 0.5);
+
+                this.pararTimerMemoryMatch();
+                this.memoryMatch = { dificuldade, cartas, abertas: [], pares: 0, erros: 0, pontuacao: 0, inicio: Date.now(), timer: null, bloqueado: false };
+                document.querySelectorAll('.minigame-level-btn').forEach(item => item.classList.toggle('active', item.dataset.difficulty === dificuldade));
+                if (botao) botao.classList.add('active');
+                document.getElementById('memory-pairs').textContent = `0/${quantidade}`;
+                document.getElementById('memory-score').textContent = '0';
+                document.getElementById('memory-timer').textContent = '00:00';
+                document.getElementById('memory-feedback').textContent = 'Encontre os pares símbolo ↔ nome.';
+                document.getElementById('memory-board').classList.remove('memory-finished');
+                this.renderizarMemoryMatch();
+                this.memoryMatch.timer = setInterval(() => {
+                    const segundos = Math.floor((Date.now() - this.memoryMatch.inicio) / 1000);
+                    document.getElementById('memory-timer').textContent = `${String(Math.floor(segundos / 60)).padStart(2, '0')}:${String(segundos % 60).padStart(2, '0')}`;
+                }, 1000);
+            },
+
+            obterDesafiosPeriodicos() {
+                return [
+                    {
+                        nome: 'Eletronegatividade',
+                        descricao: 'A tendência aumenta para a direita e para cima na tabela.',
+                        elementos: [
+                            { numero: 3, simbolo: 'Li', nome: 'Lítio', x: 22, y: 25 },
+                            { numero: 6, simbolo: 'C', nome: 'Carbono', x: 50, y: 48 },
+                            { numero: 8, simbolo: 'O', nome: 'Oxigênio', x: 70, y: 68 },
+                            { numero: 9, simbolo: 'F', nome: 'Flúor', x: 84, y: 84 },
+                            { numero: 11, simbolo: 'Na', nome: 'Sódio', x: 28, y: 18 },
+                            { numero: 17, simbolo: 'Cl', nome: 'Cloro', x: 78, y: 58 },
+                            { numero: 19, simbolo: 'K', nome: 'Potássio', x: 18, y: 10 },
+                            { numero: 35, simbolo: 'Br', nome: 'Bromo', x: 73, y: 42 }
+                        ]
+                    },
+                    {
+                        nome: 'Raio atômico',
+                        descricao: 'O raio aumenta para a esquerda e para baixo na tabela.',
+                        elementos: [
+                            { numero: 3, simbolo: 'Li', nome: 'Lítio', x: 50, y: 58 },
+                            { numero: 9, simbolo: 'F', nome: 'Flúor', x: 84, y: 20 },
+                            { numero: 11, simbolo: 'Na', nome: 'Sódio', x: 38, y: 48 },
+                            { numero: 17, simbolo: 'Cl', nome: 'Cloro', x: 78, y: 30 },
+                            { numero: 19, simbolo: 'K', nome: 'Potássio', x: 22, y: 78 },
+                            { numero: 35, simbolo: 'Br', nome: 'Bromo', x: 73, y: 45 },
+                            { numero: 37, simbolo: 'Rb', nome: 'Rubídio', x: 16, y: 86 },
+                            { numero: 53, simbolo: 'I', nome: 'Iodo', x: 68, y: 54 }
+                        ]
+                    },
+                    {
+                        nome: 'Energia de ionização',
+                        descricao: 'A tendência geral aumenta para a direita e para cima.',
+                        elementos: [
+                            { numero: 11, simbolo: 'Na', nome: 'Sódio', x: 24, y: 24 },
+                            { numero: 12, simbolo: 'Mg', nome: 'Magnésio', x: 36, y: 38 },
+                            { numero: 13, simbolo: 'Al', nome: 'Alumínio', x: 48, y: 43 },
+                            { numero: 16, simbolo: 'S', nome: 'Enxofre', x: 68, y: 63 },
+                            { numero: 17, simbolo: 'Cl', nome: 'Cloro', x: 78, y: 70 },
+                            { numero: 18, simbolo: 'Ar', nome: 'Argônio', x: 87, y: 78 },
+                            { numero: 19, simbolo: 'K', nome: 'Potássio', x: 17, y: 12 },
+                            { numero: 10, simbolo: 'Ne', nome: 'Neônio', x: 86, y: 86 }
+                        ]
+                    }
+                ];
+            },
+
+            iniciarGraficoPeriodico(dificuldade = 'facil', botao = null) {
+                const quantidades = { facil: 4, medio: 6, dificil: 8 };
+                const quantidade = quantidades[dificuldade] || quantidades.facil;
+                const desafios = this.obterDesafiosPeriodicos();
+                const desafio = desafios[Math.floor(Math.random() * desafios.length)];
+                const elementos = desafio.elementos.slice(0, quantidade).sort(() => Math.random() - 0.5);
+                this.periodicGraph = { dificuldade, propriedade: desafio.nome, elementos, colocados: 0, tentativas: 0, pontuacao: 0, finalizado: false };
+                document.querySelectorAll('.minigame-level-btn').forEach(item => item.classList.toggle('active', item.dataset.difficulty === dificuldade));
+                if (botao) botao.classList.add('active');
+                document.getElementById('periodic-property-title').textContent = desafio.nome;
+                document.getElementById('periodic-property-description').textContent = desafio.descricao;
+                document.getElementById('periodic-score').textContent = '0';
+                document.getElementById('periodic-accuracy').textContent = '0%';
+                document.getElementById('periodic-progress').textContent = `0/${quantidade}`;
+                document.getElementById('periodic-feedback').className = 'memory-feedback';
+                document.getElementById('periodic-feedback').textContent = 'Arraste um elemento para o gráfico para começar.';
+                this.renderizarGraficoPeriodico();
+            },
+
+            renderizarGraficoPeriodico() {
+                const plot = document.getElementById('periodic-plot');
+                const elements = document.getElementById('periodic-elements');
+                const jogo = this.periodicGraph;
+                plot.innerHTML = jogo.elementos.map(elemento => `<div class="periodic-target" data-target="${elemento.numero}" style="left:${elemento.x}%; bottom:${elemento.y}%" aria-label="Alvo de ${elemento.nome}">${elemento.simbolo}</div>`).join('');
+                elements.innerHTML = jogo.elementos.map(elemento => `<button class="periodic-element-token" data-element="${elemento.numero}" aria-label="Arrastar ${elemento.nome}" title="${elemento.nome}">${elemento.simbolo}</button>`).join('');
+                elements.querySelectorAll('.periodic-element-token').forEach(token => this.prepararElementoArrastavel(token));
+            },
+
+            prepararElementoArrastavel(token) {
+                let arrastando = false;
+                const mover = evento => {
+                    if (!arrastando) return;
+                    const plot = document.getElementById('periodic-plot');
+                    const rect = plot.getBoundingClientRect();
+                    const x = Math.max(3, Math.min(97, ((evento.clientX - rect.left) / rect.width) * 100));
+                    const y = Math.max(4, Math.min(96, ((rect.bottom - evento.clientY) / rect.height) * 100));
+                    token.style.left = `${x}%`;
+                    token.style.bottom = `${y}%`;
+                    token.style.position = 'absolute';
+                    token.parentElement === document.getElementById('periodic-elements') && document.getElementById('periodic-plot').appendChild(token);
+                };
+                token.addEventListener('pointerdown', evento => {
+                    if (token.classList.contains('correct')) return;
+                    arrastando = true;
+                    token.setPointerCapture(evento.pointerId);
+                    mover(evento);
+                });
+                token.addEventListener('pointermove', mover);
+                token.addEventListener('pointerup', evento => {
+                    if (!arrastando) return;
+                    arrastando = false;
+                    this.avaliarPosicaoPeriodica(token);
+                    token.releasePointerCapture(evento.pointerId);
+                });
+            },
+
+            avaliarPosicaoPeriodica(token) {
+                const jogo = this.periodicGraph;
+                const elemento = jogo.elementos.find(item => String(item.numero) === token.dataset.element);
+                if (!elemento || jogo.finalizado) return;
+                const plot = document.getElementById('periodic-plot');
+                const rect = plot.getBoundingClientRect();
+                const x = parseFloat(token.style.left);
+                const y = parseFloat(token.style.bottom);
+                const distancia = Math.sqrt(((x - elemento.x) / 100 * rect.width) ** 2 + ((y - elemento.y) / 100 * rect.height) ** 2);
+                const limite = Math.min(rect.width, rect.height) * 0.16;
+                jogo.tentativas++;
+                if (distancia <= limite) {
+                    const precisao = Math.max(0, Math.round(100 - (distancia / limite) * 50));
+                    const pontos = Math.round(40 + precisao * 1.2);
+                    jogo.pontuacao += pontos;
+                    jogo.colocados++;
+                    token.classList.add('correct');
+                    token.style.left = `${elemento.x}%`;
+                    token.style.bottom = `${elemento.y}%`;
+                    const alvo = plot.querySelector(`[data-target="${elemento.numero}"]`);
+                    if (alvo) alvo.classList.add('occupied');
+                    const feedback = document.getElementById('periodic-feedback');
+                    feedback.className = 'memory-feedback feedback-good';
+                    feedback.textContent = `Boa leitura do padrão! +${pontos} pts (${precisao}% de precisão).`;
+                } else {
+                    token.classList.add('incorrect');
+                    const feedback = document.getElementById('periodic-feedback');
+                    feedback.className = `memory-feedback ${distancia <= limite * 1.8 ? 'feedback-near' : 'feedback-bad'}`;
+                    feedback.textContent = distancia <= limite * 1.8 ? 'Está perto. Observe a direção da tendência e tente novamente.' : 'Ainda distante. Pense no sentido da tendência periódica.';
+                    setTimeout(() => token.classList.remove('incorrect'), 350);
+                }
+                document.getElementById('periodic-score').textContent = jogo.pontuacao;
+                document.getElementById('periodic-progress').textContent = `${jogo.colocados}/${jogo.elementos.length}`;
+                document.getElementById('periodic-accuracy').textContent = `${Math.round((jogo.colocados / jogo.tentativas) * 100)}%`;
+                if (jogo.colocados === jogo.elementos.length) this.finalizarGraficoPeriodico();
+            },
+
+            finalizarGraficoPeriodico() {
+                const jogo = this.periodicGraph;
+                if (jogo.finalizado) return;
+                jogo.finalizado = true;
+                const perfil = this.contaPadrao || this.obterPerfilPadrao();
+                const precisao = Math.round((jogo.colocados / Math.max(1, jogo.tentativas)) * 100);
+                const data = new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR').substring(0, 5);
+                const bonus = jogo.dificuldade === 'dificil' ? 100 : jogo.dificuldade === 'medio' ? 50 : 0;
+                const total = jogo.pontuacao + bonus;
+                perfil.pontuacaoTotal = (perfil.pontuacaoTotal || 0) + total;
+                registrarDesempenhoGrafico(perfil, { data, propriedade: jogo.propriedade, dificuldade: jogo.dificuldade, precisao, pontos: total });
+                perfil.badges = Array.isArray(perfil.badges) ? perfil.badges : [];
+                let badgeNova = false;
+                if (!perfil.badges.some(badge => badge.nome === 'Padrão Periódico')) {
+                    perfil.badges.push({ nome: 'Padrão Periódico', icone: '📈', descricao: 'Complete uma rodada do gráfico de propriedades periódicas.', pontos: 150 });
+                    perfil.pontuacaoTotal += 150;
+                    badgeNova = true;
+                }
+                if (this.usuarioAtual) this.salvarDados(`usuario_${this.usuarioAtual}`, perfil);
+                document.getElementById('total-points').textContent = perfil.pontuacaoTotal;
+                const feedback = document.getElementById('periodic-feedback');
+                feedback.className = 'memory-feedback feedback-good';
+                feedback.innerHTML = `🏆 Rodada concluída! +${total} pts${bonus ? ` (${bonus} de dificuldade)` : ''}. ${badgeNova ? 'Badge Padrão Periódico desbloqueada!' : 'Excelente leitura de tendência.'}`;
+            },
+
+            pararTimerMemoryMatch() {
+                if (this.memoryMatch?.timer) clearInterval(this.memoryMatch.timer);
+                if (this.memoryMatch) this.memoryMatch.timer = null;
+            },
+
+            renderizarMemoryMatch() {
+                const board = document.getElementById('memory-board');
+                board.innerHTML = this.memoryMatch.cartas.map(carta => `
+                    <button class="memory-card" data-card-id="${carta.id}" onclick="app.selecionarCartaMemory('${carta.id}')" aria-label="Carta fechada">
+                        <span class="memory-card-back">⚛</span><span class="memory-card-face">${carta.valor}</span>
+                    </button>
+                `).join('');
+            },
+
+            selecionarCartaMemory(id) {
+                const jogo = this.memoryMatch;
+                if (jogo.bloqueado || jogo.abertas.some(carta => carta.id === id)) return;
+                const carta = jogo.cartas.find(item => item.id === id);
+                const elemento = document.querySelector(`[data-card-id="${id}"]`);
+                if (!carta || !elemento || elemento.classList.contains('matched')) return;
+                elemento.classList.add('revealed');
+                jogo.abertas.push(carta);
+                if (jogo.abertas.length < 2) return;
+
+                const [primeira, segunda] = jogo.abertas;
+                if (primeira.par === segunda.par && primeira.tipo !== segunda.tipo) {
+                    const pontos = 100 + Math.max(0, 40 - jogo.erros * 5);
+                    jogo.pontuacao += pontos;
+                    jogo.pares++;
+                    document.querySelectorAll(`[data-card-id="${primeira.id}"], [data-card-id="${segunda.id}"]`).forEach(card => card.classList.add('matched'));
+                    document.getElementById('memory-score').textContent = jogo.pontuacao;
+                    document.getElementById('memory-pairs').textContent = `${jogo.pares}/${jogo.cartas.length / 2}`;
+                    jogo.abertas = [];
+                    if (jogo.pares === jogo.cartas.length / 2) this.finalizarMemoryMatch();
+                } else {
+                    jogo.erros++;
+                    jogo.bloqueado = true;
+                    document.getElementById('memory-feedback').textContent = 'Quase! Essas cartas não formam um par.';
+                    setTimeout(() => {
+                        document.querySelectorAll(`[data-card-id="${primeira.id}"], [data-card-id="${segunda.id}"]`).forEach(card => card.classList.remove('revealed'));
+                        jogo.abertas = [];
+                        jogo.bloqueado = false;
+                    }, 700);
+                }
+            },
+
+            finalizarMemoryMatch() {
+                this.pararTimerMemoryMatch();
+                const jogo = this.memoryMatch;
+                const segundos = Math.floor((Date.now() - jogo.inicio) / 1000);
+                const bonus = Math.max(0, 300 - segundos * 3);
+                const total = jogo.pontuacao + bonus;
+                const perfil = this.contaPadrao || this.obterPerfilPadrao();
+                perfil.pontuacaoTotal = (perfil.pontuacaoTotal || 0) + total;
+                perfil.elementosDesbloqueados = Array.isArray(perfil.elementosDesbloqueados) ? perfil.elementosDesbloqueados : [];
+                const elementoNovo = this.elementosQuimicos.find(elemento => !perfil.elementosDesbloqueados.includes(elemento.numero));
+                if (elementoNovo) perfil.elementosDesbloqueados.push(elementoNovo.numero);
+                let badgeNova = false;
+                perfil.badges = Array.isArray(perfil.badges) ? perfil.badges : [];
+                if (jogo.erros === 0 && !perfil.badges.some(badge => badge.nome === 'Memória Atômica')) {
+                    perfil.badges.push({ nome: 'Memória Atômica', icone: '🧠', descricao: 'Complete o Memory Match sem erros.', pontos: 150 });
+                    perfil.pontuacaoTotal += 150;
+                    badgeNova = true;
+                }
+                if (this.usuarioAtual) this.salvarDados(`usuario_${this.usuarioAtual}`, perfil);
+                const totalPoints = document.getElementById('total-points');
+                if (totalPoints) totalPoints.textContent = perfil.pontuacaoTotal;
+                document.getElementById('memory-feedback').innerHTML = `🏆 Vitória! +${total} pts (${bonus} de velocidade). ${badgeNova ? 'Badge Memória Atômica desbloqueada!' : 'Elemento desbloqueado para sua coleção.'}`;
+                document.getElementById('memory-board').classList.add('memory-finished');
+            },
+
             abrirLoja() {
                  this.ocultarTodasAsTelas();
 
@@ -1667,6 +1952,7 @@ escaparHTML(texto) {
                 const badgesListEl = document.getElementById('badges-list');
                 const historyListEl = document.getElementById('history-list');
                 const chartCanvas = document.getElementById('desempenho-chart');
+                const minigameChartCanvas = document.getElementById('graficos-minigame-chart');
                 if (!badgesListEl || !historyListEl || !chartCanvas) return;
 
                 const badges = Array.isArray(perfil.badges) ? perfil.badges : [];
@@ -1756,6 +2042,30 @@ escaparHTML(texto) {
                         }
                     }
                 });
+
+                if (minigameChartCanvas) {
+                    if (this.graficosMinigameChart) this.graficosMinigameChart.destroy();
+                    const resumo = resumirDesempenhoGrafico(perfil);
+                    this.graficosMinigameChart = new Chart(minigameChartCanvas.getContext('2d'), {
+                        type: 'line',
+                        data: {
+                            labels: resumo.labels.length ? resumo.labels : ['Sem rodadas'],
+                            datasets: [
+                                { label: 'Precisão (%)', data: resumo.precisao.length ? resumo.precisao : [0], borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, .18)', fill: true, tension: .3 },
+                                { label: 'Pontos', data: resumo.pontos.length ? resumo.pontos : [0], borderColor: '#f97316', backgroundColor: 'rgba(249, 115, 22, .12)', fill: false, tension: .3 }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: { beginAtZero: true, ticks: { color: 'var(--cor-texto)' }, grid: { color: 'rgba(148, 163, 184, .25)' } },
+                                x: { ticks: { color: 'var(--cor-texto)' }, grid: { display: false } }
+                            },
+                            plugins: { legend: { labels: { color: 'var(--cor-texto)' } } }
+                        }
+                    });
+                }
             },
 
             abrirPerfil() {
