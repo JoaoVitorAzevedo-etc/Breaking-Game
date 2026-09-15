@@ -161,6 +161,7 @@
             <p style="font-size: 1.3rem; margin-bottom: 10px;">Pontos Ganhos: <span id="final-score" class="highlight-text">0</span></p>
             <p style="font-size: 1.3rem;">Taxa de Acerto: <span id="acerto-pct" class="highlight-text">0</span>%</p>
             <p id="badge-alert" class="pop-animation" style="color: #00c850; font-weight: bold; margin-top: 15px; display: none; text-align: center; background: rgba(0, 200, 80, 0.1); padding: 10px; border-radius: 5px;">🎉 Nova Badge Desbloqueada! Verifique seu perfil.</p>
+            <p id="bonus-alert" class="pop-animation" style="color: #b45309; font-weight: bold; margin-top: 15px; display: none; text-align: center; background: rgba(245, 158, 11, 0.14); padding: 10px; border-radius: 5px;"></p>
         </div>
         <div style="display: flex; gap: 12px; justify-content: center; margin-top: 10px;">
             <button class="btn-option" style="font-size: 1rem; background: #888888; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;" onclick="app.voltarAoMenu()"> Menu Principal</button>
@@ -259,23 +260,22 @@
     </div>
 
     <div class="stats-panel modal-animated" id="inventory-screen" style="display: none;">
-        <h2 class="config-header"> Inventário do Usuário</h2>
-        <p style="text-align: center; color: var(--cor-texto-secundario); margin-bottom: 22px; font-size: 0.98rem;">Veja seus itens comprados, altere visuais e fontes, e aplique os itens que já possui.</p>
-
-        <div class="inventory-grid">
-            <div class="inventory-card">
-                <div class="inventory-card-header">Temas adquiridos</div>
-                <div id="inventory-theme-list" class="inventory-item-grid"></div>
+        <div class="inventory-header">
+            <div>
+                <p class="inventory-kicker">Personalização</p>
+                <h2 class="config-header">Inventário</h2>
+                <p class="inventory-subtitle">Escolha um tema ou fonte adquirida para personalizar sua experiência.</p>
             </div>
-            <div class="inventory-card">
-                <div class="inventory-card-header">Estilos de Fonte</div>
-                <div id="inventory-font-list" class="inventory-item-grid"></div>
-            </div>
+            <button class="inventory-close-button" onclick="app.fecharInventario()" aria-label="Fechar inventário">✕</button>
         </div>
 
-        <div style="margin-top: 22px; display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap;">
-            <button class="config-close" onclick="app.fecharInventario()" style="flex: 1; min-width: 140px; padding: 12px; border-radius: 12px; background: #888888; color: white; border: none; font-weight: bold; cursor: pointer;">Fechar</button>
+        <div class="inventory-filters" role="tablist" aria-label="Filtrar inventário">
+            <button class="inventory-filter-button active" data-filter="claros" onclick="app.selecionarFiltroInventario('claros')">Temas claros</button>
+            <button class="inventory-filter-button" data-filter="escuros" onclick="app.selecionarFiltroInventario('escuros')">Temas escuros</button>
+            <button class="inventory-filter-button" data-filter="fontes" onclick="app.selecionarFiltroInventario('fontes')">Fontes</button>
         </div>
+
+        <div id="inventory-item-list" class="inventory-item-list"></div>
     </div>
 
     <div class="auxiliar-screen modal-animated" id="final-warning-screen" style="display: none;">
@@ -412,7 +412,6 @@
                 <button class="shop-cat-btn active" data-cat="todos" onclick="app.selecionarCategoriaLoja('todos', this)">Todos</button>
                 <button class="shop-cat-btn" data-cat="recursos" onclick="app.selecionarCategoriaLoja('recursos', this)">📚 Recursos</button>
                 <button class="shop-cat-btn" data-cat="ofertas" onclick="app.selecionarCategoriaLoja('ofertas', this)">⚡ Ofertas</button>
-                <button class="shop-cat-btn" data-cat="dicas" onclick="app.selecionarCategoriaLoja('dicas', this)">💡 Dicas</button>
                 <button class="shop-cat-btn" data-cat="bonus" onclick="app.selecionarCategoriaLoja('bonus', this)">🎁 Bônus</button>
                 <button class="shop-cat-btn" data-cat="visual" onclick="app.selecionarCategoriaLoja('visual', this)">🎨 Visual</button>
             </div>
@@ -422,18 +421,20 @@
             <h3 class="shop-section-title">Recursos</h3>
             <div class="shop-grid">
                 
-                <div class="shop-card" data-tags="recursos bonus">
+                <div class="shop-card" id="bonus-dobro-pontos-card" data-tags="recursos bonus">
                     <div class="shop-card-icon">✨</div>
                     <h4 class="shop-card-title">Dobro de Pontos</h4>
-                    <p class="shop-card-desc">Ative e ganhe o dobro de pontuação ao acertar as questões.</p>
-                    <button class="btn-option">Comprar por 200 pontos</button>
+                    <p class="shop-card-desc">Ganhe o dobro de pontos ao acertar questões durante três fases.</p>
+                    <p id="bonus-dobro-pontos-status" class="shop-card-desc">Disponível</p>
+                    <button id="btn-comprar-dobro-pontos" class="btn-option" onclick="app.comprarDobroPontos()">Comprar por 200 pontos</button>
                 </div>
 
                 <div class="shop-card" data-tags="recursos bonus">
                     <div class="shop-card-icon">💡</div>
                     <h4 class="shop-card-title">Pacote com Três Dicas</h4>
-                    <p class="shop-card-desc">Adiciona 3 dicas extras ao seu inventário de jogo.</p>
-                    <button class="btn-option">Comprar por 150 pontos</button>
+                    <p class="shop-card-desc">Adiciona 3 dicas ao saldo. Use-as durante as fases sem gastar pontos.</p>
+                    <p id="pacote-dicas-status" class="shop-card-desc">0 dica(s) comprada(s)</p>
+                    <button class="btn-option" onclick="app.comprarPacoteDicas()">Comprar por 150 pontos</button>
                 </div>
 
             </div>
@@ -560,34 +561,6 @@
                     <h4 class="shop-card-title" style="font-family: 'Times New Roman', serif;">Fonte: Times New Roman</h4>
                     <p class="shop-card-desc">Aplique a clássica tipografia acadêmica Times New Roman.</p>
                     <button class="btn-option" onclick="app.comprarTemaNaLoja('times')">Comprar por 140 pts</button>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="shop-section">
-            <h3 class="shop-section-title">Dicas e Customização</h3>
-            <div class="shop-grid">
-
-                <div class="shop-card" data-tags="dicas visual skins">
-                    <div class="shop-card-icon">🤖</div>
-                    <h4 class="shop-card-title">Pacote Skins de Auxiliar</h4>
-                    <p class="shop-card-desc">Desbloqueie todas as 12 skins exclusivas para seus assistentes virtuais.</p>
-                    <button class="btn-option">Comprar</button>
-                </div>
-
-                <div class="shop-card" data-tags="dicas visual skins">
-                    <div class="shop-card-icon">🎭</div>
-                    <h4 class="shop-card-title">Skins do Herói</h4>
-                    <p class="shop-card-desc">Conjunto completo contendo os 4 visuais exclusivos para o personagem principal.</p>
-                    <button class="btn-option">Comprar</button>
-                </div>
-
-                <div class="shop-card" data-tags="dicas visual skins">
-                    <div class="shop-card-icon">🏆</div>
-                    <h4 class="shop-card-title">Skins de Conquista Secreta</h4>
-                    <p class="shop-card-desc">Acesso imediato às 4 skins raras de conquistas ocultas do game.</p>
-                    <button class="btn-option">Comprar</button>
                 </div>
 
             </div>

@@ -9,6 +9,7 @@ const app = {
             fonteSelecionada: 'inter',
             tamanhoFonte: 'medio',
             categoriaLojaSelecionada: 'todos',
+            filtroInventario: 'claros',
             // --------------------------------------
             perguntaAtualIdx: 0,
             gameState: { 
@@ -246,6 +247,8 @@ const app = {
                     tamanhoFonte: "medio",
                     avatarUrl: "",
                     itensComprados: ["light-1", "inter"],
+                    bonusDobroPontos: { fasesRestantes: 0 },
+                    dicasCompradas: 0,
                     elementosDesbloqueados: []
                 };
             },
@@ -792,6 +795,99 @@ const app = {
                 }
             },
 
+            obterEstadoDobroPontos(perfil = this.contaPadrao) {
+                if (!perfil) return { fasesRestantes: 0 };
+                if (!perfil.bonusDobroPontos || typeof perfil.bonusDobroPontos !== 'object') {
+                    perfil.bonusDobroPontos = { fasesRestantes: 0 };
+                }
+                perfil.bonusDobroPontos.fasesRestantes = Math.max(0, Number(perfil.bonusDobroPontos.fasesRestantes) || 0);
+                return perfil.bonusDobroPontos;
+            },
+
+            comprarDobroPontos() {
+                const perfil = this.contaPadrao;
+                if (!perfil) return console.warn('Você precisa estar logado para efetuar compras.');
+
+                const bonus = this.obterEstadoDobroPontos(perfil);
+                if (bonus.fasesRestantes > 0) {
+                    console.warn(`O bônus já está ativo por mais ${bonus.fasesRestantes} fase(s).`);
+                    this.atualizarCardDobroPontos();
+                    return;
+                }
+
+                const preco = 200;
+                if ((perfil.pontuacaoTotal || 0) < preco) {
+                    console.warn('Você não possui saldo o suficiente para comprar este item.');
+                    return;
+                }
+
+                perfil.pontuacaoTotal -= preco;
+                perfil.bonusDobroPontos = { fasesRestantes: 3 };
+                this.salvarDados(`usuario_${this.usuarioAtual}`, perfil);
+                this.atualizarInfosMenu();
+                this.atualizarCardDobroPontos();
+            },
+
+            obterDicasCompradas(perfil = this.contaPadrao) {
+                if (!perfil) return 0;
+                perfil.dicasCompradas = Math.max(0, Number(perfil.dicasCompradas) || 0);
+                return perfil.dicasCompradas;
+            },
+
+            comprarPacoteDicas() {
+                const perfil = this.contaPadrao;
+                if (!perfil) return console.warn('Você precisa estar logado para efetuar compras.');
+
+                const preco = 150;
+                if ((perfil.pontuacaoTotal || 0) < preco) {
+                    console.warn('Você não possui saldo o suficiente para comprar este item.');
+                    return;
+                }
+
+                perfil.pontuacaoTotal -= preco;
+                perfil.dicasCompradas = this.obterDicasCompradas(perfil) + 3;
+                this.salvarDados(`usuario_${this.usuarioAtual}`, perfil);
+                this.atualizarInfosMenu();
+                this.atualizarCardPacoteDicas();
+                this.atualizarBotaoDica();
+            },
+
+            atualizarCardPacoteDicas() {
+                const status = document.getElementById('pacote-dicas-status');
+                if (status) status.textContent = `${this.obterDicasCompradas()} dica(s) comprada(s)`;
+            },
+
+            atualizarBotaoDica() {
+                const botao = document.getElementById('btn-dica');
+                if (!botao) return;
+
+                const dicasUsadas = this.gameState.dicasUsadas || 0;
+                const dicasRestantes = Math.max(0, 3 - dicasUsadas);
+                const dicasCompradas = this.obterDicasCompradas();
+                const podeUsar = dicasRestantes > 0 && (dicasCompradas > 0 || this.contaPadrao?.pontuacaoTotal >= this.gameState.CUSTO_DICA);
+                const faseFinal = this.gameState.nivelAtual === 14;
+
+                botao.textContent = faseFinal ? '💡 Dicas indisponíveis' : `💡 Dica (${dicasRestantes} restante${dicasRestantes === 1 ? '' : 's'})`;
+                botao.disabled = faseFinal || !podeUsar;
+                botao.style.opacity = botao.disabled ? '0.5' : '1';
+                botao.title = faseFinal ? 'Dicas não disponíveis no desafio final!' : `Você pode usar mais ${dicasRestantes} dica(s) nesta fase.`;
+            },
+
+            atualizarCardDobroPontos() {
+                const card = document.getElementById('bonus-dobro-pontos-card');
+                const botao = document.getElementById('btn-comprar-dobro-pontos');
+                const status = document.getElementById('bonus-dobro-pontos-status');
+                if (!card || !botao || !status) return;
+
+                const bonus = this.obterEstadoDobroPontos(this.contaPadrao);
+                const ativo = bonus.fasesRestantes > 0;
+                status.textContent = ativo ? `Ativo por mais ${bonus.fasesRestantes} fase(s)` : 'Disponível';
+                botao.textContent = ativo ? 'Bônus ativo' : 'Comprar por 200 pontos';
+                botao.disabled = ativo;
+                botao.style.opacity = ativo ? '0.55' : '1';
+                botao.style.cursor = ativo ? 'not-allowed' : 'pointer';
+            },
+
             renderizarLoja() {
                 const perfil = this.contaPadrao || this.obterPerfilPadrao();
                 const pontos = perfil.pontuacaoTotal || 0;
@@ -829,6 +925,8 @@ const app = {
                         `;
                     }).join('');
                 }
+                this.atualizarCardDobroPontos();
+                this.atualizarCardPacoteDicas();
             },
 
             obterNomeTema(temaId) {
@@ -1130,53 +1228,84 @@ escaparHTML(texto) {
 
             renderInventario() {
                 const perfil = this.contaPadrao || this.obterPerfilPadrao();
-                const themeContainer = document.getElementById('inventory-theme-list');
-                const fontContainer = document.getElementById('inventory-font-list');
-                const temas = (perfil.itensComprados || []).filter(item => this.obterItemPorId(item)?.tipo === 'tema');
+                const container = document.getElementById('inventory-item-list');
+                if (!container) return;
+
+                const itensComprados = perfil.itensComprados || [];
                 const temaAtual = document.body.getAttribute('data-theme') || perfil.temaCurrent || 'light-1';
                 const fonteAtual = this.fonteSelecionada || localStorage.getItem('fonte') || 'inter';
-                const fontes = this.temasDisponiveis.filter(item => item.tipo === 'fonte');
+                const tipoFiltro = this.filtroInventario || 'claros';
+                const itens = itensComprados
+                    .map(id => this.obterItemPorId(id))
+                    .filter(item => item && (
+                        tipoFiltro === 'fontes' ? item.tipo === 'fonte' :
+                        tipoFiltro === 'escuros' ? item.id.startsWith('dark-') :
+                        tipoFiltro === 'claros' ? item.id.startsWith('light-') : true
+                    ));
 
-                if (themeContainer) {
-                    if (!temas.length) {
-                        themeContainer.innerHTML = '<div style="color: var(--cor-texto-secundario); padding: 18px; border-radius: 14px; background: var(--bg-card);">Nenhum tema adquirido ainda.</div>';
-                    } else {
-                        themeContainer.innerHTML = temas.map(item => {
-                            const ativo = item === temaAtual;
-                            const label = ativo ? 'Ativo' : 'Aplicar';
-                            return `
-                                <div class="inventory-item-card ${ativo ? 'active' : ''}">
-                                    <div class="inventory-item-meta">
-                                        <div class="inventory-theme-preview" style="${this.obterPreviewTema(item)}"></div>
-                                        <div>
-                                            <div class="inventory-item-title">${this.obterNomeTema(item)}</div>
-                                            <div class="inventory-item-subtitle">ID: ${item}</div>
-                                        </div>
-                                    </div>
-                                    <button class="inventory-item-button" onclick="app.usarItemInventario('${item}')">${label}</button>
-                                </div>
-                            `;
-                        }).join('');
-                    }
-                }
-
-                if (fontContainer) {
-                    fontContainer.innerHTML = fontes.map(item => {
-                        const owned = perfil.itensComprados.includes(item.id);
-                        const ativo = item.id === fonteAtual;
-                        const label = owned ? (ativo ? 'Ativa' : 'Aplicar') : (item.preco === 0 ? 'Grátis' : `Comprar ${item.preco} pts`);
-                        const action = owned ? `app.usarItemInventario('${item.id}')` : `app.comprarTemaNaLoja('${item.id}')`;
-                        return `
-                            <div class="inventory-item-card ${ativo ? 'active' : ''}">
-                                <div>
-                                    <div class="inventory-item-title">${this.obterNomeTema(item.id)}</div>
-                                    <div class="inventory-item-subtitle">${owned ? 'Adquirida' : 'Bloqueada'}</div>
-                                </div>
-                                <button class="inventory-item-button" onclick="${action}">${label}</button>
+                container.innerHTML = itens.length ? itens.map(item => {
+                    const ativo = item.tipo === 'tema' ? item.id === temaAtual : item.id === fonteAtual;
+                    const preview = item.tipo === 'tema'
+                        ? `<div class="inventory-preview inventory-theme-preview" style="${this.obterPreviewTema(item.id)}"></div>`
+                        : `<div class="inventory-preview inventory-font-preview" style="font-family: ${this.obterFonteCSS(item.id)}">Aa</div>`;
+                    return `
+                        <article class="inventory-item-card ${ativo ? 'active' : ''}">
+                            <div class="inventory-item-content">
+                                <div class="inventory-item-title">${this.obterNomeTema(item.id)}</div>
+                                <p class="inventory-item-description">${this.obterDescricaoInventario(item.id)}</p>
+                                <button class="inventory-item-button" onclick="app.usarItemInventario('${item.id}')">${ativo ? 'Aplicado' : 'Aplicar'}</button>
                             </div>
-                        `;
-                    }).join('');
-                }
+                            ${preview}
+                        </article>
+                    `;
+                }).join('') : '<div class="inventory-empty">Nenhum item adquirido nesta categoria.</div>';
+
+                document.querySelectorAll('.inventory-filter-button').forEach(botao => {
+                    botao.classList.toggle('active', botao.dataset.filter === tipoFiltro);
+                });
+            },
+
+            selecionarFiltroInventario(filtro) {
+                this.filtroInventario = filtro;
+                this.renderInventario();
+            },
+
+            obterDescricaoInventario(itemId) {
+                const descricoes = {
+                    'light-1': 'Tema claro padrão, limpo e equilibrado para estudar.',
+                    'light-2': 'Tema claro suave com uma paleta moderna e delicada.',
+                    'light-3': 'Tema claro orgânico para uma experiência tranquila.',
+                    'light-4': 'Tema claro energético com detalhes em verde-lima.',
+                    'light-5': 'Tema claro de contraste equilibrado e elegante.',
+                    'light-6': 'Tema claro refrescante com detalhes em azul e laranja.',
+                    'light-7': 'Tema claro sofisticado com realces roxo-escuros.',
+                    'dark-1': 'Tema escuro premium com detalhes verdes marcantes.',
+                    'dark-2': 'Tema escuro asfalto com realces em vermelho vibrante.',
+                    'dark-3': 'Tema escuro cibernético com paleta neon.',
+                    'dark-4': 'Tema escuro imersivo em tons profundos de roxo e azul.',
+                    'dark-5': 'Tema escuro futurista com detalhes em ciano.',
+                    'dark-6': 'Tema escuro aconchegante em tons terrosos e floresta.',
+                    'dark-7': 'Tema escuro premium com realces magenta e dourados.',
+                    inter: 'Fonte sem serifa equilibrada para leitura confortável.',
+                    special: 'Fonte com personalidade inspirada em anotações de laboratório.',
+                    lobster: 'Fonte descontraída para dar um toque autoral à interface.',
+                    times: 'Fonte serifada clássica com aparência acadêmica.',
+                    double: 'Fonte diferenciada para uma identidade visual marcante.',
+                    'serif-bold': 'Fonte serifada em negrito para títulos de destaque.'
+                };
+                return descricoes[itemId] || 'Item visual adquirido para personalizar sua experiência.';
+            },
+
+            obterFonteCSS(itemId) {
+                const fontes = {
+                    inter: 'Inter, sans-serif',
+                    special: 'Special Elite, serif',
+                    lobster: 'Lobster, cursive',
+                    times: 'Times New Roman, serif',
+                    double: 'JetBrains Mono, monospace',
+                    'serif-bold': 'Georgia, serif'
+                };
+                return fontes[itemId] || 'Inter, sans-serif';
             },
 
             usarItemInventario(itemId) {
@@ -3031,18 +3160,7 @@ escaparHTML(texto) {
                 dicaDisplay.classList.remove('show');
                 dicaDisplay.innerHTML = '';
                 
-                const btnDica = document.getElementById('btn-dica');
-                // Desabilitar dicas para o nível final (14)
-                if (this.gameState.nivelAtual === 14) {
-                    btnDica.disabled = true;
-                    btnDica.style.opacity = '0.3';
-                    btnDica.title = 'Dicas não disponíveis no desafio final!';
-                } else {
-                    const temPontos = this.contaPadrao.pontuacaoTotal >= this.gameState.CUSTO_DICA;
-                    btnDica.disabled = !temPontos;
-                    btnDica.style.opacity = temPontos ? '1' : '0.5';
-                    btnDica.title = '';
-                }
+                this.atualizarBotaoDica();
                 
                 if (this.contaPadrao) {
                     document.getElementById('total-points-hud').textContent = this.contaPadrao.pontuacaoTotal;
@@ -3075,7 +3193,8 @@ escaparHTML(texto) {
                 const acertou = idx === q.resposta;
                 if (acertou) {
                     this.gameState.acertos++;
-                    this.gameState.pontuacaoAtual += 50;
+                    const bonusAtivo = this.obterEstadoDobroPontos(this.contaPadrao).fasesRestantes > 0;
+                    this.gameState.pontuacaoAtual += bonusAtivo ? 100 : 50;
                     feedback.innerHTML = " Absolutamente Correto!";
                     feedback.style.color = "#008833";
                     feedback.style.background = "rgba(0, 200, 80, 0.1)";
@@ -3119,13 +3238,16 @@ escaparHTML(texto) {
             usarDica() {
                 const perfil = this.contaPadrao;
                 const dicaDisplay = document.getElementById('dica-display');
+                const dicasUsadas = this.gameState.dicasUsadas || 0;
                 if (dicasUsadas >= 3) {
-                    span(dicaDisplay).innerHTML = `<strong style="color: #cc0040;">⚠️ Limite de dicas</strong> Você já usou 3 dicas nesta fase.`;
+                    dicaDisplay.innerHTML = `<strong style="color: #cc0040;">⚠️ Limite de dicas</strong> Você já usou 3 dicas nesta fase.`;
                     dicaDisplay.classList.add('show');
                     return;
                 }
-                
-                if (perfil.pontuacaoTotal < this.gameState.CUSTO_DICA) {
+
+                const dicasCompradas = this.obterDicasCompradas(perfil);
+                const usarDicaComprada = dicasCompradas > 0;
+                if (!usarDicaComprada && perfil.pontuacaoTotal < this.gameState.CUSTO_DICA) {
                     dicaDisplay.innerHTML = `<strong style="color: #cc0040;">⚠️ Pontos insuficientes</strong> Você precisa de ${this.gameState.CUSTO_DICA} pontos. Você tem ${perfil.pontuacaoTotal}.`;
                     dicaDisplay.classList.add('show');
                     return;
@@ -3138,18 +3260,21 @@ escaparHTML(texto) {
                     return;
                 }
 
-                perfil.pontuacaoTotal -= this.gameState.CUSTO_DICA;
-                this.gameState.pontuacaoAtual -= this.gameState.CUSTO_DICA;
+                if (usarDicaComprada) {
+                    perfil.dicasCompradas--;
+                } else {
+                    perfil.pontuacaoTotal -= this.gameState.CUSTO_DICA;
+                    this.gameState.pontuacaoAtual -= this.gameState.CUSTO_DICA;
+                }
                 this.gameState.dicasUsadas++;
 
-                dicaDisplay.innerHTML = `<strong style="color: var(--cor-principal);">💡 Dica:</strong> <span style="color: var(--cor-texto);">${q.dica || "Pense melhor!"}</span><br><small style="color: var(--cor-texto-secundario);">-${this.gameState.CUSTO_DICA} pts | Saldo: ${perfil.pontuacaoTotal} pts</small>`;
+                const custoTexto = usarDicaComprada ? `Dica comprada utilizada | Restam ${perfil.dicasCompradas}` : `-${this.gameState.CUSTO_DICA} pts`;
+                dicaDisplay.innerHTML = `<strong style="color: var(--cor-principal);">💡 Dica:</strong> <span style="color: var(--cor-texto);">${q.dica || "Pense melhor!"}</span><br><small style="color: var(--cor-texto-secundario);">${custoTexto} | Saldo: ${perfil.pontuacaoTotal} pts</small>`;
                 dicaDisplay.classList.add('show');
 
-                const btnDica = document.getElementById('btn-dica');
-                if (perfil.pontuacaoTotal < this.gameState.CUSTO_DICA) {
-                    btnDica.disabled = true;
-                    btnDica.style.opacity = '0.5';
-                }
+                this.salvarDados(`usuario_${this.usuarioAtual}`, perfil);
+                this.atualizarCardPacoteDicas();
+                this.atualizarBotaoDica();
 
                 document.getElementById('pontuacao-atual').textContent = this.gameState.pontuacaoAtual;
                 document.getElementById('total-points-hud').textContent = perfil.pontuacaoTotal;
@@ -3161,6 +3286,10 @@ escaparHTML(texto) {
                 if (!perfil.historico) perfil.historico = [];
 
                 const pontosGanhos = this.gameState.pontuacaoAtual;
+                const bonus = this.obterEstadoDobroPontos(perfil);
+                const bonusConsumido = bonus.fasesRestantes > 0;
+                if (bonusConsumido) bonus.fasesRestantes--;
+                const bonusExpirou = bonusConsumido && bonus.fasesRestantes === 0;
                 perfil.pontuacaoTotal += pontosGanhos;
                 if(this.gameState.acertos >= 3 && this.gameState.nivelAtual === perfil.nivelMaximo) perfil.nivelMaximo++;
                 
@@ -3268,6 +3397,19 @@ escaparHTML(texto) {
                         avisoBadge.style.display = 'block';
                     } else {
                         avisoBadge.style.display = 'none';
+                    }
+                }
+
+                const avisoBonus = document.getElementById('bonus-alert');
+                if (avisoBonus) {
+                    if (bonusExpirou) {
+                        avisoBonus.textContent = '⚡ Seu bônus de dobro de pontos acabou. Compre outro na loja para continuar dobrando seus pontos.';
+                        avisoBonus.style.display = 'block';
+                    } else if (bonusConsumido) {
+                        avisoBonus.textContent = `⚡ Bônus de dobro de pontos ativo por mais ${bonus.fasesRestantes} fase(s).`;
+                        avisoBonus.style.display = 'block';
+                    } else {
+                        avisoBonus.style.display = 'none';
                     }
                 }
 
