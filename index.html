@@ -90,7 +90,6 @@
             <button class="btn-option" onclick="app.abrirRanking()">Ranking</button>
             <button class="btn-option" onclick="app.abrirPerfil()">Desempenho</button>
             <button class="btn-option" onclick="app.mostrarTutorialIntro()"> Rever Tutorial</button>
-            <button class="btn-option" onclick="app.trocarUsuario()"> Sair</button>
         </div>
     </div>
 
@@ -170,7 +169,10 @@
     </div>
 
  <div class="config-screen modal-animated" id="config-screen" style="display: none;">
-    <h2 class="config-header">Dashboard do Usuário</h2>
+    <div class="dashboard-header">
+        <h2 class="config-header">Dashboard do Usuário</h2>
+        <button class="inventory-close-button" type="button" onclick="app.fecharConfig()" aria-label="Fechar dashboard">✕</button>
+    </div>
 
     <div class="user-dashboard-card" style="display: flex; align-items: center; gap: 16px; padding: 18px; border-radius: 16px; background: var(--bg-card-strong, var(--bg-card)); border: 1px solid var(--borda-card); margin-bottom: 20px;">
         <div class="dashboard-avatar-frame">
@@ -188,7 +190,16 @@
         </div>
     </div>
 
-    <div class="config-scroll-container" style="max-height: 55vh; overflow-y: auto; padding-right: 8px; margin-bottom: 20px;">
+    <form class="profile-name-form" id="profile-name-form" onsubmit="app.alterarNomePerfil(event)">
+        <label class="config-label" for="profile-name-input">Nome do perfil</label>
+        <div class="profile-name-controls">
+            <input type="text" id="profile-name-input" placeholder="Novo nome" autocomplete="name" maxlength="40" required>
+            <button type="submit" class="size-btn">Salvar</button>
+        </div>
+        <small id="profile-name-status" class="config-help" aria-live="polite"></small>
+    </form>
+
+    <div class="config-scroll-container" style="max-height: 42vh; overflow-y: auto; padding-right: 8px; margin-bottom: 20px;">
         <div class="config-option" style="flex-direction: column; align-items: flex-start; margin-top: 20px;">
             <span class="config-label" style="margin-bottom: 12px; font-weight: 600;">Tamanho da Fonte</span>
             <div style="display: flex; gap: 10px; width: 100%;">
@@ -211,10 +222,16 @@
             <label class="config-label" for="avatar-url-input" style="margin-bottom: 10px; font-weight: 600;">URL da imagem do avatar</label>
             <input type="url" id="avatar-url-input" placeholder="https://exemplo.com/minha-imagem.jpg" autocomplete="url">
             <small class="config-help">Cole uma URL pública de uma imagem para usar como avatar.</small>
+            <label class="upload-label" for="profile-image-input">Enviar imagem do computador</label>
+            <input type="file" id="profile-image-input" accept="image/*" onchange="app.selecionarAvatar(event)">
+            <small id="profile-image-status" class="config-help" aria-live="polite"></small>
         </div>
     </div>
 
-    <button class="config-close" onclick="app.fecharConfig()" style="width: 100%; padding: 12px; border-radius: 12px; background: var(--cor-principal); color: white; border: none; font-weight: bold; cursor: pointer;">Fechar</button>
+    <div class="dashboard-actions">
+        <button class="btn-option dashboard-logout-button" type="button" onclick="app.sairDaConta()">Sair da conta</button>
+        <button class="config-close" onclick="app.fecharConfig()">Fechar</button>
+    </div>
 </div>
 
 <div class="stats-panel modal-animated" id="stats-panel" style="display: none;">

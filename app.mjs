@@ -610,6 +610,102 @@ const app = {
                     else image.removeAttribute('src');
                 });
             },
+
+            alterarNomePerfil(event) {
+                event.preventDefault();
+                const input = document.getElementById('profile-name-input');
+                const status = document.getElementById('profile-name-status');
+                const novoNome = input?.value.trim();
+                const nomeAnterior = this.usuarioAtual;
+                if (!novoNome || !nomeAnterior || !this.contaPadrao) return;
+
+                if (novoNome !== nomeAnterior && localStorage.getItem(`usuario_${novoNome}`) !== null) {
+                    if (status) status.textContent = 'Este nome já está em uso.';
+                    return;
+                }
+
+                const perfilAtualizado = { ...this.contaPadrao, nome: novoNome };
+                try {
+                    localStorage.setItem(`usuario_${novoNome}`, JSON.stringify(perfilAtualizado));
+                    if (!localStorage.getItem(`usuario_${novoNome}`)) throw new Error('Não foi possível salvar o perfil.');
+
+                    const historicoAntigo = localStorage.getItem(`historico_${nomeAnterior}`);
+                    if (historicoAntigo !== null && localStorage.getItem(`historico_${novoNome}`) === null) {
+                        localStorage.setItem(`historico_${novoNome}`, historicoAntigo);
+                        localStorage.removeItem(`historico_${nomeAnterior}`);
+                    }
+
+                    if (novoNome !== nomeAnterior) localStorage.removeItem(`usuario_${nomeAnterior}`);
+                    ['nomeUsuario', 'usuarioAtual', 'usuario', 'ultimoUsuario'].forEach(chave => {
+                        if (localStorage.getItem(chave) === nomeAnterior) localStorage.setItem(chave, novoNome);
+                    });
+                    this.usuarioAtual = novoNome;
+                    this.usuario = novoNome;
+                    this.contaPadrao = perfilAtualizado;
+                    this.salvarDados(`usuario_${novoNome}`, perfilAtualizado);
+                    document.getElementById('username-display').textContent = novoNome;
+                    document.getElementById('dash-username').textContent = novoNome;
+                    input.value = novoNome;
+                    if (status) status.textContent = 'Nome atualizado.';
+                    this.atualizarAvatares();
+                } catch (error) {
+                    if (status) status.textContent = 'Não foi possível salvar o novo nome.';
+                }
+            },
+
+            selecionarAvatar(event) {
+                const file = event.target.files?.[0];
+                const status = document.getElementById('profile-image-status');
+                if (!file) return;
+                if (!file.type.startsWith('image/')) {
+                    if (status) status.textContent = 'Selecione um arquivo de imagem.';
+                    event.target.value = '';
+                    return;
+                }
+                if (file.size > 2 * 1024 * 1024) {
+                    if (status) status.textContent = 'A imagem deve ter no máximo 2 MB.';
+                    event.target.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const avatarUrl = reader.result;
+                    if (typeof avatarUrl !== 'string' || !avatarUrl.startsWith('data:image/')) return;
+                    const avatarAnterior = this.contaPadrao.avatarUrl;
+                    this.contaPadrao.avatarUrl = avatarUrl;
+                    try {
+                        localStorage.setItem(`usuario_${this.usuarioAtual}`, JSON.stringify(this.contaPadrao));
+                        document.getElementById('avatar-url-input').value = '';
+                        if (status) status.textContent = 'Imagem de perfil atualizada.';
+                        this.atualizarAvatares();
+                    } catch (error) {
+                        this.contaPadrao.avatarUrl = avatarAnterior;
+                        if (status) status.textContent = 'Não foi possível salvar esta imagem.';
+                    }
+                    event.target.value = '';
+                };
+                reader.onerror = () => {
+                    if (status) status.textContent = 'Não foi possível ler esta imagem.';
+                    event.target.value = '';
+                };
+                reader.readAsDataURL(file);
+            },
+
+            sairDaConta() {
+                if (this.usuarioAtual && this.contaPadrao) {
+                    this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
+                }
+                ['nomeUsuario', 'usuarioAtual', 'usuario', 'ultimoUsuario'].forEach(chave => localStorage.removeItem(chave));
+                this.usuarioAtual = null;
+                this.usuario = null;
+                this.contaPadrao = null;
+                document.getElementById('config-screen').style.display = 'none';
+                document.getElementById('modal-overlay').style.display = 'none';
+                document.getElementById('main-menu').style.display = 'none';
+                document.getElementById('login-screen').style.display = 'block';
+                document.getElementById('username-input').value = '';
+            },
             
             carregarConfiguracoesSalvas: function() {
                 const temaSalvo = localStorage.getItem('tema') || 'light-1';
@@ -1153,6 +1249,12 @@ escaparHTML(texto) {
                 if (dashboardUsername) {
                     dashboardUsername.textContent = this.usuarioAtual || this.usuario || 'Usuário';
                 }
+                const profileNameInput = document.getElementById('profile-name-input');
+                if (profileNameInput) profileNameInput.value = this.usuarioAtual || this.usuario || '';
+                const profileNameStatus = document.getElementById('profile-name-status');
+                if (profileNameStatus) profileNameStatus.textContent = '';
+                const profileImageStatus = document.getElementById('profile-image-status');
+                if (profileImageStatus) profileImageStatus.textContent = '';
                 const dashboardPoints = document.getElementById('dash-points');
                 if (dashboardPoints) {
                     dashboardPoints.textContent = this.contaPadrao?.pontuacaoTotal || 0;
@@ -1168,7 +1270,10 @@ escaparHTML(texto) {
                 }
                 this.atualizarControlesPlaylist();
                 const avatarInput = document.getElementById('avatar-url-input');
-                if (avatarInput) avatarInput.value = this.contaPadrao?.avatarUrl || '';
+                if (avatarInput) {
+                    const savedAvatar = this.contaPadrao?.avatarUrl || '';
+                    avatarInput.value = savedAvatar.startsWith('data:image/') ? '' : savedAvatar;
+                }
                 document.getElementById('config-screen').style.display = 'block';
                 document.getElementById('modal-overlay').style.display = 'block';
                 const atual = document.body.getAttribute('data-theme') || 'light-1';
@@ -1182,7 +1287,11 @@ escaparHTML(texto) {
             fecharConfig() {
                 const avatarInput = document.getElementById('avatar-url-input');
                 if (avatarInput && this.contaPadrao && this.usuarioAtual) {
-                    this.contaPadrao.avatarUrl = avatarInput.value.trim();
+                    const avatarAtual = this.contaPadrao.avatarUrl || '';
+                    const novaUrl = avatarInput.value.trim();
+                    if (novaUrl || !avatarAtual.startsWith('data:image/')) {
+                        this.contaPadrao.avatarUrl = novaUrl;
+                    }
                     this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
                     this.atualizarAvatares();
                 }
