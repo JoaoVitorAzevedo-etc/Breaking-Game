@@ -16,12 +16,13 @@ import {
 // COLE AQUI a configuracao do app Web em Firebase Console > Configuracoes do projeto.
 // Essa configuracao publica identifica o projeto; nunca coloque senhas de usuarios ou chaves privadas aqui.
 const firebaseConfig = {
-    apiKey: 'SUA_API_KEY',
-    authDomain: 'SEU_PROJETO.firebaseapp.com',
-    projectId: 'ID_DO_SEU_PROJETO',
-    storageBucket: 'SEU_PROJETO.appspot.com',
-    messagingSenderId: 'SEU_MESSAGING_SENDER_ID',
-    appId: 'SEU_APP_ID'
+    apiKey: 'AIzaSyCTp-ByKrzLtUv6tQtr7Tla-67t12DMSog',
+    authDomain: 'breakinggame-e9f98.firebaseapp.com',
+    databaseURL: 'https://breakinggame-e9f98-default-rtdb.firebaseio.com',
+    projectId: 'breakinggame-e9f98',
+    storageBucket: 'breakinggame-e9f98.firebasestorage.app',
+    messagingSenderId: '331603651456',
+    appId: '1:331603651456:web:6335cecb75ec4850326f65'
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -38,9 +39,9 @@ export const entrarComEmailESenha = (email, senha) => signInWithEmailAndPassword
 export const cadastrarComEmailESenha = (email, senha) => createUserWithEmailAndPassword(auth, email, senha);
 export const encerrarSessaoFirebase = () => signOut(auth);
 
-// Os documentos ficam em usuarios/{UID}; as regras de seguranca estao em firestore.rules.
+// Os documentos ficam em usuario/{UID}; as regras de seguranca estao em firestore.rules.
 export async function carregarPerfilFirestore(uid) {
-    const snapshot = await getDoc(doc(db, 'usuarios', uid));
+    const snapshot = await getDoc(doc(db, 'usuario', uid));
     return snapshot.exists() ? snapshot.data() : null;
 }
 
@@ -48,7 +49,7 @@ export function salvarPerfilFirestore(uid, perfil) {
     const previousWrite = profileWritesByUser.get(uid) || Promise.resolve();
     const currentWrite = previousWrite
         .catch(() => {})
-        .then(() => setDoc(doc(db, 'usuarios', uid), perfil, { merge: true }));
+        .then(() => setDoc(doc(db, 'usuario', uid), perfil, { merge: true }));
     profileWritesByUser.set(uid, currentWrite);
     currentWrite.then(
         () => { if (profileWritesByUser.get(uid) === currentWrite) profileWritesByUser.delete(uid); },

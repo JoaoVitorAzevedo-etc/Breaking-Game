@@ -152,14 +152,14 @@ const app = {
                 }
             },
 
-            salvarDados(chave, dados) {
+            salvarDados(chave, dados, sincronizarFirestore = true) {
                 if (this.isLocalStorageAvailable()) {
                     try {
                         localStorage.setItem(chave, JSON.stringify(dados));
                     } catch (e) {}
                 }
 
-                if (chave.startsWith('usuario_') && this.firebaseUid && dados && typeof dados === 'object') {
+                if (sincronizarFirestore && chave.startsWith('usuario_') && this.firebaseUid && dados && typeof dados === 'object') {
                     const perfilSnapshot = JSON.parse(JSON.stringify(dados));
                     salvarPerfilFirestore(this.firebaseUid, perfilSnapshot).catch(error => {
                         console.error('Não foi possível sincronizar o perfil com o Firestore:', error);
@@ -522,7 +522,8 @@ const app = {
                 this.contaPadrao = Object.assign(this.obterPerfilPadrao(), perfilSalvo || {}, { nome });
                 this.salvarDados('nomeUsuario', nome);
                 this.salvarDados('usuarioAtual', nome);
-                this.salvarDados(`usuario_${nome}`, this.contaPadrao);
+                this.salvarDados(`usuario_${nome}`, this.contaPadrao, false);
+                await salvarPerfilFirestore(usuarioFirebase.uid, this.contaPadrao);
 
                 const login = document.getElementById('login-screen');
                 if (login) {
