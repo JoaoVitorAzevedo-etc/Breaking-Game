@@ -1,8 +1,18 @@
 import { registrarDesempenhoGrafico, resumirDesempenhoGrafico } from './graficos.mjs';
+import {
+    cadastrarComEmailESenha,
+    carregarPerfilFirestore,
+    entrarComEmailESenha,
+    encerrarSessaoFirebase,
+    firebaseConfigurado,
+    observarSessaoInicial,
+    salvarPerfilFirestore
+} from './firebase.mjs';
 
 //não sei onde estava o erro mas se resolveu sozinho
 const app = {
             usuarioAtual: null,
+            firebaseUid: null,
             // --- NOVAS PROPRIEDADES ADICIONADAS ---
             usuario: null,
             temaSelecionado: 'light-1',
@@ -148,6 +158,13 @@ const app = {
                         localStorage.setItem(chave, JSON.stringify(dados));
                     } catch (e) {}
                 }
+
+                if (chave.startsWith('usuario_') && this.firebaseUid && dados && typeof dados === 'object') {
+                    const perfilSnapshot = JSON.parse(JSON.stringify(dados));
+                    salvarPerfilFirestore(this.firebaseUid, perfilSnapshot).catch(error => {
+                        console.error('Não foi possível sincronizar o perfil com o Firestore:', error);
+                    });
+                }
             },
 
             carregarDados(chave, padraoValor = null) {
@@ -158,54 +175,6 @@ const app = {
                 } catch (e) {
                     return padraoValor;
                 }
-            },
-
-            obterUsuarioSalvoLocal() {
-                const chavesPrioridade = ['nomeUsuario', 'usuarioAtual', 'usuario', 'ultimoUsuario'];
-                for (const chave of chavesPrioridade) {
-                    const valor = this.carregarDados(chave, null);
-                    if (typeof valor === 'string' && valor.trim()) return valor.trim();
-
-                    if (typeof localStorage !== 'undefined') {
-                        const valorDireto = localStorage.getItem(chave);
-                        if (typeof valorDireto === 'string' && valorDireto.trim()) return valorDireto.trim();
-                    }
-                }
-
-                if (typeof localStorage !== 'undefined') {
-                    for (let i = 0; i < localStorage.length; i++) {
-                        const chave = localStorage.key(i);
-                        if (!chave || !chave.startsWith('usuario_')) continue;
-                        const nome = chave.replace('usuario_', '').trim();
-                        if (!nome) continue;
-                        const dados = this.carregarDados(chave, null);
-                        if (dados && (dados.nome || nome)) return nome;
-                    }
-                }
-
-                return null;
-            },
-
-            restaurarUsuarioLocal() {
-                const nomeSalvo = this.obterUsuarioSalvoLocal();
-                if (!nomeSalvo) return false;
-
-                const dadosSalvos = this.carregarDados(`usuario_${nomeSalvo}`);
-                this.usuarioAtual = nomeSalvo;
-                this.usuario = nomeSalvo;
-                this.salvarDados('nomeUsuario', nomeSalvo);
-                this.salvarDados('usuarioAtual', nomeSalvo);
-
-                if (dadosSalvos) {
-                    this.contaPadrao = Object.assign(this.obterPerfilPadrao(), dadosSalvos);
-                } else {
-                    this.contaPadrao = this.obterPerfilPadrao();
-                    this.contaPadrao.nome = nomeSalvo;
-                }
-
-                const inputUsuario = document.getElementById('username-input');
-                if (inputUsuario) inputUsuario.value = nomeSalvo;
-                return true;
             },
 
             obterCatalogoBadges() {
@@ -512,50 +481,63 @@ const app = {
                 ]
             },
             
-            entrarComUsuario() {
-                const inputUsuario = document.getElementById('username-input');
-                const name = (inputUsuario?.value || '').trim();
-                if (!name) return console.warn("Digite um nome!");
-                this.usuarioAtual = name;
-                this.usuario = name;
-                this.salvarDados('nomeUsuario', name);
-                this.salvarDados('usuarioAtual', name);
-                if (name === 'user0') {
-                    const dadosSalvos = this.carregarDados(`usuario_${name}`);
-                    const perfilUser0 = this.obterPerfilUser0();
-                    if (dadosSalvos) {
-                        this.contaPadrao = Object.assign(perfilUser0, dadosSalvos);
-                        this.contaPadrao.pontuacaoTotal = Math.max(this.contaPadrao.pontuacaoTotal || 0, perfilUser0.pontuacaoTotal);
-                    this.contaPadrao.nivelMaximo = Math.max(this.contaPadrao.nivelMaximo || 1, perfilUser0.nivelMaximo);
-                    this.contaPadrao.badges = perfilUser0.badges;
-                    if (!this.contaPadrao.itensComprados) this.contaPadrao.itensComprados = [];
-                    this.contaPadrao.itensComprados = Array.from(new Set([...this.contaPadrao.itensComprados, 'light-1', 'inter', 'special', 'lobster', 'times', 'double', 'serif-bold']));
-                } else {
-                    this.contaPadrao = perfilUser0;
+            async entrarComUsuario(modo = 'login') {
+                const email = document.getElementById('email-input')?.value.trim().toLowerCase();
+                const senha = document.getElementById('password-input')?.value;
+                const status = document.getElementById('login-status');
+                if (!email || !senha) {
+                    if (status) status.textContent = 'Informe seu e-mail e sua senha.';
+                    return;
                 }
-                } else {
-                    const dadosSalvos = this.carregarDados(`usuario_${name}`);
-                    if (dadosSalvos) {
-                        this.contaPadrao = Object.assign(this.obterPerfilPadrao(), dadosSalvos);
-                    } else {
-                        this.contaPadrao = this.obterPerfilPadrao();
-                        this.contaPadrao.nome = name;
-                    }
+                if (!firebaseConfigurado()) {
+                    if (status) status.textContent = 'Configure firebaseConfig em firebase.mjs antes de entrar.';
+                    return;
                 }
-                if (inputUsuario) inputUsuario.value = '';
-                this.salvarDados(`usuario_${name}`, this.contaPadrao);
-                document.getElementById('login-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('login-screen').style.opacity = '1';
-                    // Mostrar tela de tutorial intro na primeira vez
-                    if (!localStorage.getItem('tutorialVisualizado')) {
-                        this.mostrarTutorialIntro();
-                    } else {
-                        this.carregarMenuPrincipal();
-                        this.atualizarInfosMenu();
-                    }
-                }, 300);
+
+                if (status) status.textContent = 'Conectando ao Firebase...';
+                try {
+                    const credencial = modo === 'cadastro'
+                        ? await cadastrarComEmailESenha(email, senha)
+                        : await entrarComEmailESenha(email, senha);
+                    await this.carregarContaFirebase(credencial.user);
+                } catch (error) {
+                    const mensagens = {
+                        'auth/email-already-in-use': 'Este e-mail já possui uma conta.',
+                        'auth/invalid-credential': 'E-mail ou senha incorretos.',
+                        'auth/invalid-email': 'Informe um e-mail válido.',
+                        'auth/weak-password': 'A senha precisa ter pelo menos 6 caracteres.',
+                        'auth/too-many-requests': 'Muitas tentativas. Aguarde e tente novamente.'
+                    };
+                    if (status) status.textContent = mensagens[error.code] || 'Não foi possível autenticar. Verifique o Firebase e tente novamente.';
+                    console.error('Falha na autenticação Firebase:', error);
+                }
+            },
+
+            async carregarContaFirebase(usuarioFirebase) {
+                const perfilSalvo = await carregarPerfilFirestore(usuarioFirebase.uid);
+                const nome = perfilSalvo?.nome || usuarioFirebase.email?.split('@')[0] || 'Usuário';
+                this.firebaseUid = usuarioFirebase.uid;
+                this.usuarioAtual = nome;
+                this.usuario = nome;
+                this.contaPadrao = Object.assign(this.obterPerfilPadrao(), perfilSalvo || {}, { nome });
+                this.salvarDados('nomeUsuario', nome);
+                this.salvarDados('usuarioAtual', nome);
+                this.salvarDados(`usuario_${nome}`, this.contaPadrao);
+
+                const login = document.getElementById('login-screen');
+                if (login) {
+                    login.style.opacity = '0';
+                    setTimeout(() => {
+                        login.style.display = 'none';
+                        login.style.opacity = '1';
+                        if (!localStorage.getItem('tutorialVisualizado')) {
+                            this.mostrarTutorialIntro();
+                        } else {
+                            this.carregarMenuPrincipal();
+                            this.atualizarInfosMenu();
+                        }
+                    }, 300);
+                }
             },
             
             // =========================================
@@ -675,7 +657,7 @@ const app = {
                     const avatarAnterior = this.contaPadrao.avatarUrl;
                     this.contaPadrao.avatarUrl = avatarUrl;
                     try {
-                        localStorage.setItem(`usuario_${this.usuarioAtual}`, JSON.stringify(this.contaPadrao));
+                        this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
                         document.getElementById('avatar-url-input').value = '';
                         if (status) status.textContent = 'Imagem de perfil atualizada.';
                         this.atualizarAvatares();
@@ -692,19 +674,31 @@ const app = {
                 reader.readAsDataURL(file);
             },
 
-            sairDaConta() {
+            async sairDaConta() {
                 if (this.usuarioAtual && this.contaPadrao) {
-                    this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
+                    try {
+                        await salvarPerfilFirestore(this.firebaseUid, this.contaPadrao);
+                    } catch (error) {
+                        console.error('Não foi possível salvar o perfil antes de sair:', error);
+                    }
+                }
+                try {
+                    await encerrarSessaoFirebase();
+                } catch (error) {
+                    console.error('Não foi possível encerrar a sessão Firebase:', error);
                 }
                 ['nomeUsuario', 'usuarioAtual', 'usuario', 'ultimoUsuario'].forEach(chave => localStorage.removeItem(chave));
                 this.usuarioAtual = null;
                 this.usuario = null;
+                this.firebaseUid = null;
                 this.contaPadrao = null;
                 document.getElementById('config-screen').style.display = 'none';
                 document.getElementById('modal-overlay').style.display = 'none';
                 document.getElementById('main-menu').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'block';
-                document.getElementById('username-input').value = '';
+                document.getElementById('email-input').value = '';
+                document.getElementById('password-input').value = '';
+                document.getElementById('login-status').textContent = '';
             },
             
             carregarConfiguracoesSalvas: function() {
@@ -3663,6 +3657,15 @@ escaparHTML(texto) {
 window.addEventListener('DOMContentLoaded', () => {
     app.observarVisibilidadeMenu();
     app.observarVisibilidadePlayer();
+    observarSessaoInicial(usuarioFirebase => {
+        if (usuarioFirebase) {
+            app.carregarContaFirebase(usuarioFirebase).catch(error => {
+                console.error('Não foi possível restaurar a sessão Firebase:', error);
+                const status = document.getElementById('login-status');
+                if (status) status.textContent = 'Não foi possível carregar sua conta. Verifique a conexão com o Firestore.';
+            });
+        }
+    });
     // Carregar configurações salvas (tema, fonte, tamanho)
     if (app.carregarConfiguracoesSalvas) {
         app.carregarConfiguracoesSalvas();

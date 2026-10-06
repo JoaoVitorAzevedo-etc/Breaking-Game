@@ -26,10 +26,13 @@
     <div id="login-screen" class="container">
         <h1 class="game-title">Breaking Game</h1>
         <p class="game-subtitle">Aprenda Química Jogando</p>
-        <input type="text" id="username-input" placeholder="Seu nome aqui...">
-        <div class="menu-options" style="margin-top: 30px;">
-            <button class="btn-option" onclick="app.entrarComUsuario()">Entrar</button>
-        </div>
+        <form class="menu-options" style="margin-top: 30px;" onsubmit="event.preventDefault(); app.entrarComUsuario('login')">
+            <input type="email" id="email-input" placeholder="Seu e-mail" autocomplete="email" required>
+            <input type="password" id="password-input" placeholder="Sua senha" autocomplete="current-password" minlength="6" required>
+            <button class="btn-option" type="submit">Entrar</button>
+            <button class="btn-option" type="button" onclick="app.entrarComUsuario('cadastro')">Criar conta</button>
+            <p id="login-status" role="status" aria-live="polite"></p>
+        </form>
     </div>
 
 <div id="tutorial-intro-screen" class="tutorial-intro-overlay fade-in" style="display: none;">
