@@ -631,6 +631,62 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
            ========================================= */
         .container { text-align: center; z-index: 10; max-width: 1200px; width: 100%; padding: 56px 24px; position: relative; }
         #login-screen { margin: 0 auto; }
+        #login-screen.container {
+            max-width: 520px;
+            padding: 48px 40px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            background: var(--glass-bg);
+            box-shadow: var(--glass-shadow-lg);
+            backdrop-filter: blur(18px) saturate(150%);
+            -webkit-backdrop-filter: blur(18px) saturate(150%);
+        }
+        #login-screen .game-title { margin-bottom: 12px; }
+        #login-screen .game-subtitle {
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+        #login-screen .menu-options {
+            display: grid;
+            width: min(100%, 360px);
+            margin: 30px auto 0;
+            gap: 14px;
+        }
+        #login-screen input {
+            width: 100%;
+            min-height: 52px;
+            padding: 14px 16px;
+            border: 1px solid var(--borda-card);
+            border-radius: var(--radius-md);
+            outline: none;
+            background: var(--bg-input);
+            color: var(--cor-texto);
+            font-size: 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+        #login-screen input::placeholder { color: var(--cor-texto-secundario); opacity: 0.8; }
+        #login-screen input:focus {
+            border-color: var(--cor-principal);
+            box-shadow: 0 0 0 4px var(--cor-glow);
+            background: var(--bg-card-strong);
+        }
+        #login-screen .btn-option {
+            width: 100%;
+            min-height: 50px;
+        }
+        #login-screen .btn-option[type="submit"] {
+            border-color: transparent;
+            background: var(--grad-primary);
+            color: #fff;
+            box-shadow: 0 8px 20px var(--cor-glow);
+        }
+        #login-screen .btn-option[type="submit"]:hover { box-shadow: 0 12px 28px var(--cor-glow); }
+        #login-screen #login-status {
+            min-height: 1.4em;
+            color: var(--cor-texto-secundario);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
         #main-menu { text-align: left; padding-left: 80px; margin-top: 0px; }
 
         .split-layout { display: flex; gap: 50px; text-align: left; align-items: flex-start; }
@@ -1936,6 +1992,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
            ========================================= */
         @media (max-width: 768px) {
             .container { padding: 28px 16px; }
+            #login-screen.container { padding: 36px 28px; }
             #main-menu { padding-left: 16px; margin-top: 0; }
             .game-title { letter-spacing: 0.12em; }
             .split-layout { flex-direction: column; gap: 28px; }
@@ -1978,6 +2035,8 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         }
 
         @media (max-width: 480px) {
+            #login-screen.container { padding: 30px 20px; }
+            #login-screen .game-title { letter-spacing: 0.1em; }
             .game-subtitle { font-size: 0.85rem; }
             .auxiliar-card { width: 124px; padding: 14px 10px; }
             .auxiliar-sprite { width: 50px; height: 50px; font-size: 1.7rem; }
