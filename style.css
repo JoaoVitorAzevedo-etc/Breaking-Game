@@ -692,6 +692,15 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         .split-layout { display: flex; gap: 50px; text-align: left; align-items: flex-start; }
         .left-panel { flex: 1.5; padding-bottom: 50px; }
         .right-panel { flex: 1; position: sticky; top: 40px; display: flex; justify-content: center; align-items: center; }
+        .roadmap-minigames { flex: 0.9; position: sticky; top: 24px; padding: 20px; border: 1px solid var(--glass-border); border-radius: var(--radius-lg); background: var(--glass-bg-strong); box-shadow: var(--glass-shadow); }
+        .roadmap-minigames h2 { margin: 0; color: var(--cor-principal); font-size: 1.25rem; }
+        .roadmap-minigames > p { color: var(--cor-texto-secundario); font-size: .9rem; line-height: 1.5; }
+        .roadmap-minigame-list { display: grid; gap: 12px; }
+        .roadmap-minigame-card { display: grid; gap: 6px; width: 100%; padding: 14px; border: 1px solid var(--borda-card); border-radius: var(--radius-md); background: var(--bg-card); color: var(--cor-texto); text-align: left; cursor: pointer; }
+        .roadmap-minigame-card:hover:not(:disabled), .roadmap-minigame-card:focus-visible:not(:disabled) { border-color: var(--cor-principal); box-shadow: 0 8px 18px var(--cor-glow); outline: none; }
+        .roadmap-minigame-card:disabled { cursor: not-allowed; opacity: .62; }
+        .roadmap-minigame-title { font-weight: 800; }
+        .roadmap-minigame-status { color: var(--cor-texto-secundario); font-size: .82rem; }
 
         .theme-image {
             width: 100%; max-width: 420px;
@@ -1441,6 +1450,7 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         .minigame-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 28px; }
         .minigame-choice-card { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-height: 230px; padding: 24px; border: 1px solid var(--glass-border); border-radius: var(--radius-lg); background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(255,255,255,.07)); color: var(--cor-texto); text-align: left; cursor: pointer; transition: transform .25s, border-color .25s, box-shadow .25s; }
         .minigame-choice-card:hover, .minigame-choice-card:focus-visible { transform: translateY(-5px); border-color: var(--cor-principal-2); box-shadow: 0 14px 28px var(--cor-glow); outline: none; }
+        .minigame-choice-card:disabled { cursor: not-allowed; opacity: .55; }
         .minigame-choice-icon { font-size: 2.4rem; line-height: 1; margin-bottom: 8px; }
         .minigame-choice-title { color: var(--cor-acento); font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
         .minigame-choice-name { font-size: 1.35rem; font-weight: 800; }
@@ -1476,6 +1486,26 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
         .memory-feedback { min-height: 24px; color: var(--cor-texto-secundario); text-align: center; margin: 18px 0 10px; font-weight: 700; }
         .minigame-actions { display: flex; gap: 10px; margin-top: 12px; }
         .minigame-actions .periodic-close-btn.secondary { background: var(--glass-bg); color: var(--cor-texto); border: 1px solid var(--borda-card); box-shadow: none; }
+        .mixing-order { display: grid; gap: 6px; margin: 18px 0; padding: 16px; border: 1px solid var(--borda-card); border-radius: var(--radius-md); background: var(--bg-card); }
+        .mixing-order small { color: var(--cor-texto-secundario); line-height: 1.5; }
+        .mixing-columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+        .mixing-column { min-width: 0; padding: 16px; border: 1px solid var(--borda-card); border-radius: var(--radius-md); background: var(--bg-card); }
+        .mixing-column h3 { margin: 0 0 12px; color: var(--cor-principal); }
+        .mixing-item, .mixing-recipe { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--borda-card); color: var(--cor-texto); }
+        .mixing-item:last-child, .mixing-recipe:last-child { border-bottom: 0; }
+        .mixing-item-details { display: grid; gap: 3px; min-width: 0; }
+        .mixing-item-details small, .mixing-recipe small { color: var(--cor-texto-secundario); }
+        .mixing-add-button { width: 38px; height: 38px; flex: 0 0 38px; border: 1px solid var(--borda-card); border-radius: 50%; background: var(--bg-input); color: var(--cor-principal); font-size: 1.3rem; cursor: pointer; }
+        .mixing-add-button:disabled { cursor: not-allowed; opacity: .45; }
+        .mixing-recipe { width: 100%; border: 0; border-bottom: 1px solid var(--borda-card); background: transparent; text-align: left; cursor: pointer; }
+        .mixing-recipe.selected { color: var(--cor-principal); font-weight: 800; }
+        .mixing-bench-empty { color: var(--cor-texto-secundario); }
+        .mixing-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+        .mixing-actions .periodic-close-btn { margin: 0; padding: 10px 14px; font-size: .82rem; }
+        .mixing-actions button:disabled { cursor: not-allowed; opacity: .5; }
+        .mixing-footer { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-top: 14px; color: var(--cor-texto-secundario); }
+        .mixing-footer p { margin: 0; }
+        .mixing-footer strong { color: var(--cor-principal); }
 
         .periodic-challenge-card { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px 18px; margin-bottom: 18px; border: 1px solid var(--borda-card); border-radius: var(--radius-md); background: linear-gradient(120deg, rgba(6, 182, 212, .12), rgba(79, 70, 229, .10)); }
         .periodic-property-label { color: var(--cor-acento); font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
@@ -1998,6 +2028,9 @@ body[data-font="serif-bold"] { --fonte-principal: 'Times New Roman', serif; font
             .split-layout { flex-direction: column; gap: 28px; }
             .left-panel { padding-bottom: 24px; }
             .right-panel { position: static; }
+            .roadmap-minigames { position: static; width: 100%; box-sizing: border-box; }
+            .mixing-columns { grid-template-columns: 1fr; }
+            .mixing-footer { flex-direction: column; align-items: flex-start; }
             .theme-image { width: 80%; max-width: 320px; }
             .roadmap-container { margin-left: 8px; padding-left: 28px; }
             .level-card { padding: 16px; }

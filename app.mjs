@@ -1,6 +1,12 @@
 import { registrarDesempenhoGrafico, resumirDesempenhoGrafico } from './graficos.mjs';
 import { parseBancoPerguntas } from './banco-perguntas.mjs';
 import {
+    componentes as componentesMisturas,
+    pontuarEntrega,
+    receitas as receitasMisturas,
+    validarMistura
+} from './game/minijogo-misturas.mjs';
+import {
     cadastrarComEmailESenha,
     carregarPerfilFirestore,
     entrarComEmailESenha,
@@ -43,6 +49,8 @@ const app = {
             memoryMatch: { dificuldade: 'facil', cartas: [], abertas: [], pares: 0, erros: 0, pontuacao: 0, inicio: 0, timer: null, bloqueado: false },
             periodicGraph: { dificuldade: 'facil', propriedade: null, elementos: [], colocados: 0, tentativas: 0, pontuacao: 0, finalizado: false },
             equationBalance: { dificuldade: 'facil', equacao: null, coeficientes: [], inicio: 0, tentativas: 0, pontuacao: 0, finalizado: false, timer: null },
+            minijogoMisturas: { estoques: {}, bancada: {}, pedido: null, pontuacao: 0, feedback: '', misturado: false },
+            origemMinigames: 'tabela',
 
             observarVisibilidadeMenu() {
                 const mainMenu = document.getElementById('main-menu');
@@ -1951,29 +1959,130 @@ escaparHTML(texto) {
             },
 
             abrirMinigames() {
+                this.origemMinigames = 'tabela';
+                document.getElementById('periodic-table-screen').style.display = 'none';
+                document.getElementById('minigame-screen').style.display = 'block';
+                document.getElementById('modal-overlay').style.display = 'block';
+                this.atualizarDesbloqueiosMinigames();
+                this.voltarSeletorMinigames();
+            },
+
+            moduloConcluido(faseFinal) {
+                return Number(this.contaPadrao?.nivelMaximo || 1) > faseFinal;
+            },
+
+            atualizarDesbloqueiosMinigames() {
+                const desbloqueios = {
+                    periodic: this.moduloConcluido(10),
+                    balance: this.moduloConcluido(13)
+                };
+                document.querySelectorAll('[data-minigame]').forEach(botao => {
+                    const tipo = botao.dataset.minigame;
+                    if (!(tipo in desbloqueios)) return;
+                    botao.disabled = !desbloqueios[tipo];
+                    botao.setAttribute('aria-disabled', String(!desbloqueios[tipo]));
+                    const aviso = botao.querySelector('.minigame-choice-reward');
+                    if (aviso) {
+                        aviso.textContent = desbloqueios[tipo]
+                            ? aviso.dataset.recompensa
+                            : `🔒 Conclua o Módulo ${tipo === 'periodic' ? 2 : 3}`;
+                    }
+                });
+            },
+
+            renderizarMinigamesRoadmap() {
+                const container = document.getElementById('roadmap-minigame-list');
+                if (!container) return;
+                const jogos = [
+                    { id: 'misturas', titulo: 'Laboratório de misturas', modulo: 1, faseFinal: 5, descricao: 'Atenda pedidos e pratique proporções e soluções.', acao: 'misturas' },
+                    { id: 'periodic', titulo: 'Padrão periódico', modulo: 2, faseFinal: 10, descricao: 'Relacione elementos e tendências periódicas.', acao: 'periodic' },
+                    { id: 'balance', titulo: 'Balanceador de equações', modulo: 3, faseFinal: 13, descricao: 'Ajuste equações e conserve os átomos.', acao: 'balance' }
+                ];
+
+                container.replaceChildren(...jogos.map(jogo => {
+                    const desbloqueado = this.moduloConcluido(jogo.faseFinal);
+                    const botao = document.createElement('button');
+                    botao.type = 'button';
+                    botao.className = 'roadmap-minigame-card';
+                    botao.disabled = !desbloqueado;
+                    botao.setAttribute('aria-label', desbloqueado
+                        ? `Abrir ${jogo.titulo}`
+                        : `${jogo.titulo}, bloqueado até concluir o Módulo ${jogo.modulo}`);
+                    botao.addEventListener('click', () => this.abrirMinijogoRoadmap(jogo.acao));
+
+                    const titulo = document.createElement('span');
+                    titulo.className = 'roadmap-minigame-title';
+                    titulo.textContent = `${desbloqueado ? '🎮' : '🔒'} ${jogo.titulo}`;
+                    const descricao = document.createElement('span');
+                    descricao.className = 'roadmap-minigame-status';
+                    descricao.textContent = desbloqueado
+                        ? jogo.descricao
+                        : `Disponível após concluir o Módulo ${jogo.modulo}`;
+                    botao.append(titulo, descricao);
+                    return botao;
+                }));
+            },
+
+            abrirMinijogoRoadmap(tipo) {
+                const fasesFinais = { misturas: 5, periodic: 10, balance: 13 };
+                const faseFinal = fasesFinais[tipo];
+                if (!faseFinal || !this.moduloConcluido(faseFinal)) {
+                    console.warn('Este minijogo ainda está bloqueado.');
+                    this.renderizarMinigamesRoadmap();
+                    return;
+                }
+
+                this.origemMinigames = 'roadmap';
+                document.getElementById('levels-screen').style.display = 'none';
                 document.getElementById('periodic-table-screen').style.display = 'none';
                 document.getElementById('minigame-screen').style.display = 'block';
                 document.getElementById('modal-overlay').style.display = 'block';
                 this.voltarSeletorMinigames();
+                if (tipo === 'misturas') this.selecionarMinigame('mixing');
+                else this.selecionarMinigame(tipo);
             },
 
             selecionarMinigame(tipo) {
+                if (tipo === 'mixing' && !this.moduloConcluido(5)) {
+                    console.warn('Conclua o Módulo 1 para liberar o laboratório de misturas.');
+                    return;
+                }
+                if (tipo === 'periodic' && !this.moduloConcluido(10)) {
+                    console.warn('Conclua o Módulo 2 para liberar este minijogo.');
+                    return;
+                }
+                if (tipo === 'balance' && !this.moduloConcluido(13)) {
+                    console.warn('Conclua o Módulo 3 para liberar este minijogo.');
+                    return;
+                }
                 document.getElementById('minigame-selector').style.display = 'none';
+                document.getElementById('mixing-game-view').style.display = tipo === 'mixing' ? 'block' : 'none';
                 document.getElementById('memory-game-view').style.display = tipo === 'memory' ? 'block' : 'none';
                 document.getElementById('periodic-game-view').style.display = tipo === 'periodic' ? 'block' : 'none';
                 document.getElementById('balance-game-view').style.display = tipo === 'balance' ? 'block' : 'none';
                 if (tipo === 'memory') this.iniciarMemoryMatch(this.memoryMatch.dificuldade);
                 if (tipo === 'periodic') this.iniciarGraficoPeriodico(this.periodicGraph.dificuldade);
                 if (tipo === 'balance') this.iniciarBalanceador(this.equationBalance.dificuldade);
+                if (tipo === 'mixing') this.iniciarMinijogoMisturas();
             },
 
             voltarSeletorMinigames() {
                 this.pararTimerMemoryMatch();
                 this.pararTimerBalanceador();
+                document.getElementById('mixing-game-view').style.display = 'none';
                 document.getElementById('minigame-selector').style.display = 'block';
                 document.getElementById('memory-game-view').style.display = 'none';
                 document.getElementById('periodic-game-view').style.display = 'none';
                 document.getElementById('balance-game-view').style.display = 'none';
+                this.atualizarDesbloqueiosMinigames();
+            },
+
+            fecharMinigameAtivo() {
+                if (this.origemMinigames === 'roadmap') {
+                    this.fecharMinigames();
+                    return;
+                }
+                this.voltarSeletorMinigames();
             },
 
             fecharMinigames() {
@@ -1981,7 +2090,217 @@ escaparHTML(texto) {
                 this.pararTimerBalanceador();
                 document.getElementById('minigame-screen').style.display = 'none';
                 document.getElementById('modal-overlay').style.display = 'none';
-                document.getElementById('periodic-table-screen').style.display = 'block';
+                if (this.origemMinigames === 'roadmap') {
+                    this.abrirPanorama();
+                } else {
+                    document.getElementById('periodic-table-screen').style.display = 'block';
+                }
+            },
+
+            iniciarMinijogoMisturas() {
+                const estado = this.minijogoMisturas;
+                if (!Object.keys(estado.estoques).length) {
+                    componentesMisturas.forEach(componente => {
+                        estado.estoques[componente.id] = componente.estoqueInicial;
+                    });
+                }
+                this.devolverBancadaAoEstoque(estado);
+                estado.bancada = {};
+                estado.misturado = false;
+                estado.feedback = 'Escolha um pedido e adicione os componentes à bancada.';
+                const disponiveis = this.obterReceitasMisturasDisponiveis();
+                if (!disponiveis.length) {
+                    estado.pedido = null;
+                } else if (!disponiveis.some(receita => receita.id === estado.pedido?.id)) {
+                    estado.pedido = disponiveis[0];
+                }
+                // DECISÃO: não há cronômetro por pedido; o foco é comparar proporções sem pressão de tempo.
+                this.renderizarMinijogoMisturas();
+            },
+
+            obterReceitasMisturasDisponiveis() {
+                const nivelMaximo = Number(this.contaPadrao?.nivelMaximo || 1);
+                return receitasMisturas.filter(receita => receita.fase <= nivelMaximo);
+            },
+
+            selecionarReceitaMisturas(id) {
+                const receita = this.obterReceitasMisturasDisponiveis().find(item => item.id === id);
+                if (!receita) {
+                    console.warn('A receita solicitada ainda não está liberada.');
+                    return;
+                }
+                this.minijogoMisturas.pedido = receita;
+                this.minijogoMisturas.misturado = false;
+                this.minijogoMisturas.feedback = `Novo pedido: ${receita.nome}.`;
+                this.renderizarMinijogoMisturas();
+            },
+
+            adicionarComponenteBancada(id) {
+                const componente = componentesMisturas.find(item => item.id === id);
+                const estado = this.minijogoMisturas;
+                if (!componente || estado.estoques[id] <= 0) return;
+                estado.estoques[id]--;
+                estado.bancada[id] = (estado.bancada[id] || 0) + 1;
+                estado.misturado = false;
+                estado.feedback = `${componente.nome} adicionado à bancada.`;
+                this.renderizarMinijogoMisturas();
+            },
+
+            devolverBancadaAoEstoque(estado = this.minijogoMisturas) {
+                Object.entries(estado.bancada).forEach(([id, quantidade]) => {
+                    estado.estoques[id] = (estado.estoques[id] || 0) + quantidade;
+                });
+            },
+
+            misturarBancada() {
+                const estado = this.minijogoMisturas;
+                if (!Object.values(estado.bancada).some(quantidade => quantidade > 0)) {
+                    estado.feedback = 'Bancada vazia. Adicione componentes antes de misturar.';
+                } else if (!estado.pedido) {
+                    estado.feedback = 'Selecione uma receita antes de misturar.';
+                } else {
+                    estado.misturado = true;
+                    estado.feedback = 'Mistura pronta para ser entregue ao cliente.';
+                }
+                this.renderizarMinijogoMisturas();
+            },
+
+            limparBancada() {
+                const estado = this.minijogoMisturas;
+                this.devolverBancadaAoEstoque(estado);
+                estado.bancada = {};
+                estado.misturado = false;
+                estado.feedback = 'Bancada limpa; todos os componentes voltaram ao estoque.';
+                this.renderizarMinijogoMisturas();
+            },
+
+            entregarPedidoMisturas() {
+                const estado = this.minijogoMisturas;
+                if (!estado.pedido || !estado.misturado) {
+                    estado.feedback = 'Misture os componentes e selecione um pedido antes de entregar.';
+                    this.renderizarMinijogoMisturas();
+                    return;
+                }
+
+                const resultado = validarMistura(estado.bancada, estado.pedido);
+                const pontos = pontuarEntrega(resultado);
+                estado.pontuacao += pontos;
+                this.adicionarPontosMinijogo(pontos);
+
+                if (resultado.mensagem === 'Bancada vazia') {
+                    estado.feedback = resultado.mensagem;
+                } else if (resultado.ok) {
+                    estado.feedback = `Cliente satisfeito! +${pontos} pontos. ${estado.pedido.explicacao}`;
+                } else {
+                    const detalhes = resultado.erros.map(erro => {
+                        const nome = componentesMisturas.find(item => item.id === erro.id)?.nome || erro.id;
+                        return `${nome}: ${erro.real.toFixed(1)}% (esperado ${erro.alvo.toFixed(1)}%)`;
+                    });
+                    estado.feedback = `Proporções fora da tolerância: ${detalhes.join('; ')}. +${pontos} pontos. ${estado.pedido.explicacao}`;
+                    // DECISÃO: uma entrega incorreta devolve toda a mistura ao estoque para incentivar a experimentação.
+                    this.devolverBancadaAoEstoque(estado);
+                }
+
+                estado.bancada = {};
+                estado.misturado = false;
+                const disponiveis = this.obterReceitasMisturasDisponiveis();
+                const atual = disponiveis.findIndex(receita => receita.id === estado.pedido.id);
+                if (disponiveis.length) {
+                    // DECISÃO: os pedidos avançam em sequência, mas o jogador pode escolher outra receita liberada.
+                    const proxima = disponiveis[(atual + 1) % disponiveis.length];
+                    estado.pedido = proxima;
+                }
+                this.renderizarMinijogoMisturas();
+            },
+
+            adicionarPontosMinijogo(pontos) {
+                if (!this.contaPadrao) {
+                    console.error('Não foi possível salvar a pontuação do minijogo sem um perfil carregado.');
+                    return;
+                }
+                this.contaPadrao.pontuacaoTotal = (Number(this.contaPadrao.pontuacaoTotal) || 0) + pontos;
+                this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
+                const totalPontos = document.getElementById('total-points');
+                const pontosDashboard = document.getElementById('dash-points');
+                if (totalPontos) totalPontos.textContent = this.contaPadrao.pontuacaoTotal;
+                if (pontosDashboard) pontosDashboard.textContent = this.contaPadrao.pontuacaoTotal;
+            },
+
+            renderizarMinijogoMisturas() {
+                const estado = this.minijogoMisturas;
+                const pedidoNome = document.getElementById('mixing-order-name');
+                const pedidoDescricao = document.getElementById('mixing-order-description');
+                if (pedidoNome) pedidoNome.textContent = estado.pedido
+                    ? `Cliente: prepare ${estado.pedido.nome}.`
+                    : 'Não há receitas liberadas para este perfil.';
+                if (pedidoDescricao) pedidoDescricao.textContent = estado.pedido?.explicacao || '';
+
+                const inventario = document.getElementById('mixing-inventory-list');
+                if (inventario) inventario.replaceChildren(...componentesMisturas.map(componente => {
+                    const item = document.createElement('div');
+                    item.className = 'mixing-item';
+                    const detalhes = document.createElement('span');
+                    detalhes.className = 'mixing-item-details';
+                    const nome = document.createElement('span');
+                    nome.textContent = componente.nome;
+                    const estoque = document.createElement('small');
+                    const unidade = componente.tipo === 'sólido' ? '1 g' : '1 mL';
+                    estoque.textContent = `${estado.estoques[componente.id] || 0} porções de ${unidade} · ${componente.tipo}`;
+                    detalhes.append(nome, estoque);
+                    const adicionar = document.createElement('button');
+                    adicionar.type = 'button';
+                    adicionar.className = 'mixing-add-button';
+                    adicionar.textContent = '+';
+                    adicionar.disabled = (estado.estoques[componente.id] || 0) <= 0;
+                    adicionar.setAttribute('aria-label', `Adicionar uma porção de ${componente.nome}`);
+                    adicionar.addEventListener('click', () => this.adicionarComponenteBancada(componente.id));
+                    item.append(detalhes, adicionar);
+                    return item;
+                }));
+
+                const total = Object.values(estado.bancada).reduce((soma, quantidade) => soma + quantidade, 0);
+                const bancada = document.getElementById('mixing-bench-content');
+                if (bancada) {
+                    if (total === 0) {
+                        const vazio = document.createElement('p');
+                        vazio.className = 'mixing-bench-empty';
+                        vazio.textContent = 'Béquer vazio.';
+                        bancada.replaceChildren(vazio);
+                    } else {
+                        bancada.replaceChildren(...componentesMisturas
+                            .filter(componente => estado.bancada[componente.id])
+                            .map(componente => {
+                                const linha = document.createElement('p');
+                                const quantidade = estado.bancada[componente.id];
+                                const unidade = componente.tipo === 'sólido' ? 'g' : 'mL';
+                                linha.textContent = `${componente.nome}: ${quantidade} ${unidade} · ${(quantidade / total * 100).toFixed(1)}%`;
+                                return linha;
+                            }));
+                    }
+                }
+
+                const receitas = this.obterReceitasMisturasDisponiveis();
+                const listaReceitas = document.getElementById('mixing-recipes-list');
+                if (listaReceitas) listaReceitas.replaceChildren(...receitas.map(receita => {
+                    const botao = document.createElement('button');
+                    botao.type = 'button';
+                    botao.className = `mixing-recipe${estado.pedido?.id === receita.id ? ' selected' : ''}`;
+                    botao.setAttribute('aria-pressed', String(estado.pedido?.id === receita.id));
+                    const nome = document.createElement('span');
+                    nome.textContent = `▸ ${receita.nome}`;
+                    const fase = document.createElement('small');
+                    fase.textContent = `Fase ${receita.fase}`;
+                    botao.append(nome, fase);
+                    botao.addEventListener('click', () => this.selecionarReceitaMisturas(receita.id));
+                    return botao;
+                }));
+
+                const feedback = document.getElementById('mixing-feedback');
+                if (feedback) feedback.textContent = estado.feedback;
+                const pontos = document.getElementById('mixing-game-score');
+                if (pontos) pontos.textContent = estado.pontuacao;
+                const entrega = document.getElementById('mixing-deliver-button');
+                if (entrega) entrega.disabled = !estado.misturado || !estado.pedido || total === 0;
             },
 
             iniciarMemoryMatch(dificuldade = 'facil', botao = null) {
@@ -3230,6 +3549,7 @@ escaparHTML(texto) {
                 });
                 const levelsScreen = document.getElementById('levels-screen');
                 if (levelsScreen) levelsScreen.style.display = 'block';
+                this.renderizarMinigamesRoadmap();
             },
 
             iniciarNivel(id, tag) {

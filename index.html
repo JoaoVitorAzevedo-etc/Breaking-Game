@@ -113,7 +113,11 @@
                 <button class="btn-option" style="font-size: 1rem; margin-bottom: 20px;" onclick="app.voltarAoMenu()">← Voltar</button>
                 <div id="roadmap-content" class="roadmap-container"></div>
             </div>
-            
+            <aside class="roadmap-minigames" aria-labelledby="roadmap-minigames-title">
+                <h2 id="roadmap-minigames-title">Minigames por módulo</h2>
+                <p>Conclua cada módulo para desbloquear seu desafio.</p>
+                <div id="roadmap-minigame-list" class="roadmap-minigame-list"></div>
+            </aside>
         </div>
     </div>
 
@@ -920,20 +924,59 @@
                     <span class="minigame-choice-description">Encontre os pares entre símbolos e nomes dos elementos.</span>
                     <span class="minigame-choice-reward">🏆 Badge Memória Atômica</span>
                 </button>
-                <button class="minigame-choice-card" onclick="app.selecionarMinigame('periodic')">
+                <button class="minigame-choice-card" data-minigame="periodic" onclick="app.selecionarMinigame('periodic')">
                     <span class="minigame-choice-icon">📈</span>
                     <span class="minigame-choice-title">Padrão Periódico</span>
                     <span class="minigame-choice-name">Gráfico de tendências</span>
                     <span class="minigame-choice-description">Arraste cada elemento para a posição correta no gráfico.</span>
-                    <span class="minigame-choice-reward">📊 Badge Padrão Periódico</span>
+                    <span class="minigame-choice-reward" data-recompensa="📊 Badge Padrão Periódico">📊 Badge Padrão Periódico</span>
                 </button>
-                <button class="minigame-choice-card" onclick="app.selecionarMinigame('balance')">
+                <button class="minigame-choice-card" data-minigame="balance" onclick="app.selecionarMinigame('balance')">
                     <span class="minigame-choice-icon">🎯</span>
                     <span class="minigame-choice-title">Estequiometria</span>
                     <span class="minigame-choice-name">Balanceador de Equações</span>
                     <span class="minigame-choice-description">Ajuste os coeficientes e iguale a quantidade de átomos dos dois lados.</span>
-                    <span class="minigame-choice-reward">🏅 Badge Mestre do Balanceamento</span>
+                    <span class="minigame-choice-reward" data-recompensa="🏅 Badge Mestre do Balanceamento">🏅 Badge Mestre do Balanceamento</span>
                 </button>
+            </div>
+        </div>
+
+        <div id="mixing-game-view" style="display: none;">
+            <div class="minigame-header-row">
+                <div>
+                    <p class="minigame-kicker">Laboratório virtual</p>
+                    <h2 class="minigame-header">⚗️ Pedidos de misturas</h2>
+                    <p class="minigame-subtitle">Prepare soluções e misturas usando o estoque do laboratório.</p>
+                </div>
+                <button class="minigame-icon-btn" onclick="app.fecharMinigameAtivo()" aria-label="Fechar minigame" title="Fechar minigame">✕</button>
+            </div>
+            <div class="mixing-order" aria-live="polite">
+                <strong>Pedido atual:</strong>
+                <span id="mixing-order-name">Selecione uma receita para começar.</span>
+                <small id="mixing-order-description"></small>
+            </div>
+            <div class="mixing-columns">
+                <section class="mixing-column" aria-labelledby="mixing-inventory-heading">
+                    <h3 id="mixing-inventory-heading">Inventário</h3>
+                    <div id="mixing-inventory-list"></div>
+                </section>
+                <section class="mixing-column" aria-labelledby="mixing-bench-heading">
+                    <h3 id="mixing-bench-heading">Bancada · Béquer</h3>
+                    <div id="mixing-bench-content" aria-live="polite"></div>
+                    <div class="mixing-actions">
+                        <button type="button" class="periodic-close-btn" onclick="app.misturarBancada()">Misturar</button>
+                        <button type="button" class="periodic-close-btn secondary" onclick="app.limparBancada()">Limpar</button>
+                        <button type="button" class="periodic-close-btn" id="mixing-deliver-button" onclick="app.entregarPedidoMisturas()" disabled>Entregar ao cliente</button>
+                    </div>
+                </section>
+                <section class="mixing-column" aria-labelledby="mixing-recipes-heading">
+                    <h3 id="mixing-recipes-heading">Receitas liberadas</h3>
+                    <div id="mixing-recipes-list"></div>
+                </section>
+            </div>
+            <div class="mixing-footer">
+                <p id="mixing-feedback" role="status" aria-live="polite"></p>
+                <p>Pontos do minijogo: <strong id="mixing-game-score">0</strong></p>
             </div>
         </div>
 
