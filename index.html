@@ -67,6 +67,16 @@
                 <p>Utilize professores, assistentes e dicas para ajudar durante as fases.</p>
             </div>
         </div>
+        <div class="tutorial-difficulty">
+            <label for="tutorial-difficulty-select">Escolha a dificuldade das perguntas</label>
+            <select id="tutorial-difficulty-select" onchange="app.alterarDificuldade(this.value)">
+                <option value="facil">Fácil</option>
+                <option value="medio">Médio</option>
+                <option value="dificil">Difícil</option>
+                <option value="vestibular">Vestibular</option>
+            </select>
+            <p id="tutorial-difficulty-summary" aria-live="polite"></p>
+        </div>
         <!-- BOTÃO ÚNICO -->
         <div class="tutorial-actions">
             <button class="tutorial-btn start"
@@ -136,6 +146,7 @@
         <h3 class="conceito-header">Conceito da Fase</h3>
         <p class="conceito-auxiliar" id="conceito-auxiliar-nome"></p>
         <div class="conceito-texto" id="conceito-conteudo"></div>
+        <p class="difficulty-summary" id="concept-difficulty-summary"></p>
         <div style="display: flex; gap: 12px; justify-content: center; margin-top: 25px;">
             <button class="conceito-botao" style="background: #888888;" onclick="app.fecharConceitoVoltarMapa()">← Voltar ao Mapa</button>
             <button class="conceito-botao" onclick="app.passarParaPerguntas()">Começar a Jogar →</button>
@@ -203,6 +214,17 @@
     </form>
 
     <div class="config-scroll-container" style="max-height: 42vh; overflow-y: auto; padding-right: 8px; margin-bottom: 20px;">
+        <div class="config-option difficulty-config-option">
+            <label class="config-label" for="dashboard-difficulty-select">Dificuldade das perguntas</label>
+            <select id="dashboard-difficulty-select" onchange="app.alterarDificuldade(this.value)">
+                <option value="facil">Fácil</option>
+                <option value="medio">Médio</option>
+                <option value="dificil">Difícil</option>
+                <option value="vestibular">Vestibular</option>
+            </select>
+            <small id="dashboard-difficulty-summary" class="config-help" aria-live="polite"></small>
+        </div>
+
         <div class="config-option" style="flex-direction: column; align-items: flex-start; margin-top: 20px;">
             <span class="config-label" style="margin-bottom: 12px; font-weight: 600;">Tamanho da Fonte</span>
             <div style="display: flex; gap: 10px; width: 100%;">

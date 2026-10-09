@@ -1,4 +1,5 @@
 import { registrarDesempenhoGrafico, resumirDesempenhoGrafico } from './graficos.mjs';
+import { parseBancoPerguntas } from './banco-perguntas.mjs';
 import {
     cadastrarComEmailESenha,
     carregarPerfilFirestore,
@@ -22,6 +23,8 @@ const app = {
             filtroInventario: 'claros',
             // --------------------------------------
             perguntaAtualIdx: 0,
+            bancoPerguntas: null,
+            bancoPerguntasPromise: null,
             gameState: { 
                 nivelAtual: 1, 
                 pontuacao: 0, 
@@ -212,6 +215,7 @@ const app = {
                     nivelMaximo: 1,
                     badges: [],
                     historico: [],
+                    dificuldade: 'facil',
                     temaCurrent: "light-1",
                     tamanhoFonte: "medio",
                     avatarUrl: "",
@@ -245,6 +249,64 @@ const app = {
 
             inicializarConta() {
                 this.contaPadrao = this.obterPerfilPadrao();
+            },
+            carregarBancoPerguntas() {
+                if (!this.bancoPerguntasPromise) {
+                    this.bancoPerguntasPromise = fetch(new URL('./perguntas.md', import.meta.url))
+                        .then(resposta => {
+                            if (!resposta.ok) throw new Error(`Falha ao carregar perguntas.md: HTTP ${resposta.status}`);
+                            return resposta.text();
+                        })
+                        .then(markdown => {
+                            this.bancoPerguntas = parseBancoPerguntas(markdown);
+                            return this.bancoPerguntas;
+                        })
+                        .catch(error => {
+                            this.bancoPerguntasPromise = null;
+                            throw error;
+                        });
+                }
+                return this.bancoPerguntasPromise;
+            },
+            obterDificuldadeSelecionada() {
+                const dificuldade = this.contaPadrao?.dificuldade;
+                return ['facil', 'medio', 'dificil', 'vestibular'].includes(dificuldade) ? dificuldade : 'facil';
+            },
+            obterPerguntasNivel(nivel) {
+                if (Number(nivel) === 14) return this.questoes.nivel14;
+                return this.bancoPerguntas?.fases[nivel]?.[this.obterDificuldadeSelecionada()];
+            },
+            atualizarInterfaceDificuldade() {
+                const dificuldade = this.obterDificuldadeSelecionada();
+                document.querySelectorAll('#tutorial-difficulty-select, #dashboard-difficulty-select')
+                    .forEach(seletor => { seletor.value = dificuldade; });
+                const resumo = this.bancoPerguntas?.resumosDificuldade[dificuldade] || '';
+                const nomeDificuldade = {
+                    facil: 'Fácil',
+                    medio: 'Médio',
+                    dificil: 'Difícil',
+                    vestibular: 'Vestibular'
+                }[dificuldade];
+                ['tutorial-difficulty-summary', 'dashboard-difficulty-summary', 'concept-difficulty-summary']
+                    .forEach(id => {
+                        const elemento = document.getElementById(id);
+                        if (elemento) {
+                            elemento.textContent = id === 'concept-difficulty-summary'
+                                ? `Foco ${nomeDificuldade}: ${resumo}`
+                                : resumo;
+                        }
+                    });
+            },
+            alterarDificuldade(dificuldade) {
+                if (!['facil', 'medio', 'dificil', 'vestibular'].includes(dificuldade)) {
+                    console.warn('Dificuldade inválida:', dificuldade);
+                    this.atualizarInterfaceDificuldade();
+                    return;
+                }
+                if (!this.contaPadrao) return console.warn('Não foi possível salvar a dificuldade sem um perfil carregado.');
+                this.contaPadrao.dificuldade = dificuldade;
+                this.salvarDados(`usuario_${this.usuarioAtual}`, this.contaPadrao);
+                this.atualizarInterfaceDificuldade();
             },
             podeAcessarDesafioFinal() {
     const historico = this.contaPadrao?.historico || [];
@@ -494,6 +556,15 @@ const app = {
                     return;
                 }
 
+                if (status) status.textContent = 'Carregando perguntas...';
+                try {
+                    await this.carregarBancoPerguntas();
+                } catch (error) {
+                    console.error('Não foi possível carregar o banco de perguntas:', error);
+                    if (status) status.textContent = 'Não foi possível carregar as perguntas. Verifique sua conexão e tente novamente.';
+                    return;
+                }
+
                 if (status) status.textContent = 'Conectando ao Firebase...';
                 try {
                     const credencial = modo === 'cadastro'
@@ -514,6 +585,7 @@ const app = {
             },
 
             async carregarContaFirebase(usuarioFirebase) {
+                await this.carregarBancoPerguntas();
                 const perfilSalvo = await carregarPerfilFirestore(usuarioFirebase.uid);
                 const nome = perfilSalvo?.nome || usuarioFirebase.email?.split('@')[0] || 'Usuário';
                 this.firebaseUid = usuarioFirebase.uid;
@@ -547,12 +619,14 @@ const app = {
             mostrarTutorialIntro: function() {
                 document.getElementById('main-menu').style.display = 'none';
                 document.getElementById('tutorial-intro-screen').style.display = 'block';
+                this.atualizarInterfaceDificuldade();
             },
             
             finalizarTutorialIntro: function() {
                 localStorage.setItem('tutorialVisualizado', 'true');
                 document.getElementById('tutorial-intro-screen').style.display = 'none';
                 document.getElementById('main-menu').style.display = 'block';
+                this.atualizarInterfaceDificuldade();
                 this.carregarMenuPrincipal();
                 this.atualizarInfosMenu();
             },
@@ -1240,6 +1314,7 @@ escaparHTML(texto) {
 
             abrirConfig() {
                 this.atualizarAvatares();
+                this.atualizarInterfaceDificuldade();
                 const dashboardUsername = document.getElementById('dash-username');
                 if (dashboardUsername) {
                     dashboardUsername.textContent = this.usuarioAtual || this.usuario || 'Usuário';
@@ -2569,22 +2644,30 @@ escaparHTML(texto) {
                     html += `<h4 style="color: var(--cor-principal); margin-top: 25px; border-bottom: 2px solid var(--borda-card); padding-bottom: 5px;">${modulo.titulo}</h4>`;
                     
                     modulo.fases.forEach(fase => {
-                        const perguntas = this.questoes['nivel' + fase.id];
+                        const perguntas = this.obterPerguntasNivel(fase.id);
                         const liberado = this.faseComGabaritoLiberado(fase.id);
                         const totalPerguntas = perguntas?.length || (fase.id === 14 ? 10 : 5);
 
                         if (perguntas && perguntas.length > 0) {
                             if (liberado) {
+                                const nomeDificuldade = fase.id === 14
+                                    ? ''
+                                    : ` (${{
+                                        facil: 'Fácil',
+                                        medio: 'Médio',
+                                        dificil: 'Difícil',
+                                        vestibular: 'Vestibular'
+                                    }[this.obterDificuldadeSelecionada()]})`;
                                 html += `<details style="margin: 12px 0; background: var(--bg-card); padding: 12px; border-radius: 8px; border: 1px solid var(--borda-card); cursor: pointer; transition: all 0.3s;">
-                                    <summary style="font-weight: bold; color: var(--cor-texto); font-size: 1.1rem; outline: none;">Fase ${fase.tag} - ${fase.nome}</summary>
+                                    <summary style="font-weight: bold; color: var(--cor-texto); font-size: 1.1rem; outline: none;">Fase ${this.escaparHTML(fase.tag)} - ${this.escaparHTML(fase.nome)}${nomeDificuldade}</summary>
                                     <div style="margin-top: 15px; font-size: 0.95rem;">`;
 
                                 perguntas.forEach((q, idx) => {
-                                    const respostaCorretaText = q.opcoes[q.resposta];
+                                    const respostaCorretaText = this.escaparHTML(q.opcoes[q.resposta]);
                                     html += `<div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--borda-card);">
-                                        <p style="color: var(--cor-texto); margin-bottom: 8px;"><strong>${idx + 1}.</strong> ${q.pergunta}</p>
+                                        <p style="color: var(--cor-texto); margin-bottom: 8px;"><strong>${idx + 1}.</strong> ${this.escaparHTML(q.pergunta)}</p>
                                         <p style="color: #00c850; margin-bottom: 5px; font-weight: bold;">R: ${respostaCorretaText}</p>
-                                        <p style="font-style: italic; color: var(--cor-texto-secundario); line-height: 1.4;"><strong>Explicação:</strong> ${q.explicacao}</p>
+                                        <p style="font-style: italic; color: var(--cor-texto-secundario); line-height: 1.4;"><strong>Explicação:</strong> ${this.escaparHTML(q.explicacao)}</p>
                                     </div>`;
                                 });
 
@@ -3151,6 +3234,10 @@ escaparHTML(texto) {
 
             iniciarNivel(id, tag) {
                 if (!id) return console.warn('Erro: nível inválido.');
+                if (id !== 14 && !this.bancoPerguntas) {
+                    console.error('O banco de perguntas ainda não está disponível.');
+                    return;
+                }
                 this.nivelPendente = id;
                 this.tagPendente = tag;
                 this.auxiliarSelecionado = null;
@@ -3230,6 +3317,7 @@ escaparHTML(texto) {
                 
                 document.getElementById('conceito-auxiliar-nome').textContent = `Explicação por: ${nomeAuxiliar[auxiliar]}`;
                 document.getElementById('conceito-conteudo').innerHTML = conteudo;
+                this.atualizarInterfaceDificuldade();
                 document.getElementById('modal-overlay').style.display = 'block';
                 document.getElementById('conceito-box').style.display = 'block';
             },
@@ -3241,7 +3329,7 @@ escaparHTML(texto) {
             },
 
             mostrarPergunta() {
-                const lista = this.questoes['nivel' + this.gameState.nivelAtual];
+                const lista = this.obterPerguntasNivel(this.gameState.nivelAtual);
                 if (!lista || this.perguntaAtualIdx >= lista.length) return this.finalizar();
                 
                 const q = lista[this.perguntaAtualIdx];
@@ -3254,7 +3342,14 @@ escaparHTML(texto) {
                 const btnProxima = document.getElementById('btn-proxima');
                 const optionsList = document.getElementById('options-list');
 
-                if (questionTitle) questionTitle.textContent = `Pergunta ${this.perguntaAtualIdx + 1}/${lista.length}`;
+                const nomeDificuldade = {
+                    facil: 'Fácil',
+                    medio: 'Médio',
+                    dificil: 'Difícil',
+                    vestibular: 'Vestibular'
+                }[this.obterDificuldadeSelecionada()];
+                const indicadorDificuldade = this.gameState.nivelAtual === 14 ? '' : ` · ${nomeDificuldade}`;
+                if (questionTitle) questionTitle.textContent = `Pergunta ${this.perguntaAtualIdx + 1}/${lista.length}${indicadorDificuldade}`;
                 if (questionText) questionText.textContent = q.pergunta;
                 if (feedback) feedback.style.display = 'none';
                 if (btnProxima) btnProxima.style.display = 'none';
@@ -3270,7 +3365,14 @@ escaparHTML(texto) {
                     document.getElementById('total-points-hud').textContent = this.contaPadrao.pontuacaoTotal;
                 }
                 if (optionsList) {
-                    optionsList.innerHTML = q.opcoes.map((o, i) => `<button class="option-btn" type="button" onclick="app.checar(${i}, this)">${o}</button>`).join('');
+                    optionsList.replaceChildren(...q.opcoes.map((opcao, indice) => {
+                        const botao = document.createElement('button');
+                        botao.className = 'option-btn';
+                        botao.type = 'button';
+                        botao.textContent = opcao;
+                        botao.addEventListener('click', () => this.checar(indice, botao));
+                        return botao;
+                    }));
                 }
                 
                 const overlay = document.getElementById('modal-overlay');
@@ -3284,7 +3386,7 @@ escaparHTML(texto) {
                     b.style.pointerEvents = 'none';
                     b.disabled = true;
                 });
-                const q = this.questoes['nivel' + this.gameState.nivelAtual][this.perguntaAtualIdx];
+                const q = this.obterPerguntasNivel(this.gameState.nivelAtual)?.[this.perguntaAtualIdx];
                 if (!q) return console.warn('Erro: Pergunta não encontrada.');
                 
                 const feedback = document.getElementById('feedback');
@@ -3307,7 +3409,7 @@ escaparHTML(texto) {
                     btn.style.borderColor = '#008833';
                     this.tocarSom('acerto');
                 } else {
-                    feedback.innerHTML = " Quase lá... " + q.explicacao;
+                    feedback.textContent = " Quase lá... " + q.explicacao;
                     feedback.style.color = "#cc0040";
                     feedback.style.background = "rgba(204, 0, 64, 0.1)";
                     box.classList.add('shake-animation');
@@ -3357,7 +3459,7 @@ escaparHTML(texto) {
                     return;
                 }
 
-                const q = this.questoes['nivel' + this.gameState.nivelAtual][this.perguntaAtualIdx];
+                const q = this.obterPerguntasNivel(this.gameState.nivelAtual)?.[this.perguntaAtualIdx];
                 if (!q) {
                     dicaDisplay.innerHTML = `<strong style="color: #cc0040;">❌ Erro</strong> Erro ao recuperar pergunta.`;
                     dicaDisplay.classList.add('show');
@@ -3403,7 +3505,8 @@ escaparHTML(texto) {
                     data: data,
                     acertos: this.gameState.acertos,
                     pontos: pontosGanhos,
-                    dicasUsadas: this.gameState.dicasUsadas
+                    dicasUsadas: this.gameState.dicasUsadas,
+                    dificuldade: this.gameState.nivelAtual === 14 ? 'final' : this.obterDificuldadeSelecionada()
                 });
 
                 let ganhouBadge = false;

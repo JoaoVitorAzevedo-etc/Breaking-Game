@@ -2620,6 +2620,62 @@ button:focus-visible {
 
     width: 100%;
 }
+
+.tutorial-difficulty,
+.difficulty-summary {
+    color: var(--cor-texto-secundario);
+    line-height: 1.6;
+}
+
+.tutorial-difficulty {
+    display: grid;
+    gap: 10px;
+    justify-items: center;
+    padding: 20px;
+    border: 1px solid var(--borda-card);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    text-align: center;
+}
+
+.tutorial-difficulty label {
+    color: var(--cor-texto);
+    font-weight: 700;
+}
+
+.tutorial-difficulty select,
+.difficulty-config-option select {
+    width: 100%;
+    max-width: 320px;
+    padding: 11px 14px;
+    border: 1px solid var(--borda-card);
+    border-radius: var(--radius-md);
+    background: var(--bg-input);
+    color: var(--cor-texto);
+    font: inherit;
+}
+
+.tutorial-difficulty p,
+.difficulty-summary,
+.difficulty-config-option .config-help {
+    margin: 0;
+}
+
+.difficulty-config-option {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: default;
+}
+
+.difficulty-config-option select {
+    max-width: none;
+}
+
+.difficulty-summary {
+    margin-top: 16px;
+}
+
 /* =========================================
    GRID DA LOJA
 ========================================= */
